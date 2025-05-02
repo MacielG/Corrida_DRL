@@ -4,6 +4,7 @@ from main import main, run_curriculum, train_phase, check_resources, get_user_co
 from environment import CorridaEnv
 from unittest.mock import Mock
 import psutil
+from tests.utils import create_mock_env
 
 class StopTestLoop(Exception):
     pass
@@ -11,11 +12,8 @@ class StopTestLoop(Exception):
 @pytest.mark.timeout(15)
 def test_main_loop_pause(monkeypatch):
     print("Iniciando test_main_loop_pause")
-    env = Mock(spec=CorridaEnv, width=800, height=600)
+    env = create_mock_env()
     print("Mock CorridaEnv criado")
-    env.reset.return_value = ([0] * 15, {})
-    env.step.return_value = ([0] * 15, 0.0, False, False, {})
-    print("Mock reset e step configurados")
     mock_vec_env = Mock()
     mock_vec_env.envs = [env]
     mock_vec_env.reset.return_value = ([[0] * 15], {})
@@ -58,18 +56,35 @@ def test_main_loop_pause(monkeypatch):
         print("Loop principal interrompido para o teste (StopTestLoop)")
     print("Finalizando test_main_loop_pause")
 
-@pytest.mark.timeout(15)
+@pytest.mark.timeout(5)
 def test_run_curriculum_complete(monkeypatch):
     print("Iniciando test_run_curriculum_complete")
-    env = Mock(spec=CorridaEnv, width=800, height=600)
-    env.reset.return_value = ([0] * 15, {})
-    env.step.return_value = ([0] * 15, 100, True, False, {"success": True, "checkpoint": 2})
-    # Configura DummyVecEnv para retornar uma lista de estados
-    mock_vec_env = Mock()
-    mock_vec_env.envs = [env]
-    mock_vec_env.reset.return_value = [[0] * 15]
-    mock_vec_env.step.return_value = ([[0] * 15], [100], [True], [False], [{"success": True, "checkpoint": 2}])
-    monkeypatch.setattr("main.DummyVecEnv", lambda x: mock_vec_env)
+    # Mock DummyVecEnv e ambiente para simular progresso real
+    class DummyEnvMock:
+        def __init__(self):
+            self.episodes = 0
+            self.width = 800
+            self.height = 600
+            self.car1_pos = (0, 0)
+            self.car1_angle = 0.0
+        def reset(self):
+            return [0] * 15
+        def step(self, action):
+            self.episodes += 1
+            # Após 2 episódios, sempre retorna done=True
+            done = self.episodes >= 2
+            return [0] * 15, 100, done, False, {"success": True, "checkpoint": 2}
+    class DummyVecEnvMock:
+        def __init__(self):
+            self.envs = [DummyEnvMock()]
+            self.episodes = 0
+        def reset(self):
+            return [[0] * 15]
+        def step(self, actions):
+            self.episodes += 1
+            done = self.episodes >= 2
+            return [[0] * 15], [100], [done], [False], [{"success": True, "checkpoint": 2}]
+    monkeypatch.setattr("main.DummyVecEnv", lambda x: DummyVecEnvMock())
     monkeypatch.setattr("main.Agent", lambda *a, **k: Mock(predict=lambda x: 0))
     monkeypatch.setattr("main.Interface", lambda *a, **k: Mock(
         process_events=lambda: None,
@@ -81,6 +96,14 @@ def test_run_curriculum_complete(monkeypatch):
         close=lambda: None
     ))
     monkeypatch.setattr("main.TrainingLogger", lambda: Mock(log=lambda *a, **k: None, close=lambda: None))
+    monkeypatch.setattr("config.CURRICULUM", [{
+        "map_type": "corridor",
+        "desc": "Corredor reto",
+        "min_reward": 1,
+        "min_checkpoints": 1,
+        "episodes_eval": 1,
+        "max_steps": 10
+    }])
     run_curriculum(n_parallel=1)
     print("Finalizando test_run_curriculum_complete")
 

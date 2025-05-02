@@ -56,11 +56,13 @@ def test_log_callback():
 
 def test_custom_callback(monkeypatch):
     callback = CustomCallback()
-    env = DummyVecEnv([lambda: CorridaEnv(map_type="corridor")])
-    env.envs[0].car1_speed = 2.0
-    # Mock para simular training_env.get_attr
-    monkeypatch.setattr(callback, "get_attr", lambda name: [2.0] if name == "car1_speed" else [None])
-    callback.logger = Mock(record=lambda key, value: None)
+    mock_env = Mock()
+    mock_env.get_attr = lambda name: [2.0] if name == "car1_speed" else [None]
+    # Mock do modelo com get_env retornando o mock_env
+    mock_model = Mock()
+    mock_model.get_env = lambda: mock_env
+    callback.model = mock_model
+    callback._logger = Mock(record=lambda key, value: None)
     assert callback._on_step()
 
 def test_run_experiment_error(monkeypatch):

@@ -168,7 +168,13 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
         speeds = []
         unique_states = set()
         actions = [int(agent.predict(obs[i])) for i in range(n_parallel)]  # Garante int
-        obs_, rewards, terminateds, truncateds, infos = env.step(actions)
+        step_result = env.step(actions)
+        if len(step_result) == 5:
+            obs_, rewards, terminateds, truncateds, infos = step_result
+        else:
+            obs_, rewards, dones, infos = step_result
+            terminateds = dones
+            truncateds = [False for _ in dones]
         dones = [terminateds[i] or truncateds[i] for i in range(n_parallel)]
         obs = obs_
         for idx in range(n_parallel):
@@ -195,7 +201,11 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
                 episode_time = infos[idx].get('episode_time', None)
                 training_logger.log(idx, rewards_hist[idx], collisions_hist[idx], actions=actions_hist[idx], checkpoints=checkpoints_hist[idx], episode_time=episode_time, success=is_success)
                 obs_single = env.envs[idx].reset()
-                obs[idx] = obs_single  # Já é np.array
+                # Corrige: sempre pega apenas o vetor de observação
+                if isinstance(obs_single, tuple):
+                    obs[idx] = obs_single[0]
+                else:
+                    obs[idx] = obs_single
                 dones[idx] = False
                 episodios[idx] += 1
                 actions_hist[idx] = []
@@ -244,8 +254,14 @@ def run_curriculum(car_to_train=1, n_parallel=4):
         while True:
             interface.process_events()
             interface.clear()
-            actions = [int(agent.predict(states[i])) for i in range(n_parallel)]
-            obs_, rewards, terminateds, truncateds, infos = env.step(actions)
+            actions = [int(agent.predict(states[i][0] if isinstance(states[i], tuple) else states[i])) for i in range(n_parallel)]
+            step_result = env.step(actions)
+            if len(step_result) == 5:
+                obs_, rewards, terminateds, truncateds, infos = step_result
+            else:
+                obs_, rewards, dones, infos = step_result
+                terminateds = dones
+                truncateds = [False for _ in dones]
             dones = [terminateds[i] or truncateds[i] for i in range(n_parallel)]
             for idx in range(n_parallel):
                 if not dones[idx]:
@@ -263,7 +279,21 @@ def run_curriculum(car_to_train=1, n_parallel=4):
                     episode_checkpoints[i].append(current_checkpoints[i])
                     rewards_temp[i] = []
                     current_checkpoints[i] = 0
-                    states[i] = env.envs[i].reset()
+                    # Chamada ao logger para garantir registro do episódio
+                    training_logger.log(
+                        i,
+                        episode_rewards[i][-1] if episode_rewards[i] else [],
+                        [],  # colisões não são registradas aqui
+                        actions=None,
+                        checkpoints=episode_checkpoints[i][-1] if episode_checkpoints[i] else [],
+                        episode_time=None,
+                        success=True
+                    )
+                    obs_reset = env.envs[i].reset()
+                    if isinstance(obs_reset, tuple):
+                        states[i] = obs_reset[0]
+                    else:
+                        states[i] = obs_reset
                     dones[i] = False
                     episodes_completed[i] += 1
             total_episodes = sum(episodes_completed)

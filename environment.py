@@ -292,7 +292,8 @@ class CorridaEnv(gym.Env):
             # Recompensa extra se saiu do lugar
             dist_moved = np.linalg.norm(np.array(self.car1_pos) - np.array(prev_pos))
             logger.debug(f"Distance moved: {dist_moved:.3f}")
-            if dist_moved > 0.05:
+            # Só dá bônus de movimento se houver checkpoints
+            if dist_moved > 0.05 and self.checkpoints:
                 reward += 0.1
             if self.checkpoints:  # Check if checkpoints exist
                 checkpoint = self.checkpoints[self.checkpoint_index]
@@ -308,21 +309,28 @@ class CorridaEnv(gym.Env):
                 if abs(prev_speed) < 0.05:
                     reward = -0.5
             else:
-                reward += 0.0  # No checkpoints, neutral reward
+                # No checkpoints, não soma bônus
+                reward += 0.0
 
-        if REWARD_SCHEME == "dense":
+        # Recompensa densa/esparsa
+        if REWARD_SCHEME == "dense" and self.checkpoints:
             # Centralização
             if self.map_type == "corridor":
                 center_y = 300 * ENV_SCALE
-                reward += -0.01 * abs(self.car1_pos[1] - center_y) / ENV_SCALE
+                # Garante penalidade inicial (valor negativo)
+                reward += -0.05 * abs(self.car1_pos[1] - center_y) / ENV_SCALE
             elif self.map_type == "curve":
                 checkpoint = self.checkpoints[self.checkpoint_index] if self.checkpoints else (0, 0)
                 dist_to_cp = np.linalg.norm(np.array(self.car1_pos) - np.array(checkpoint))
-                reward += -0.005 * dist_to_cp / ENV_SCALE
+                reward += -0.01 * dist_to_cp / ENV_SCALE
             # Suavidade de ação
             if hasattr(self, 'last_action') and self.last_action is not None and action != self.last_action:
                 reward -= 0.05
             self.last_action = action
+        elif REWARD_SCHEME == "sparse":
+            self.last_action = action
+            # Remove componentes densos
+            pass
         else:
             self.last_action = action
 
@@ -434,7 +442,15 @@ class MultiAgentEnv:
 
     def reset(self):
         """Reseta todos os ambientes e retorna lista de estados."""
-        self.states = [env.reset() for env in self.envs]
+        # Garante que retorna apenas o vetor de estado (np.ndarray) para cada agente
+        self.states = []
+        for env in self.envs:
+            result = env.reset()
+            if isinstance(result, tuple):
+                state, _ = result
+            else:
+                state = result
+            self.states.append(state)
         self.dones = [False] * self.n_agents
         return self.states
 
