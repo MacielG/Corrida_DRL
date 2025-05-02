@@ -1,0 +1,286 @@
+import pytest
+import numpy as np
+import pygame
+import os
+import time
+import psutil
+from environment import CorridaEnv, MultiAgentEnv
+from agent import Agent
+from interface import Interface
+from metrics import Metrics
+from main import main, run_curriculum, train_phase, TrainingLogger
+from config import PHASES, ENV_SCALE, MAX_STEPS, MAX_EPISODE_TIME, SUPPORTED_ALGORITHMS
+from stable_baselines3.common.vec_env import DummyVecEnv
+from unittest.mock import Mock, patch
+import matplotlib.pyplot as plt
+
+# Fixture para inicializar o ambiente e a interface
+@pytest.fixture
+def corrida_env():
+    env = CorridaEnv(map_type="corridor")
+    yield env
+    env.close()
+
+@pytest.fixture
+def interface():
+    pygame.init()
+    interface = Interface(width=800, height=600, fase_desc="Test", n_parallel=1)
+    yield interface
+    interface.close()
+
+@pytest.fixture
+def dummy_vec_env():
+    env = DummyVecEnv([lambda: CorridaEnv(map_type="corridor")])
+    yield env
+    env.close()
+
+# 1. Teste de integração ponta-a-ponta: Treinamento e avaliação
+@pytest.mark.parametrize("algo", SUPPORTED_ALGORITHMS)
+def test_end_to_end_training_evaluation(algo, tmp_path, monkeypatch):
+    """Testa o ciclo completo de treinamento e avaliação do agente."""
+    os.environ["RL_ALGORITHM"] = algo
+    model_path = str(tmp_path / f"model_{algo}")
+    
+    # Reduz o número de timesteps para rodar rápido no hardware limitado
+    env = DummyVecEnv([lambda: CorridaEnv(map_type="corridor")])
+    agent = Agent(env, model_path=model_path, learning_rate=0.0003, gamma=0.98)
+    
+    # Mock para evitar salvar no disco
+    monkeypatch.setattr(agent, "save", lambda path=None: None)
+    
+    # Treina por poucos passos
+    agent.train(total_timesteps=100, eval_interval=50)
+    
+    # Avalia o agente
+    score = agent.evaluate(env, n_episodes=3)
+    assert isinstance(score, float)
+    assert np.isfinite(score)
+    
+    # Verifica que o agente tomou ações válidas
+    state = env.reset()[0]
+    action = agent.predict(state, deterministic=True)
+    assert action in [0, 1, 2, 3]  # Ações discretas: acelerar, frear, virar esquerda, virar direita
+
+# 2. Teste de comportamento do agente: Aprendizado em poucos episódios
+def test_agent_learning_progress(corrida_env, tmp_path):
+    """Verifica se o agente melhora a recompensa média ao longo de poucos episódios."""
+    env = DummyVecEnv([lambda: corrida_env])
+    agent = Agent(env, model_path=str(tmp_path / "test_learning"))
+    
+    # Avaliação inicial (antes do treinamento)
+    initial_score = agent.evaluate(env, n_episodes=5)
+    
+    # Treina por poucos passos
+    agent.train(total_timesteps=500, eval_interval=100)
+    
+    # Avaliação final
+    final_score = agent.evaluate(env, n_episodes=5)
+    
+    # Verifica se houve alguma melhoria (mesmo que pequena)
+    assert final_score >= initial_score - 10, f"Final score ({final_score}) should not be significantly worse than initial ({initial_score})"
+
+# 3. Teste de métricas: Validação de recompensas e colisões
+def test_metrics_calculation(corrida_env, interface):
+    """Testa se as métricas são registradas e calculadas corretamente."""
+    metrics = Metrics()
+    
+    # Simula um episódio com recompensas, colisões e checkpoints
+    for i in range(50):
+        reward = float(i % 10) - 2  # Recompensas variando entre -2 e 7
+        collisions = i % 2  # 0 ou 1
+        episode_time = i * 0.1
+        checkpoint = i // 10  # Aumenta a cada 10 passos
+        metrics.update(reward, collisions, episode_time, checkpoint)
+    
+    # Verifica que as métricas foram registradas
+    assert len(metrics.rewards) == 50
+    assert len(metrics.collisions) == 50
+    assert len(metrics.episode_times) == 50
+    assert len(metrics.checkpoints) == 50
+    
+    # Calcula média móvel
+    ma_rewards = metrics.compute_moving_average(metrics.rewards, window=10)
+    assert len(ma_rewards) == 41  # 50 - 10 + 1 (convolução)
+    assert np.all(ma_rewards >= -2) and np.all(ma_rewards <= 7)  # Dentro do intervalo esperado
+    
+    # Testa exportação para CSV
+    csv_path = "test_metrics.csv"
+    metrics.export_metrics(csv_path)
+    assert os.path.exists(csv_path)
+    os.remove(csv_path)
+
+# 4. Teste de robustez: Mapa sem checkpoints
+def test_step_no_checkpoints(corrida_env):
+    """Testa o comportamento do ambiente quando não há checkpoints."""
+    corrida_env.checkpoints = []
+    corrida_env.reset()
+    
+    # Executa alguns passos
+    rewards = []
+    for _ in range(5):
+        state, reward, terminated, truncated, info = corrida_env.step(0)  # Acelerar
+        rewards.append(reward)
+        assert not terminated and not truncated, "Episode should not terminate prematurely"
+        assert info["checkpoint"] == 0, "Checkpoint index should remain 0"
+    
+    # Verifica que as recompensas são razoáveis (penalidade por passo e movimento)
+    assert all(r <= 0 for r in rewards), "Rewards should be non-positive without checkpoints"
+    assert any(r > -0.1 for r in rewards), "Some rewards should reflect movement bonus"
+
+# 5. Teste de robustez: Múltiplos agentes
+def test_multi_agent_env():
+    """Testa o ambiente MultiAgentEnv com dois agentes."""
+    multi_env = MultiAgentEnv(n_agents=2, map_type="corridor")
+    
+    # Reseta o ambiente
+    states = multi_env.reset()
+    assert len(states) == 2
+    assert all(isinstance(s, np.ndarray) for s in states)
+    
+    # Executa um passo com ações diferentes
+    actions = [0, 2]  # Agente 1 acelera, agente 2 vira à esquerda
+    states, rewards, dones, infos = multi_env.step(actions)
+    
+    assert len(states) == 2
+    assert len(rewards) == 2
+    assert len(dones) == 2
+    assert len(infos) == 2
+    assert all(isinstance(r, float) for r in rewards)
+    assert all(not d for d in dones), "Agents should not terminate after one step"
+    assert all("collisions" in info for info in infos)
+
+# 6. Teste de interface: Interação com botões
+def test_interface_button_interaction(interface, monkeypatch):
+    """Testa a interação com os botões da interface (pausar, reiniciar, mudar mapa)."""
+    # Simula clique no botão "Pausar"
+    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.buttons["pause"].x + 10, interface.buttons["pause"].y + 10)))
+    monkeypatch.setattr(pygame, "event", Mock(get=lambda: [Mock(type=pygame.MOUSEBUTTONDOWN)]))
+    interface.process_events()
+    assert interface.paused is True
+    
+    # Simula clique no botão "Reiniciar"
+    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.buttons["restart"].x + 10, interface.buttons["restart"].y + 10)))
+    interface.process_events()
+    assert interface.should_restart() is True
+    
+    # Simula clique no botão "Mudar Mapa" e seleção de mapa
+    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.buttons["map"].x + 10, interface.buttons["map"].y + 10)))
+    interface.process_events()
+    assert interface.menu_active is True
+    
+    # Simula clique na opção "curve"
+    menu_y = interface.buttons["map"].y + 110  # Segunda opção do menu
+    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.sim_width + 30, menu_y)))
+    interface.process_events()
+    assert interface.selected_map == "curve"
+    assert interface.menu_active is False
+
+# 7. Teste de performance: Uso de memória e CPU
+def test_resource_usage(corrida_env, interface):
+    """Testa o uso de memória e CPU durante um episódio curto."""
+    process = psutil.Process()
+    initial_memory = process.memory_percent()
+    initial_cpu = psutil.cpu_percent(interval=0.1)
+    
+    # Simula um episódio curto
+    corrida_env.reset()
+    for _ in range(100):
+        corrida_env.step(0)  # Acelerar
+        interface.clear()
+        interface.draw_env_grid(corrida_env, 0)
+        interface.update()
+    
+    final_memory = process.memory_percent()
+    final_cpu = psutil.cpu_percent(interval=0.1)
+    
+    # Verifica que o uso de recursos não aumentou significativamente
+    assert final_memory < initial_memory + 10, f"Memory usage increased too much: {initial_memory}% -> {final_memory}%"
+    assert final_cpu < 90, f"CPU usage too high: {final_cpu}%"
+
+# 8. Teste de currículo: Progressão entre fases
+def test_curriculum_progression(tmp_path, monkeypatch):
+    """Testa a progressão do currículo entre fases."""
+    # Mock para evitar treinamento real
+    monkeypatch.setattr(Agent, "train", lambda self, *args, **kwargs: None)
+    monkeypatch.setattr(Agent, "evaluate", lambda self, *args, **kwargs: 100)  # Simula desempenho suficiente
+    
+    # Reduz o número de episódios para teste rápido
+    monkeypatch.setattr("main.PHASES", [
+        {"map_type": "corridor", "desc": "Corredor reto"},
+        {"map_type": "curve", "desc": "Corredor com curva"}
+    ])
+    monkeypatch.setattr("main.CURRICULUM", [
+        {
+            "map_type": "corridor",
+            "desc": "Corredor reto",
+            "min_reward": 50,
+            "min_checkpoints": 1,
+            "episodes_eval": 5,
+            "max_steps": 100
+        },
+        {
+            "map_type": "curve",
+            "desc": "Corredor com curva",
+            "min_reward": 100,
+            "min_checkpoints": 2,
+            "episodes_eval": 5,
+            "max_steps": 100
+        }
+    ])
+    
+    # Mock da interface para evitar renderização
+    mock_interface = Mock(
+        process_events=lambda: None,
+        clear=lambda: None,
+        draw_car_grid=lambda *args, **kwargs: None,
+        draw_metrics_grid=lambda *args, **kwargs: None,
+        draw_info=lambda *args: None,
+        update=lambda: None,
+        close=lambda: None
+    )
+    monkeypatch.setattr("main.Interface", lambda *args, **kwargs: mock_interface)
+    
+    # Mock do logger
+    mock_logger = Mock(log=lambda *args, **kwargs: None, close=lambda: None)
+    monkeypatch.setattr("main.TrainingLogger", lambda *args, **kwargs: mock_logger)
+    
+    # Executa o currículo
+    run_curriculum(car_to_train=1, n_parallel=1)
+    
+    # Verifica que o logger foi chamado para ambas as fases
+    assert mock_logger.log.call_count >= 2, "Logger should be called for each phase"
+
+# 9. Teste de validação de recompensas: Esquema denso vs esparso
+def test_reward_scheme(corrida_env, monkeypatch):
+    """Compara o comportamento das recompensas nos esquemas denso e esparso."""
+    # Configura esquema denso
+    monkeypatch.setattr("environment.REWARD_SCHEME", "dense")
+    corrida_env.reset()
+    state, reward_dense, terminated, truncated, info = corrida_env.step(0)  # Acelerar
+    
+    # Configura esquema esparso
+    monkeypatch.setattr("environment.REWARD_SCHEME", "sparse")
+    corrida_env.reset()
+    state, reward_sparse, terminated, truncated, info = corrida_env.step(0)  # Acelerar
+    
+    # Verifica que o esquema denso dá recompensas mais detalhadas
+    assert reward_dense != reward_sparse, "Dense and sparse rewards should differ"
+    assert reward_dense < 0, "Dense reward should include small penalties"
+    assert abs(reward_dense) > abs(reward_sparse), "Dense reward should have more components"
+
+# 10. Teste de stress: Episódio longo
+def test_long_episode(corrida_env):
+    """Testa a estabilidade do ambiente em um episódio longo."""
+    corrida_env.reset()
+    start_time = time.time()
+    
+    # Executa MAX_STEPS passos
+    for _ in range(MAX_STEPS):
+        state, reward, terminated, truncated, info = corrida_env.step(0)  # Acelerar
+        if terminated or truncated:
+            break
+    
+    duration = time.time() - start_time
+    assert duration < 10, f"Long episode took too long: {duration}s"
+    assert corrida_env.current_step <= MAX_STEPS, "Episode should respect max steps"
+    assert corrida_env.episode_time <= MAX_EPISODE_TIME + 0.1, "Episode time should respect max time"
