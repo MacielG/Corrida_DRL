@@ -6,7 +6,7 @@ import sys
 from environment import CorridaEnv, MultiAgentEnv
 from agent import Agent
 from metrics import Metrics
-from interface import Interface
+from interface_dpg import InterfaceDPG as Interface
 from config import PHASES, ENV_SCALE, SIM_SPEED, TIME_STEP
 import argparse
 import time
@@ -15,6 +15,8 @@ import math
 import os
 from datetime import datetime
 from logger import setup_logger
+import pygame
+from interface_agents import AgentInfo, load_agents, save_agents
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv
 import gc
 import json
@@ -117,27 +119,133 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
     """
     from config import PHASES
     fase_desc = PHASES[fase_idx]["desc"] if fase_idx < len(PHASES) else map_type
-    # Usa SubprocVecEnv para paralelismo real
-    env = SubprocVecEnv([make_env(map_type) for _ in range(n_parallel)])
-    model_path = f"models/model_{map_type}_car{car_to_train}"
+
+    # --- NOVO FLUXO: menu visual e gestão de agentes ---
+    interface = Interface(width=800, height=600, fase_desc=fase_desc, n_parallel=n_parallel)
+    # Adiciona opção de gestão de agentes ao menu
+    interface.state = "menu_inicial"
+
+    # Variables for gestao_agentes UI
+    gestao_btn_novo = []
+    gestao_agent_cards = []
+
+    import pygame
+    from interface_agents import draw_gestao_agentes, handle_gestao_agentes_events
+    agents = [AgentInfo.from_dict(a) for a in load_agents()]
+
+    while True:
+        interface.update()  # Garante atualização da interface Dear PyGui
+        if interface.state == "menu_inicial":
+            interface.menu.draw_menu_inicial(interface.screen)
+            idx = interface.menu.handle_menu_events(interface.state, interface.menu.menu_btns)
+            if idx == 0:
+                interface.change_state("selecao_agente")
+            elif idx == 1:
+                interface.change_state("selecao_agente")
+            elif idx == 2:
+                interface.change_state("ranking")
+            elif idx == 3:
+                pygame.quit(); exit()
+            elif idx == 4:
+                interface.change_state("gestao_agentes")
+            interface.clock.tick(60)
+
+        elif interface.state == "selecao_agente":
+            interface.select_screen.draw_selecao_agente(interface.screen, selected_agent=interface.selected_agent, selected_map=interface.selected_map)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mx, my = pygame.mouse.get_pos()
+                    for ag, rect in interface.select_screen.agente_btns:
+                        r = pygame.Rect(rect)
+                        if r.collidepoint(mx, my):
+                            interface.selected_agent = ag
+                            interface.change_state("selecao_mapa")
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    interface.change_state("menu_inicial")
+            interface.clock.tick(60)
+
+        elif interface.state == "selecao_mapa":
+            interface.select_screen.draw_selecao_mapa(interface.screen, selected_map=interface.selected_map)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit(); exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    mx, my = pygame.mouse.get_pos()
+                    for mp, rect in interface.select_screen.mapa_btns:
+                        r = pygame.Rect(rect)
+                        if r.collidepoint(mx, my):
+                            interface.selected_map = mp
+                            interface.change_state("simulacao")
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    interface.change_state("selecao_agente")
+            interface.clock.tick(60)
+
+        elif interface.state == "ranking":
+            interface.ranking_screen.draw_ranking(interface.screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit(); exit()
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    interface.change_state("menu_inicial")
+            interface.clock.tick(60)
+
+        elif interface.state == "gestao_agentes":
+            draw_gestao_agentes(interface.screen, interface.width, interface.height, agents, gestao_btn_novo, gestao_agent_cards)
+            result = handle_gestao_agentes_events(pygame.event.get(), gestao_btn_novo, gestao_agent_cards, agents, interface=interface)
+            if result is not None:
+                if isinstance(result, tuple) and result[0] == "select":
+                    interface.selected_agent = result[1]
+                    interface.change_state("menu_inicial")
+                elif result == "escape":
+                    interface.change_state("menu_inicial")
+            interface.clock.tick(60)
+
+        elif interface.state == "simulacao":
+            break
+    # Após menu, pega escolhas do usuário
+    # Busca agente pelo nome
+    agents = [AgentInfo.from_dict(a) for a in load_agents()]
+    agent_info = next((a for a in agents if a.nome == interface.selected_agent), None)
+    if not agent_info:
+        print("Agente não encontrado! Voltando ao menu.")
+        return main(map_type, car_to_train, fase_idx, n_parallel, skip_training, learning_rate, gamma)
+    selected_agent = agent_info.tipo
+    selected_map = interface.selected_map or "corridor"
+    print(f"Agente selecionado: {agent_info.nome} ({selected_agent}) | Mapa: {selected_map}")
+
+    # 2. Prepara ambiente, modelo e agente (NÃO treina antes do loop principal)
+    from stable_baselines3.common.vec_env import DummyVecEnv
+    env = DummyVecEnv([make_env(selected_map) for _ in range(n_parallel)])
+    for i in range(10, 101, 10):
+        interface.draw_loading(f'Renderizando agentes... ({i}%)', progresso=i/100, animar=False)
+        interface.process_events()
+        time.sleep(0.05)
+    # Força algoritmo selecionado
+    import os
+    os.environ["RL_ALGORITHM"] = selected_agent
+    model_path = f"models/model_{selected_map}_{selected_agent}"
     agent = Agent(env, model_path=model_path, learning_rate=learning_rate, gamma=gamma)
-    if not skip_training:
-        model_file = model_path + "_step_10000.zip"
+    model_file = model_path + "_step_10000.zip"
+    if skip_training:
         if os.path.exists(model_file):
             agent.load(model_file)
             logger.info(f"Loaded pre-trained model from {model_file}")
         else:
-            logger.info("Training agent from scratch...")
-            agent.train(total_timesteps=10000)
-    else:
-        model_file = model_path + "_step_10000.zip"
-        if os.path.exists(model_file):
-            agent.load(model_file)
-            logger.info(f"Loaded pre-trained model from {model_file}")
-        else:
-            logger.info("No pre-trained model found, skipping training as requested.")
-    interface = Interface(width=env.envs[0].width, height=env.envs[0].height, fase_desc=fase_desc, n_parallel=n_parallel)
+            logger.info("No pre-trained model found, rodando treinamento ao vivo.")
+    # NÃO chama agent.train() aqui!
+
+    # 3. Atualiza interface para mostrar que os agentes foram renderizados
+    interface.draw_loading('Agentes renderizados! Treinamento iniciado.', progresso=1.0, animar=False)
+    interface.update()
+    print('Agentes renderizados! Iniciando treinamento...')
+    time.sleep(1)
+
+    # 4. Loop principal de treinamento
     training_logger = TrainingLogger()
+    interface.load_ranking_data()
     logger.info(f"Treinando {n_parallel} execuções paralelas do agente {car_to_train} no mapa: {map_type} (Fase: {fase_desc})")
     obs, info = env.reset()
     rewards_hist = [[] for _ in range(n_parallel)]
@@ -149,9 +257,11 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
     ciclo_total = 0
     trajs = [[(obs[i][0], obs[i][1])] for i in range(n_parallel)]
     iter_count = 0
+    print("Loop principal iniciado!")
     dones = [False for _ in range(n_parallel)]
     avg_speed = 0.0  # Corrige UnboundLocalError
     n_dif = 0        # Corrige UnboundLocalError
+    treino_start = time.time()
     while True:
         if iter_count % 100 == 0:
             check_resources()
@@ -162,12 +272,11 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             time.sleep(0.05)
             continue
         interface.clear()
-        # Desenha cada ambiente paralelo em um grid
         for idx, env_single in enumerate(env.envs):
             interface.draw_env_grid(env_single, idx)
         speeds = []
         unique_states = set()
-        actions = [int(agent.predict(obs[i])) for i in range(n_parallel)]  # Garante int
+        actions = [int(agent.predict(obs[i])) for i in range(n_parallel)]
         step_result = env.step(actions)
         if len(step_result) == 5:
             obs_, rewards, terminateds, truncateds, infos = step_result
@@ -182,10 +291,8 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             rewards_hist[idx].append(rewards[idx])
             collisions_hist[idx].append(infos[idx]["collisions"] if "collisions" in infos[idx] else 0)
             penalties_hist[idx].append(penalty)
-            # Corrige: salva ações como int
             actions_hist[idx].append(int(actions[idx]))
             checkpoints_hist[idx].append(infos[idx].get("checkpoint", 0))
-            # Desnormaliza velocidade
             speeds.append(abs(obs[idx][2]*2))
             unique_states.add((round(obs[idx][0],1), round(obs[idx][1],1), round(obs[idx][3],1)))
         ciclo_total += sum([1 for d in dones if d])
@@ -195,13 +302,36 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
         interface.update()
         iter_count += 1
         time.sleep(0.05)
+        # Mostra resumo no terminal a cada 20 episódios
+        if iter_count % 20 == 0:
+            avg_reward = sum([sum(r[-20:]) for r in rewards_hist]) / (20 * n_parallel)
+            print(f"[TREINO] Episódio {ciclo_total} | Média recompensa (20): {avg_reward:.2f} | Média velocidade: {avg_speed:.2f}")
         for idx in range(n_parallel):
             if dones[idx]:
                 is_success = infos[idx].get('success', False)
                 episode_time = infos[idx].get('episode_time', None)
                 training_logger.log(idx, rewards_hist[idx], collisions_hist[idx], actions=actions_hist[idx], checkpoints=checkpoints_hist[idx], episode_time=episode_time, success=is_success)
+                # Atualiza ranking ao final de cada episódio
+                key = f"{selected_agent}|{selected_map}"
+                score = sum(rewards_hist[idx])
+                speed = avg_speed
+                tempo = episode_time or 0
+                prev = interface.ranking_data.get(key, {"score": -float('inf')})
+                if score > prev["score"]:
+                    interface.ranking_data[key] = {"score": score, "speed": speed, "tempo": tempo}
+                    interface.save_ranking_data()
+                # Atualiza tempo_acumulado e histórico do agente
+                agents = [AgentInfo.from_dict(a) for a in load_agents()]
+                agent_info = next((a for a in agents if a.nome == interface.selected_agent), None)
+                if agent_info:
+                    agent_info.tempo_acumulado += episode_time or 0
+                    agent_info.historico.append({"mapa": selected_map, "score": score, "velocidade": speed, "tempo": tempo, "data": time.strftime("%Y-%m-%d %H:%M:%S")})
+                    # Limita histórico para não pesar
+                    agent_info.historico = agent_info.historico[-30:]
+                    # Salva
+                    agents = [a.to_dict() if a.nome != agent_info.nome else agent_info.to_dict() for a in agents]
+                    save_agents(agents)
                 obs_single = env.envs[idx].reset()
-                # Corrige: sempre pega apenas o vetor de observação
                 if isinstance(obs_single, tuple):
                     obs[idx] = obs_single[0]
                 else:
@@ -222,7 +352,6 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             ciclo_total = 0
             iter_count = 0
             interface.clear_restart()
-    # Garante fechamento do logger
     training_logger.close()
 
 def run_curriculum(car_to_train=1, n_parallel=4):
@@ -270,8 +399,8 @@ def run_curriculum(car_to_train=1, n_parallel=4):
                         current_checkpoints[idx] += 1
                     states[idx] = obs_[idx]
                 interface.draw_car_grid(env.envs[idx].car1_pos, env.envs[idx].car1_angle, idx)
-            interface.draw_metrics_grid([sum(r) for r in rewards_temp], current_checkpoints)
-            interface.draw_info(0.0)
+            interface.dashboard.draw_metrics_grid([sum(r) for r in rewards_temp], current_checkpoints)
+            interface.dashboard.draw_info(0.0)
             interface.update()
             for i in range(n_parallel):
                 if dones[i]:
@@ -325,22 +454,6 @@ def train_phase(phase_config, n_parallel=4):
         if score >= phase_config["min_reward"]:
             return True
     return False
-
-def get_user_config():
-    """Solicita configuração do usuário via input.
-
-    Returns:
-        tuple: (map_type, fase_idx, n_agents, car_to_train, n_parallel)
-    """
-    fases = [f["map_type"] for f in PHASES]
-    fase_idx = int(input(f"Escolha o mapa/fase (0-{len(fases)-1}): ") or 0)
-    map_type = fases[fase_idx]
-
-    n_agents = 1  # Sempre 1 agente
-    car_to_train = 1  # Sempre carro 1
-    n_parallel = 1  # Sempre 1 execução paralela
-
-    return map_type, fase_idx, n_agents, car_to_train, n_parallel
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Corrida DRL Training")

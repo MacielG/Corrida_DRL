@@ -137,18 +137,18 @@ class CorridaEnv(gym.Env):
         """
         self.randomize_checkpoint = randomize_checkpoint
         tentativas = 0
-        # Corrigir: randomizar posição inicial se RANDOMIZE_START=True
+        # Melhora: aumenta a velocidade inicial e garante posição válida
         while True:
             if RANDOMIZE_START:
                 self.car1_pos = [
                     150 * ENV_SCALE + np.random.uniform(-20, 20) * ENV_SCALE,
                     300 * ENV_SCALE + np.random.uniform(-20, 20) * ENV_SCALE
                 ]
-                self.car1_angle = np.random.uniform(0, 360)
+                self.car1_angle = np.random.uniform(-10, 10)  # Começa mais alinhado
             else:
                 self.car1_pos = [150 * ENV_SCALE, 300 * ENV_SCALE]
                 self.car1_angle = 0
-            self.car1_speed = 0.5
+            self.car1_speed = 1.0  # Começa com velocidade positiva
             if self.is_on_corridor(self.car1_pos):
                 break
             tentativas += 1
@@ -286,30 +286,24 @@ class CorridaEnv(gym.Env):
             truncated = False
             return obs, reward, terminated, truncated, info
         else:
-            reward = -0.001  # penalidade menor por passo
+            reward = -0.001
             if self.car1_speed < 0:
-                reward -= 0.05  # penalidade menor por andar para trás
-            # Recompensa extra se saiu do lugar
+                reward -= 0.1  # Penalidade maior para andar para trás
             dist_moved = np.linalg.norm(np.array(self.car1_pos) - np.array(prev_pos))
-            logger.debug(f"Distance moved: {dist_moved:.3f}")
-            # Só dá bônus de movimento se houver checkpoints
             if dist_moved > 0.05 and self.checkpoints:
-                reward += 0.1
-            if self.checkpoints:  # Check if checkpoints exist
+                reward += 0.2  # Bônus maior por movimento
+            if self.checkpoints:
                 checkpoint = self.checkpoints[self.checkpoint_index]
                 dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
                 if self.prev_dist_to_checkpoint is not None:
                     progress = self.prev_dist_to_checkpoint - dist
-                    logger.debug(f"Progress towards checkpoint: {progress:.3f}")
-                    reward += max(0, progress) * 3.0  # peso maior para progresso
+                    reward += max(0, progress) * 4.0  # Peso maior para progresso
                 self.prev_dist_to_checkpoint = dist
                 angle_diff = self.angle_to_checkpoint()
-                reward += np.cos(np.radians(angle_diff)) * 0.1  # Recompensa angular baseada em cosseno
-                # Penalidade de parado baseada na velocidade antes da ação
+                reward += np.cos(np.radians(angle_diff)) * 0.2  # Bônus angular maior
                 if abs(prev_speed) < 0.05:
                     reward = -0.5
             else:
-                # No checkpoints, não soma bônus
                 reward += 0.0
 
         # Recompensa densa/esparsa
@@ -317,15 +311,14 @@ class CorridaEnv(gym.Env):
             # Centralização
             if self.map_type == "corridor":
                 center_y = 300 * ENV_SCALE
-                # Garante penalidade inicial (valor negativo)
-                reward += -0.05 * abs(self.car1_pos[1] - center_y) / ENV_SCALE
+                reward += -0.03 * abs(self.car1_pos[1] - center_y) / ENV_SCALE
             elif self.map_type == "curve":
                 checkpoint = self.checkpoints[self.checkpoint_index] if self.checkpoints else (0, 0)
                 dist_to_cp = np.linalg.norm(np.array(self.car1_pos) - np.array(checkpoint))
-                reward += -0.01 * dist_to_cp / ENV_SCALE
+                reward += -0.008 * dist_to_cp / ENV_SCALE
             # Suavidade de ação
             if hasattr(self, 'last_action') and self.last_action is not None and action != self.last_action:
-                reward -= 0.05
+                reward -= 0.03
             self.last_action = action
         elif REWARD_SCHEME == "sparse":
             self.last_action = action
@@ -342,14 +335,15 @@ class CorridaEnv(gym.Env):
         car_angle = self.car1_angle % 360
         diff_angle = min(abs(target_angle - car_angle), 360 - abs(target_angle - car_angle))
         if diff_angle < 10:
-            reward += 0.2  # recompensa extra por estar bem alinhado
+            reward += 0.3  # Bônus maior por alinhamento
 
         dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
         angle_diff = self.angle_to_checkpoint() if self.checkpoints else 0
-        print(f"[DEBUG] dist={dist}, angle_diff={angle_diff}, car1_pos={self.car1_pos}, checkpoint={checkpoint}")
+        # Removido print DEBUG para não travar interface
+        # print(f"[DEBUG] dist={dist}, angle_diff={angle_diff}, car1_pos={self.car1_pos}, checkpoint={checkpoint}")
         # Alteração: sucesso se dist < 20*ENV_SCALE e ângulo < 30 OU dist ~ 0
         if self.checkpoints and ((dist < 20 * ENV_SCALE and angle_diff < 30) or np.isclose(dist, 0, atol=1e-6)):
-            reward += 10
+            reward += 12  # Bônus maior ao atingir checkpoint
             self.checkpoint_index += 1
             success = True
             if self.checkpoint_index >= len(self.checkpoints):

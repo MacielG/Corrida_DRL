@@ -6,7 +6,7 @@ import time
 import psutil
 from environment import CorridaEnv, MultiAgentEnv
 from agent import Agent
-from interface import Interface
+from interface_dpg import Interface
 from metrics import Metrics
 from main import main, run_curriculum, train_phase, TrainingLogger
 from config import PHASES, ENV_SCALE, MAX_STEPS, MAX_EPISODE_TIME, SUPPORTED_ALGORITHMS

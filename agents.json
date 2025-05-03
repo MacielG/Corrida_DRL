@@ -1,0 +1,14 @@
+[
+  {
+    "nome": "test",
+    "tipo": "SAC",
+    "tempo_acumulado": 0.0,
+    "modelo_path": "models/test_SAC.zip",
+    "historico": [],
+    "cor": [
+      120,
+      180,
+      255
+    ]
+  }
+]

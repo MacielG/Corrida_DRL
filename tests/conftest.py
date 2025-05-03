@@ -1,6 +1,6 @@
 import pytest
 import pygame
-from interface import Interface
+from interface_dpg import Interface
 
 @pytest.fixture
 def interface():

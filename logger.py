@@ -18,11 +18,9 @@ def setup_logger():
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
 
-    # Handler para console (INFO, ERROR)
+    # Handler para console (apenas INFO e acima, sem DEBUG)
     console_handler = logging.StreamHandler()
-    debug_log = os.environ.get("DEBUG_LOG", "0") == "1"
-    console_level = logging.DEBUG if debug_log else logging.INFO
-    console_handler.setLevel(console_level)
+    console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 
