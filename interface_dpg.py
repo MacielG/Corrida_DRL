@@ -192,6 +192,10 @@ class InterfaceDPG:
         self.pygame_screen.blit(car_rot, rect.topleft)
         self.last_car_pos = [float(pos[0]), float(pos[1])]
 
+    def draw_env_grid(self, env_single, idx):
+        """Desenha ambiente em grid (compatível com main.py chamadas)."""
+        self.draw_env_grid_simple(env_single, idx)
+    
     def draw_env_grid_simple(self, env_single, idx):
         """Desenha ambiente simples em grid (NOVO - substitui draw_env_grid)."""
         col = idx % self.grid_cols

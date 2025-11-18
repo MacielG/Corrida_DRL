@@ -95,16 +95,26 @@ class Dashboard:
             penalties_hist (list): Histórico de penalizações.
         """
         n = len(rewards_hist)
-        if n == 0:
+        if n == 0 or not any(rewards_hist):
             return
-        avg_rewards = [sum([r[i] if i < len(r) else 0 for r in rewards_hist])/n for i in range(max(len(r) for r in rewards_hist))]
-        avg_collisions = [sum([c[i] if i < len(c) else 0 for c in collisions_hist])/n for i in range(max(len(c) for c in collisions_hist))]
+        # Filtra listas vazias
+        max_reward_len = max((len(r) for r in rewards_hist), default=0)
+        max_collision_len = max((len(c) for c in collisions_hist), default=0)
+        
+        if max_reward_len == 0:
+            return
+        
+        avg_rewards = [sum([r[i] if i < len(r) else 0 for r in rewards_hist])/n for i in range(max_reward_len)]
+        avg_collisions = [sum([c[i] if i < len(c) else 0 for c in collisions_hist])/n for i in range(max_collision_len)] if max_collision_len > 0 else []
         self.ax.clear()
         self.ax.plot(avg_rewards, label="Recompensa média", color='tab:blue')
-        self.ax.plot(avg_collisions, label="Colisões médias", color='tab:red')
-        if penalties_hist:
-            avg_penalties = [sum([p[i] if i < len(p) else 0 for p in penalties_hist])/n for i in range(max(len(p) for p in penalties_hist))]
-            self.ax.plot(avg_penalties, label="Penalização média", color='tab:orange')
+        if avg_collisions:
+            self.ax.plot(avg_collisions, label="Colisões médias", color='tab:red')
+        if penalties_hist and any(penalties_hist):
+            max_penalty_len = max((len(p) for p in penalties_hist), default=0)
+            if max_penalty_len > 0:
+                avg_penalties = [sum([p[i] if i < len(p) else 0 for p in penalties_hist])/n for i in range(max_penalty_len)]
+                self.ax.plot(avg_penalties, label="Penalização média", color='tab:orange')
         self.ax.legend(fontsize=8, loc='upper right')
         self.ax.set_title("Desempenho Geral", fontsize=10)
         self.ax.set_xlabel("Ciclos")
