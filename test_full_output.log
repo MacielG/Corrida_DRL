@@ -1,0 +1,132 @@
+..............................................F...+++++++++++++++++++++++++++++++++++ Timeout +++++++++++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Captured stdout ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Using cpu device
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 4        |
+|    fps              | 48       |
+|    time_elapsed     | 0        |
+|    total_timesteps  | 138      |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 3.12     |
+|    n_updates        | 9        |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 8        |
+|    fps              | 76       |
+|    time_elapsed     | 0        |
+|    total_timesteps  | 201      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 12       |
+|    fps              | 76       |
+|    time_elapsed     | 0        |
+|    total_timesteps  | 601      |
+----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~ Stack of MainThread (141180) ~~~~~~~~~~~~~~~~~~~~~~~~~
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pytest\__main__.py", line 7, in <module>
+    raise SystemExit(pytest.console_main())
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\config\__init__.py", line 197, in console_main
+    code = main()
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\config\__init__.py", line 174, in main
+    ret: Union[ExitCode, int] = config.hook.pytest_cmdline_main(
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 332, in pytest_cmdline_main
+    return wrap_session(config, _main)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 285, in wrap_session
+    session.exitstatus = doit(config, session) or 0
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 339, in _main
+    config.hook.pytest_runtestloop(session=session)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 364, in pytest_runtestloop
+    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 115, in pytest_runtest_protocol
+    runtestprotocol(item, nextitem=nextitem)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 134, in runtestprotocol
+    reports.append(call_and_report(item, "call", log))
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 239, in call_and_report
+    call = CallInfo.from_call(
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 340, in from_call
+    result: Optional[TResult] = func()
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 240, in <lambda>
+    lambda: runtest_hook(item=item, **kwds), when=when, reraise=reraise
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 172, in pytest_runtest_call
+    item.runtest()
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\python.py", line 1772, in runtest
+    self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+    res = hook_impl.function(*args)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\python.py", line 195, in pytest_pyfunc_call
+    result = testfunction(**testargs)
+  File "c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py", line 19, in test_agent_learning_statistical
+    agent.train(total_timesteps=200, eval_interval=100)
+  File "c:\Users\guilh\Documents\Corrida_DRL\agent.py", line 75, in train
+    current_score = self.evaluate(self.env)
+  File "c:\Users\guilh\Documents\Corrida_DRL\agent.py", line 125, in evaluate
+    action = self.predict(state, deterministic=True)
+  File "c:\Users\guilh\Documents\Corrida_DRL\agent.py", line 90, in predict
+    action, _ = self.model.predict(state, deterministic=deterministic)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\stable_baselines3\dqn\dqn.py", line 260, in predict
+    action, state = self.policy.predict(observation, state, episode_start, deterministic)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\stable_baselines3\common\policies.py", line 368, in predict
+    actions = self._predict(obs_tensor, deterministic=deterministic)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\stable_baselines3\dqn\policies.py", line 184, in _predict
+    return self.q_net._predict(obs, deterministic=deterministic)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\stable_baselines3\dqn\policies.py", line 69, in _predict
+    q_values = self(observation)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\stable_baselines3\dqn\policies.py", line 66, in forward
+    return self.q_net(self.extract_features(obs, self.features_extractor))
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\container.py", line 250, in forward
+    input = module(input)
++++++++++++++++++++++++++++++++++++ Timeout +++++++++++++++++++++++++++++++++++

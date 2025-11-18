@@ -4,6 +4,8 @@ Fornece classes e funções para registrar recompensas, colisões, checkpoints e
 """
 import pygame
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend to avoid tkinter issues
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import gc
@@ -78,9 +80,16 @@ class Metrics:
         canvas = FigureCanvasAgg(self.fig)
         canvas.draw()
         renderer = canvas.get_renderer()
-        raw_data = renderer.tostring_rgb()
+        # Use buffer_rgba() instead of deprecated tostring_rgb()
+        raw_data = renderer.buffer_rgba()
         size = canvas.get_width_height()
-        surf = pygame.image.fromstring(raw_data, size, "RGB")
+        # Convert RGBA to RGB by converting to string then using RGB
+        import numpy as np
+        data_array = np.frombuffer(raw_data, dtype=np.uint8).reshape((*size[::-1], 4))
+        # Drop alpha channel, keep only RGB
+        rgb_array = data_array[:, :, :3]
+        # Create surface from RGB array
+        surf = pygame.surfarray.make_surface(np.transpose(rgb_array, (1, 0, 2)))
         screen.blit(surf, (550, 10))
 
     def export_metrics(self, filename="metrics.csv"):

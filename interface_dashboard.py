@@ -37,9 +37,13 @@ class Dashboard:
             canvas = FigureCanvasAgg(fig)
             canvas.draw()
             renderer = canvas.get_renderer()
-            raw_data = renderer.tostring_rgb()
+            # Use buffer_rgba() instead of deprecated tostring_rgb()
+            raw_data = renderer.buffer_rgba()
             size = canvas.get_width_height()
-            surf = pygame.image.fromstring(raw_data, size, "RGB")
+            import numpy as np
+            data_array = np.frombuffer(raw_data, dtype=np.uint8).reshape((*size[::-1], 4))
+            rgb_array = data_array[:, :, :3]
+            surf = pygame.surfarray.make_surface(np.transpose(rgb_array, (1, 0, 2)))
             self.screen.blit(surf, (self.sim_width+10, graph_y))
             plt.close(fig)
         # Info

@@ -32,7 +32,18 @@ def test_create_new_agent(monkeypatch, tmp_path):
     monkeypatch.setattr("builtins.input", lambda _: next(inputs))
     monkeypatch.setattr("interface_agents.save_agents", lambda a, filename="agents.json": None)
     monkeypatch.setattr("interface_assets.play_sound", lambda nome: None)
-    criar_novo_agente(agents)
+    # Mock interface with all required methods
+    def mock_show_agent_form(self, callback):
+        # Simulate form submission
+        callback({"nome": "AgentX", "tipo": "DQN"})
+    def mock_show_message(self, msg, success=True):
+        pass
+    mock_interface = type('MockInterface', (), {
+        'paused': False,
+        'show_agent_form': mock_show_agent_form,
+        'show_message': mock_show_message
+    })()
+    criar_novo_agente(agents, mock_interface)
     assert any(a["nome"] == "AgentX" for a in agents)
 
 def test_agent_learning_time_and_history():

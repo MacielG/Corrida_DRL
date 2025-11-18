@@ -245,9 +245,13 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
 
     # 4. Loop principal de treinamento
     training_logger = TrainingLogger()
-    interface.load_ranking_data()
+    # CORREÇÃO: Tratamento de erro para ranking.json
+    try:
+        interface.load_ranking_data()
+    except FileNotFoundError:
+        interface.ranking_data = {}
     logger.info(f"Treinando {n_parallel} execuções paralelas do agente {car_to_train} no mapa: {map_type} (Fase: {fase_desc})")
-    obs, info = env.reset()
+    obs = env.reset()  # CORREÇÃO: DummyVecEnv.reset() retorna apenas obs
     rewards_hist = [[] for _ in range(n_parallel)]
     collisions_hist = [[] for _ in range(n_parallel)]
     penalties_hist = [[] for _ in range(n_parallel)]
@@ -272,18 +276,18 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             time.sleep(0.05)
             continue
         interface.clear()
+        # CORREÇÃO: Desenha grid de ambientes simples
         for idx, env_single in enumerate(env.envs):
-            interface.draw_env_grid(env_single, idx)
+            interface.draw_env_grid_simple(env_single, idx)
         speeds = []
         unique_states = set()
-        actions = [int(agent.predict(obs[i])) for i in range(n_parallel)]
-        step_result = env.step(actions)
-        if len(step_result) == 5:
-            obs_, rewards, terminateds, truncateds, infos = step_result
-        else:
-            obs_, rewards, dones, infos = step_result
-            terminateds = dones
-            truncateds = [False for _ in dones]
+        # CORREÇÃO: Predição vetorizada usando agent.model.predict() retorna (actions_array, _state)
+        actions_array, _ = agent.model.predict(obs, deterministic=False)
+        actions = [int(a) for a in actions_array]  # Converte array para list de ints
+        # CORREÇÃO: DummyVecEnv.step() sempre retorna 4 valores
+        obs_, rewards, dones, infos = env.step(actions)
+        terminateds = dones
+        truncateds = [False for _ in dones]
         dones = [terminateds[i] or truncateds[i] for i in range(n_parallel)]
         obs = obs_
         for idx in range(n_parallel):
@@ -331,11 +335,9 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
                     # Salva
                     agents = [a.to_dict() if a.nome != agent_info.nome else agent_info.to_dict() for a in agents]
                     save_agents(agents)
-                obs_single = env.envs[idx].reset()
-                if isinstance(obs_single, tuple):
-                    obs[idx] = obs_single[0]
-                else:
-                    obs[idx] = obs_single
+                # CORREÇÃO: reset() sempre retorna tuple
+                obs_single, _ = env.envs[idx].reset()
+                obs[idx] = obs_single
                 dones[idx] = False
                 episodios[idx] += 1
                 actions_hist[idx] = []
@@ -383,14 +385,13 @@ def run_curriculum(car_to_train=1, n_parallel=4):
         while True:
             interface.process_events()
             interface.clear()
-            actions = [int(agent.predict(states[i][0] if isinstance(states[i], tuple) else states[i])) for i in range(n_parallel)]
-            step_result = env.step(actions)
-            if len(step_result) == 5:
-                obs_, rewards, terminateds, truncateds, infos = step_result
-            else:
-                obs_, rewards, dones, infos = step_result
-                terminateds = dones
-                truncateds = [False for _ in dones]
+            # CORREÇÃO: Predição vetorizada
+            actions_array, _ = agent.model.predict(states, deterministic=False)
+            actions = [int(a) for a in actions_array]  # Converte array para list de ints
+            # CORREÇÃO: DummyVecEnv retorna sempre 4 valores
+            obs_, rewards, dones, infos = env.step(actions)
+            terminateds = dones
+            truncateds = [False for _ in dones]
             dones = [terminateds[i] or truncateds[i] for i in range(n_parallel)]
             for idx in range(n_parallel):
                 if not dones[idx]:
@@ -399,8 +400,9 @@ def run_curriculum(car_to_train=1, n_parallel=4):
                         current_checkpoints[idx] += 1
                     states[idx] = obs_[idx]
                 interface.draw_car_grid(env.envs[idx].car1_pos, env.envs[idx].car1_angle, idx)
-            interface.dashboard.draw_metrics_grid([sum(r) for r in rewards_temp], current_checkpoints)
-            interface.dashboard.draw_info(0.0)
+            # CORREÇÃO: draw_metrics_grid recebe listas de recompensas, não escalares
+            interface.dashboard.draw_metrics_grid(rewards_temp, [], [])
+            interface.dashboard.draw_info(0)
             interface.update()
             for i in range(n_parallel):
                 if dones[i]:
@@ -408,21 +410,19 @@ def run_curriculum(car_to_train=1, n_parallel=4):
                     episode_checkpoints[i].append(current_checkpoints[i])
                     rewards_temp[i] = []
                     current_checkpoints[i] = 0
-                    # Chamada ao logger para garantir registro do episódio
+                    # CORREÇÃO: Log com scalar, não lista
                     training_logger.log(
                         i,
-                        episode_rewards[i][-1] if episode_rewards[i] else [],
+                        [episode_rewards[i][-1]] if episode_rewards[i] else [0],  # Sempre lista
                         [],  # colisões não são registradas aqui
                         actions=None,
-                        checkpoints=episode_checkpoints[i][-1] if episode_checkpoints[i] else [],
+                        checkpoints=[episode_checkpoints[i][-1]] if episode_checkpoints[i] else [0],  # Sempre lista
                         episode_time=None,
                         success=True
                     )
-                    obs_reset = env.envs[i].reset()
-                    if isinstance(obs_reset, tuple):
-                        states[i] = obs_reset[0]
-                    else:
-                        states[i] = obs_reset
+                    # CORREÇÃO: reset() sempre retorna tuple
+                    obs_reset, _ = env.envs[i].reset()
+                    states[i] = obs_reset
                     dones[i] = False
                     episodes_completed[i] += 1
             total_episodes = sum(episodes_completed)

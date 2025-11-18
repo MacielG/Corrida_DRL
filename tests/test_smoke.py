@@ -6,7 +6,7 @@ import types
 def test_interface_instanciacao():
     print("Iniciando test_interface_instanciacao")
     import interface_dpg
-    Interface = interface_dpg.Interface
+    Interface = interface_dpg.InterfaceDPG
     inst = Interface(width=800, height=600, n_parallel=1)
     assert inst.width == 800
     assert inst.height == 600

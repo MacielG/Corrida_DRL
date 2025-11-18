@@ -1,4 +1,21 @@
 import pygame
+import json
+import os
+
+def load_ranking(filename="ranking.json"):
+    """CORREÇÃO: Carrega ranking com tratamento de erro."""
+    if not os.path.exists(filename):
+        return {}
+    try:
+        with open(filename, "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_ranking(ranking_data, filename="ranking.json"):
+    """Salva ranking em JSON."""
+    with open(filename, "w") as f:
+        json.dump(ranking_data, f, indent=2)
 
 class RankingScreen:
     def __init__(self, width, height):

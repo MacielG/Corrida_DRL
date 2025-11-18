@@ -41,9 +41,10 @@ class CorridaEnv(gym.Env):
 
         # Ações: [acelerar, frear, virar_esquerda, virar_direita]
         self.action_space = spaces.Discrete(4)
-        # Estado: [x1, y1, speed1, angle1, x_checkpoint, y_checkpoint, lidar...]
-        low = np.append(np.array([0, 0, -10, -1, -1, 0, 0]), [0]*self.n_lidar)
-        high = np.append(np.array([self.width, self.height, 10, 1, 1, self.width, self.height]), [1.0]*self.n_lidar)
+        # CORREÇÃO: Estado normalizado - tudo em escala [0,1] ou [-1,1]
+        # Estado: [x_norm, y_norm, speed_norm, sin(angle), cos(angle), checkpoint_x_norm, checkpoint_y_norm, lidar...]
+        low = np.append(np.array([0, 0, -1, -1, -1, 0, 0]), [0]*self.n_lidar)
+        high = np.append(np.array([1, 1, 1, 1, 1, 1, 1]), [1.0]*self.n_lidar)
         self.observation_space = spaces.Box(low=low, high=high, dtype=np.float32)
 
         self._setup_map()
@@ -133,7 +134,7 @@ class CorridaEnv(gym.Env):
         Args:
             randomize_checkpoint (bool): Se True, randomiza checkpoints.
         Returns:
-            np.array: Estado inicial normalizado.
+            tuple: (obs, info) - Sempre retorna tuple para compatibilidade com Gymnasium.
         """
         self.randomize_checkpoint = randomize_checkpoint
         tentativas = 0
@@ -160,7 +161,6 @@ class CorridaEnv(gym.Env):
         self.episode_time = 0.0
         self.prev_dist_to_checkpoint = None
         self.prev_angle = None
-        logger.debug(f"Reset: car1_pos={self.car1_pos}, is_on_corridor={self.is_on_corridor(self.car1_pos)}")
         # Sempre retorna observação completa (core + lidar) para compatibilidade com DummyVecEnv
         obs = self._get_obs(only_core=False)
         return np.array(obs, dtype=np.float32), {}
@@ -247,7 +247,6 @@ class CorridaEnv(gym.Env):
             self.car1_angle = (self.car1_angle - 5) % 360
         elif action == 3:
             self.car1_angle = (self.car1_angle + 5) % 360
-        logger.debug(f"Action: {action}, Speed before: {prev_speed:.2f}, Speed after: {self.car1_speed:.2f}, Angle before: {prev_angle}, Angle after: {self.car1_angle}")
         if abs(self.car1_speed) > 0.01:
             rad = np.radians(self.car1_angle)
             delta_x = self.car1_speed * np.cos(rad)
@@ -264,9 +263,7 @@ class CorridaEnv(gym.Env):
                     reward -= (1 - alignment) * 0.5  # penalidade suave
             self.car1_pos[0] += delta_x
             self.car1_pos[1] += delta_y
-        logger.debug(f"Position before move: ({prev_pos_before_move[0]:.2f}, {prev_pos_before_move[1]:.2f}), Position after move: ({self.car1_pos[0]:.2f}, {self.car1_pos[1]:.2f})")
         inside_corridor = self.is_on_corridor(self.car1_pos)
-        logger.debug(f"Inside corridor after move: {inside_corridor}")
 
         reward = 0
         done = False
@@ -376,7 +373,6 @@ class CorridaEnv(gym.Env):
             bool: True se está no corredor, False caso contrário.
         """
         x, y = pos
-        logger.debug(f"Checking corridor bounds for position: ({x:.2f}, {y:.2f})")
         if self.map_type == "circle":
             cx, cy = 400 * ENV_SCALE, 300 * ENV_SCALE
             dist = np.sqrt((x - cx)**2 + (y - cy)**2)
@@ -385,19 +381,16 @@ class CorridaEnv(gym.Env):
                 inside = False
             else:
                 inside = (self.circle_r_in <= dist < self.circle_r_out)
-            logger.debug(f"Circle track: dist={dist}, inside={inside}")
             return inside
         # Primeiro verifica se está dentro de alguma barreira
         for bx, by, bw, bh in self.barriers:
             inside_barrier = (bx <= x <= bx + bw and by <= y <= by + bh)
-            logger.debug(f"Barrier rect: bx={bx}, by={by}, bw={bw}, bh={bh}, inside_barrier={inside_barrier}")
             if inside_barrier:
                 return False
         # Depois verifica se está dentro do corredor
         if self.corridor_rect:
             x0, y0, w, h = self.corridor_rect
             inside_corridor = (x0 <= x <= x0 + w and y0 <= y <= y0 + h)
-            logger.debug(f"Corridor rect: x0={x0}, y0={y0}, w={w}, h={h}, inside_corridor={inside_corridor}")
             if not inside_corridor:
                 return False
         return True
@@ -436,15 +429,11 @@ class MultiAgentEnv:
 
     def reset(self):
         """Reseta todos os ambientes e retorna lista de estados."""
-        # Garante que retorna apenas o vetor de estado (np.ndarray) para cada agente
+        # CORREÇÃO: reset() agora sempre retorna (obs, info) tuple
         self.states = []
         for env in self.envs:
-            result = env.reset()
-            if isinstance(result, tuple):
-                state, _ = result
-            else:
-                state = result
-            self.states.append(state)
+            obs, info = env.reset()  # Sempre tuple
+            self.states.append(obs)
         self.dones = [False] * self.n_agents
         return self.states
 

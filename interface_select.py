@@ -39,9 +39,13 @@ class SelectScreen:
             screen.blit(sombra, (rect[0]-3, rect[1]-3))
             # Ícone
             if os.path.exists(icones[ag]):
-                icon = pygame.image.load(icones[ag]).convert_alpha()
-                icon = pygame.transform.smoothscale(icon, (60,60))
-                surf.blit(icon, (45,20))
+                try:
+                    icon = pygame.image.load(icones[ag]).convert_alpha()
+                    icon = pygame.transform.smoothscale(icon, (60,60))
+                    surf.blit(icon, (45,20))
+                except pygame.error:
+                    # Fallback: draw a colored circle if image fails to load
+                    pygame.draw.circle(surf, (100,150,200), (75,50), 25)
             # Nome
             ag_text = font.render(ag, True, (30,60,120))
             surf.blit(ag_text, (35, 90))

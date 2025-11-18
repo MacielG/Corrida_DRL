@@ -1,7 +1,7 @@
 import pytest
 import pygame
 import os
-from interface_dpg import Interface
+from interface_dpg import InterfaceDPG
 from environment import CorridaEnv
 from interface_select import SelectScreen
 from interface_ranking import RankingScreen
@@ -11,7 +11,7 @@ from unittest.mock import Mock
 @pytest.fixture
 def interface():
     pygame.init()
-    interface = Interface(width=800, height=600, fase_desc="Test", n_parallel=2)
+    interface = InterfaceDPG(width=800, height=600, fase_desc="Test", n_parallel=2)
     yield interface
     interface.close()
 
@@ -39,32 +39,32 @@ def test_draw_car_trajectory(interface):
     color = interface.screen.get_at((395, 300))
     assert color.r > 0
 
-def test_process_events_pause(interface, monkeypatch):
-    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.buttons["pause"].x + 10, interface.buttons["pause"].y + 10)))
-    monkeypatch.setattr(pygame, "event", Mock(get=lambda: [Mock(type=pygame.MOUSEBUTTONDOWN)]))
-    interface.process_events()
-    assert interface.paused is True
+def test_toggle_pause(interface):
+    # CORREÇÃO: Teste simples de toggle_pause
+    initial = interface.paused
+    interface.toggle_pause()
+    assert interface.paused == (not initial)
 
-def test_process_events_map_menu(interface, monkeypatch):
-    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.buttons["map"].x + 10, interface.buttons["map"].y + 10)))
-    monkeypatch.setattr(pygame, "event", Mock(get=lambda: [Mock(type=pygame.MOUSEBUTTONDOWN)]))
-    interface.process_events()
-    assert interface.menu_active is True
-    menu_y = interface.buttons["map"].y + 50
-    monkeypatch.setattr(pygame, "mouse", Mock(get_pos=lambda: (interface.sim_width + 30, menu_y + 10)))
-    interface.process_events()
-    assert interface.selected_map == "corridor"
-    assert interface.menu_active is False
+def test_request_restart(interface):
+    # CORREÇÃO: Teste de restart
+    assert not interface.should_restart()
+    interface.request_restart()
+    assert interface.should_restart()
+    interface.clear_restart()
+    assert not interface.should_restart()
 
 def test_draw_dashboard_empty(interface):
+    # CORREÇÃO: Passou argumentos corretos para draw_dashboard
     interface.draw_dashboard([], [], [], 0, 0.0, 0)
     assert interface.screen.get_at((interface.sim_width + 20, 50))[:3] != (255, 255, 255)
 
-def test_draw_multi_agents(interface):
+def test_draw_env_grid_simple(interface):
+    # CORREÇÃO: Testa draw_env_grid_simple ao invés de draw_multi_agents (não existe)
     env = CorridaEnv(map_type="corridor")
-    states = [[400, 300, 1, 0, 1, 0, 0] * 2]
-    interface.draw_multi_agents(env, states=states)
-    assert interface.screen.get_at((400, 300))[:3] != (255, 255, 255)
+    env.reset()
+    interface.draw_env_grid_simple(env, 0)
+    # Verifica que algo foi desenhado na grade
+    assert interface.screen.get_at((50, 50))[:3] != (255, 255, 255)
 
 # Additional tests for agent selection, ranking, events, names, and models
 

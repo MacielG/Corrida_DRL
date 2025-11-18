@@ -1,0 +1,63 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.0, pytest-8.1.1, pluggy-1.6.0 -- C:\Users\guilh\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: c:\Users\guilh\Documents\Corrida_DRL
+plugins: timeout-2.4.0
+collecting ... collected 56 items / 1 error
+
+=================================== ERRORS ====================================
+_________________ ERROR collecting tests/test_integration.py __________________
+ImportError while importing test module 'c:\Users\guilh\Documents\Corrida_DRL\tests\test_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests\test_integration.py:9: in <module>
+    from interface_dpg import Interface
+E   ImportError: cannot import name 'Interface' from 'interface_dpg' (c:\Users\guilh\Documents\Corrida_DRL\interface_dpg.py). Did you mean: 'InterfaceDPG'?
+============================== warnings summary ===============================
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\pygame\pkgdata.py:25
+  C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pygame\pkgdata.py:25: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+    from pkg_resources import resource_stream, resource_exists
+
+tests\test_learning.py:8
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:8: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:27
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:27: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:52
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:52: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:64
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:64: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:77
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:77: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:87
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:87: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:96
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:96: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:107
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:107: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+tests\test_learning.py:121
+  c:\Users\guilh\Documents\Corrida_DRL\tests\test_learning.py:121: PytestUnknownMarkWarning: Unknown pytest.mark.slow - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.slow
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_integration.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+======================== 10 warnings, 1 error in 9.63s ========================
