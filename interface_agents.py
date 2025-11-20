@@ -4,13 +4,17 @@ import json
 from interface_assets import load_icon, play_sound
 
 class AgentInfo:
-    def __init__(self, nome, tipo, tempo_acumulado=0.0, modelo_path=None, historico=None, cor=(120,180,255)):
+    def __init__(self, nome, tipo, tempo_acumulado=0.0, modelo_path=None, historico=None, cor=(120,180,255), stats=None, level=1):
         self.nome = nome
         self.tipo = tipo
         self.tempo_acumulado = tempo_acumulado
         self.modelo_path = modelo_path or f"models/{nome}_{tipo}.zip"
         self.historico = historico or []
         self.cor = cor
+        self.level = level
+        # Stats padrão: Aceleração, Turn, MaxSpeed
+        self.stats = stats or {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
+    
     def to_dict(self):
         return {
             "nome": self.nome,
@@ -18,11 +22,30 @@ class AgentInfo:
             "tempo_acumulado": self.tempo_acumulado,
             "modelo_path": self.modelo_path,
             "historico": self.historico,
-            "cor": self.cor
+            "cor": self.cor,
+            "level": self.level,
+            "stats": self.stats
         }
+    
     @staticmethod
     def from_dict(d):
-        return AgentInfo(d["nome"], d["tipo"], d.get("tempo_acumulado",0.0), d.get("modelo_path"), d.get("historico",[]), tuple(d.get("cor",(120,180,255))))
+        return AgentInfo(
+            d["nome"], d["tipo"], d.get("tempo_acumulado",0.0), 
+            d.get("modelo_path"), d.get("historico",[]), 
+            tuple(d.get("cor",(120,180,255))),
+            d.get("stats"),
+            d.get("level", 1)
+        )
+    
+    def upgrade(self, stat_name):
+        """Sistema simples de upgrade de stats"""
+        if stat_name == "accel":
+            self.stats["accel"] = min(self.stats["accel"] + 0.05, 1.0)
+        elif stat_name == "turn_speed":
+            self.stats["turn_speed"] = min(self.stats["turn_speed"] + 0.5, 15.0)
+        elif stat_name == "max_speed":
+            self.stats["max_speed"] = min(self.stats["max_speed"] + 1.0, 30.0)
+        self.level += 1
 
 def save_agents(agents, filename="agents.json"):
     with open(filename, "w", encoding="utf-8") as f:

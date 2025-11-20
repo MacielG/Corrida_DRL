@@ -335,13 +335,101 @@
 
 ---
 
+## CAMADA DE GAMIFICAÇÃO (v2.1)
+
+### 1. Upgrades e Física Variável (`environment.py` + `interface_agents.py`)
+
+- [x] Classe `AgentInfo` estendida com `stats` e `level`
+  - Stats: accel, turn_speed, max_speed
+  - Método `upgrade()` para incrementar stats
+  - Localização: `interface_agents.py` linhas 6-45
+
+- [x] `CorridaEnv` aceita `car_stats` customizados
+  - Construtor modificado para aceitar dict de stats
+  - Física dinâmica: ACCEL_FORCE, TURN_SPEED, MAX_SPEED
+  - Localização: `environment.py` linhas 15-47
+
+- [x] Limitador de velocidade máxima
+  - `self.car1_speed = max(-self.MAX_SPEED, min(self.car1_speed, self.MAX_SPEED))`
+  - Localização: `environment.py` linha ~253
+
+- [x] `MultiAgentEnv` suporta múltiplos stats
+  - `car_stats_list` parameter para ambientes diferentes
+  - Localização: `environment.py` linhas 434-446
+
+**Status**: ✓ COMPLETO
+
+### 2. Corridas Coletivas Multi-Modelos (`race_manager.py`)
+
+- [x] Classe `RaceManager` implementada
+  - Carrega múltiplos modelos treinados
+  - Executa predições rotacionadas (agente i usa modelo i % n_models)
+  - Suporta competição entre diferentes RL algorithms
+  - Localização: `main.py` linhas 101-168
+
+- [x] Classe `CompetitiveRaceManager` criada
+  - Gerencia torneios round-robin
+  - Registra resultados de corridas
+  - Calcula rankings de agentes
+  - Localização: arquivo novo `race_manager.py`
+
+**Status**: ✓ COMPLETO
+
+### 3. Sistema de Progressão e Desbloqueios (`gamification.py`)
+
+- [x] Classe `GamificationSystem` implementada
+  - Cálculo de nível por XP (fórmula: sqrt(XP/100) + 1)
+  - Desbloqueio de mapas por nível (corridor=1, curve=5, circle=10)
+  - Sistema de upgrades com custo em XP
+  - Validação de disponibilidade de upgrades
+  - Localização: arquivo novo `gamification.py` linhas 1-160
+
+- [x] Classe `Achievement` implementada
+  - Achievements desbloqueáveis (Primeiro Passo, Perfeito, etc)
+  - Validação de condições de desbloqueio
+  - Localização: `gamification.py` linhas 162-210
+
+**Status**: ✓ COMPLETO
+
+### 4. Integração no Main Loop (`main.py`)
+
+- [x] Stats do agente passados ao ambiente
+  - `make_env(selected_map, car_stats=agent_info.stats)`
+  - Agents renderizam com física customizada
+  - Localização: `main.py` linha ~286
+
+- [x] Exibição de stats e nível em console
+  - "[GAMIFICAÇÃO] Stats do agente: Acel=X, Turn=Y, MaxSpeed=Z"
+  - "[GAMIFICAÇÃO] Nível do agente: N"
+  - Localização: `main.py` linhas 279-280
+
+**Status**: ✓ COMPLETO
+
+### 5. Ranking com Stats de Gamificação (`interface_ranking.py`)
+
+- [x] RankingScreen.draw_ranking() estendida
+  - Mostra Nível ao lado do Score
+  - Mostra Aceleração do agente
+  - Busca stats do agente na lista agents_data
+  - Localização: `interface_ranking.py` linhas 29-88
+
+- [x] Main passa agents_data ao ranking
+  - `draw_ranking(screen, agents_data=agents_loaded)`
+  - Localização: `main.py` linhas 249-251
+
+**Status**: ✓ COMPLETO
+
 ## PRÓXIMAS ETAPAS
 
-1. [ ] Validação manual de testes 1-5
-2. [ ] Feedback de usuários
-3. [ ] Otimizações de performance (se necessário)
-4. [ ] Curriculum learning (v2.1)
-5. [ ] Multi-agent racing (v2.2)
+1. [x] Upgrades e Física Variável (v2.1) - COMPLETO
+2. [x] Corridas Coletivas Multi-Modelos (v2.1) - COMPLETO
+3. [x] Sistema de Progressão e Desbloqueios (v2.1) - COMPLETO
+4. [ ] Validação manual de testes 1-5
+5. [ ] Interface visual de upgrades (menu de compra)
+6. [ ] Torneios com visualização em tempo real
+7. [ ] Achievements e trophy room (v2.2)
+8. [ ] Curriculum learning automático (v2.2)
+9. [ ] Multi-agent racing visual (v2.2)
 
 ---
 

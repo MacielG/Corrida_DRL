@@ -26,7 +26,7 @@ class RankingScreen:
         self.margin_top = 80
         self.line_height = 40
 
-    def draw_ranking(self, screen, ranking_data=None, highlight_idx=None):
+    def draw_ranking(self, screen, ranking_data=None, highlight_idx=None, agents_data=None):
         # Fundo gradiente
         bg = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         for y in range(self.height):
@@ -39,10 +39,10 @@ class RankingScreen:
         pygame.draw.rect(sombra, (80,120,180,60), (6,6,table_rect.width-12,table_rect.height-12), border_radius=18)
         screen.blit(sombra, (table_rect.x-3, table_rect.y-3))
         # Cabeçalho
-        title_surf = self.font_title.render("Ranking", True, (30, 60, 120))
+        title_surf = self.font_title.render("Ranking (com Stats de Gamificação)", True, (30, 60, 120))
         screen.blit(title_surf, (self.width // 2 - title_surf.get_width() // 2, 20))
         y = self.margin_top
-        header = self.font_entry.render(f"{'Pos':<4} {'Agente|Mapa':<20} {'Score':>8} {'Velocidade':>12} {'Tempo':>10}", True, (255,255,255))
+        header = self.font_entry.render(f"{'Pos':<4} {'Agente|Mapa':<20} {'Score':>8} {'Nível':>6} {'Acel':>6}", True, (255,255,255))
         header_bg = pygame.Surface((self.width-80, self.line_height), pygame.SRCALPHA)
         pygame.draw.rect(header_bg, (74,144,226,220), (0,0,self.width-80,self.line_height), border_radius=12)
         screen.blit(header_bg, (50, y))
@@ -59,7 +59,18 @@ class RankingScreen:
                 score = val.get("score", 0)
                 speed = val.get("speed", 0)
                 tempo = val.get("tempo", 0)
-                entry_text = f"{idx:<4} {key:<20} {score:>8.2f} {speed:>12.2f} {tempo:>10.2f}s"
+                
+                # Extrai informações do agente se disponíveis
+                nivel = 1
+                accel = 0.5
+                if agents_data:
+                    for ag in agents_data:
+                        if ag.get("nome") in key:
+                            nivel = ag.get("level", 1)
+                            accel = ag.get("stats", {}).get("accel", 0.5)
+                            break
+                
+                entry_text = f"{idx:<4} {key:<20} {score:>8.2f} {nivel:>6} {accel:>6.2f}"
                 # Linhas alternadas
                 row_bg = pygame.Surface((self.width-80, self.line_height), pygame.SRCALPHA)
                 cor_bg = (255,255,255,220) if idx%2==0 else (230,240,255,220)

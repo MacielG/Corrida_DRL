@@ -97,8 +97,70 @@ import argparse
 
 logger = setup_logger()
 
-def make_env(map_type):
-    return lambda: CorridaEnv(map_type=map_type)
+class RaceManager:
+    """Gerenciador de corridas multi-modelos para competições de IA.
+    
+    Permite que múltiplos agentes com diferentes cérebros (PPO, DQN, etc)
+    corram simultaneamente no mesmo mapa para criar corridas visuais interessantes.
+    """
+    def __init__(self, agents_info_list, map_type, n_parallel=8):
+        """
+        Args:
+            agents_info_list (list): Lista de AgentInfo com modelos treinados
+            map_type (str): Tipo de mapa ('corridor', 'curve', 'circle')
+            n_parallel (int): Número de ambientes paralelos
+        """
+        self.agents_info = agents_info_list
+        self.map_type = map_type
+        self.n_parallel = n_parallel
+        self.models = []
+        self.agent_stats = []
+        
+        # Carrega todos os modelos
+        for agent_info in agents_info_list:
+            try:
+                # Carrega o modelo específico do agente
+                model_path = agent_info.modelo_path.replace(".zip", "")
+                agent_instance = Agent(None, model_path=model_path)
+                if os.path.exists(agent_info.modelo_path):
+                    agent_instance.load(agent_info.modelo_path)
+                    self.models.append(agent_instance)
+                    self.agent_stats.append(agent_info.stats)
+                    logger.info(f"[RaceManager] Modelo carregado: {agent_info.nome}")
+            except Exception as e:
+                logger.warning(f"[RaceManager] Falha ao carregar {agent_info.nome}: {e}")
+        
+        if not self.models:
+            logger.warning("[RaceManager] Nenhum modelo carregado! Usando modelo padrão.")
+            self.models = [None]
+            self.agent_stats = [{"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}]
+    
+    def get_actions(self, observations):
+        """Predições de múltiplos modelos de forma rotacionada.
+        
+        Args:
+            observations (array): Array de observações [n_parallel, obs_dim]
+            
+        Returns:
+            list: Ações [n_parallel] onde cada índice usa um modelo diferente
+        """
+        actions = []
+        for i, obs in enumerate(observations):
+            model_idx = i % len(self.models)
+            try:
+                if self.models[model_idx] is not None:
+                    action, _ = self.models[model_idx].predict(np.array([obs]), deterministic=False)
+                    actions.append(int(action[0]))
+                else:
+                    actions.append(0)  # Ação padrão se modelo não carregou
+            except Exception as e:
+                logger.warning(f"[RaceManager] Erro na predição do modelo {model_idx}: {e}")
+                actions.append(0)
+        return actions
+
+def make_env(map_type, car_stats=None):
+    """Factory function para criar ambientes com stats customizados."""
+    return lambda: CorridaEnv(map_type=map_type, car_stats=car_stats)
 
 def update_curriculum(current_performance: float):
     from config import PHASES
@@ -184,7 +246,9 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             interface.clock.tick(60)
 
         elif interface.state == "ranking":
-            interface.ranking_screen.draw_ranking(interface.screen)
+            # Carrega dados dos agentes para mostrar stats no ranking
+            agents_loaded = [AgentInfo.from_dict(a).to_dict() for a in load_agents()]
+            interface.ranking_screen.draw_ranking(interface.screen, agents_data=agents_loaded)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit(); exit()
@@ -215,10 +279,13 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
     selected_agent = agent_info.tipo
     selected_map = interface.selected_map or "corridor"
     print(f"Agente selecionado: {agent_info.nome} ({selected_agent}) | Mapa: {selected_map}")
+    print(f"[GAMIFICAÇÃO] Stats do agente: Acel={agent_info.stats['accel']}, Turn={agent_info.stats['turn_speed']}, MaxSpeed={agent_info.stats['max_speed']}")
+    print(f"[GAMIFICAÇÃO] Nível do agente: {agent_info.level}")
 
     # 2. Prepara ambiente, modelo e agente (NÃO treina antes do loop principal)
     from stable_baselines3.common.vec_env import DummyVecEnv
-    env = DummyVecEnv([make_env(selected_map) for _ in range(n_parallel)])
+    # Passa os stats do agente para o ambiente
+    env = DummyVecEnv([make_env(selected_map, car_stats=agent_info.stats) for _ in range(n_parallel)])
     for i in range(10, 101, 10):
         interface.draw_loading(f'Renderizando agentes... ({i}%)', progresso=i/100, animar=False)
         interface.process_events()

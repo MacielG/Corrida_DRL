@@ -17,8 +17,9 @@ class CorridaEnv(gym.Env):
 
     Args:
         map_type (str): Tipo de mapa ('corridor' ou 'curve').
+        car_stats (dict): Stats do carro {'accel': 0.5, 'turn_speed': 5.0, 'max_speed': 20.0}
     """
-    def __init__(self, map_type="corridor"):
+    def __init__(self, map_type="corridor", car_stats=None):
         self.width = int(800 * ENV_SCALE)
         self.height = int(600 * ENV_SCALE)
         self.map_type = map_type
@@ -38,6 +39,12 @@ class CorridaEnv(gym.Env):
         self.last_angle_pos = None
         self.n_lidar = 8  # 8 sensores Lidar a cada 45 graus
         self.randomize_checkpoint = False  # Garante que sempre existe
+        
+        # Carrega stats do agente ou usa padrão
+        self.car_stats = car_stats if car_stats else {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
+        self.ACCEL_FORCE = self.car_stats["accel"]
+        self.TURN_SPEED = self.car_stats["turn_speed"]
+        self.MAX_SPEED = self.car_stats["max_speed"]
 
         # Ações: [acelerar, frear, virar_esquerda, virar_direita]
         self.action_space = spaces.Discrete(4)
@@ -234,19 +241,22 @@ class CorridaEnv(gym.Env):
         prev_angle = self.car1_angle
         prev_pos_before_move = self.car1_pos.copy()
         # Ação do carro 1 (agente)
-        # Física realista: força e atrito
-        ACCEL_FORCE = 0.5
+        # Física realista: força e atrito com stats dinâmicos
         FRICTION = 0.98
         if action == 0:
-            self.car1_speed = self.car1_speed * FRICTION + ACCEL_FORCE
+            self.car1_speed = self.car1_speed * FRICTION + self.ACCEL_FORCE
         elif action == 1:
-            self.car1_speed = self.car1_speed * FRICTION - ACCEL_FORCE
+            self.car1_speed = self.car1_speed * FRICTION - self.ACCEL_FORCE
         else:
             self.car1_speed = self.car1_speed * FRICTION
+        
+        # Limita velocidade máxima baseada em stats
+        self.car1_speed = max(-self.MAX_SPEED, min(self.car1_speed, self.MAX_SPEED))
+        
         if action == 2:
-            self.car1_angle = (self.car1_angle - 5) % 360
+            self.car1_angle = (self.car1_angle - self.TURN_SPEED) % 360
         elif action == 3:
-            self.car1_angle = (self.car1_angle + 5) % 360
+            self.car1_angle = (self.car1_angle + self.TURN_SPEED) % 360
         if abs(self.car1_speed) > 0.01:
             rad = np.radians(self.car1_angle)
             delta_x = self.car1_speed * np.cos(rad)
@@ -425,9 +435,12 @@ class MultiAgentEnv:
     Args:
         n_agents (int): Número de agentes/ambientes.
         map_type (str): Tipo de mapa para todos os ambientes.
+        car_stats_list (list): Lista de dicts com stats para cada agente.
     """
-    def __init__(self, n_agents, map_type):
-        self.envs = [CorridaEnv(map_type=map_type) for _ in range(n_agents)]
+    def __init__(self, n_agents, map_type, car_stats_list=None):
+        if car_stats_list is None:
+            car_stats_list = [None] * n_agents
+        self.envs = [CorridaEnv(map_type=map_type, car_stats=car_stats_list[i]) for i in range(n_agents)]
         self.n_agents = n_agents
         self.states = [None] * n_agents
         self.dones = [False] * n_agents
