@@ -197,50 +197,91 @@ class InterfaceDPG:
         self.draw_env_grid_simple(env_single, idx)
     
     def draw_env_grid_simple(self, env_single, idx):
-        """Desenha ambiente simples em grid (NOVO - substitui draw_env_grid)."""
+        """Desenha ambiente estilizado como pista de corrida."""
         col = idx % self.grid_cols
         row = idx // self.grid_cols
         offset_x = col * self.cell_width
         offset_y = row * self.cell_height
         
-        # Limpa célula
-        pygame.draw.rect(self.pygame_screen, (240, 240, 240), 
+        # Fundo da célula (Grama/Terra)
+        pygame.draw.rect(self.pygame_screen, (34, 139, 34), 
                         (offset_x, offset_y, self.cell_width, self.cell_height))
-        pygame.draw.rect(self.pygame_screen, (100, 100, 100), 
-                        (offset_x, offset_y, self.cell_width, self.cell_height), 2)
         
-        # Desenha componentes do ambiente em escala reduzida
-        if env_single.corridor_rect:
-            cx0, cy0, cw, ch = env_single.corridor_rect
-            # Escala para caber na célula
-            scale_x = self.cell_width / env_single.width
-            scale_y = self.cell_height / env_single.height
-            rect = pygame.Rect(offset_x + cx0*scale_x, offset_y + cy0*scale_y, 
-                             cw*scale_x, ch*scale_y)
-            pygame.draw.rect(self.pygame_screen, (200, 200, 200), rect)
+        # Borda da célula (separador de telas)
+        pygame.draw.rect(self.pygame_screen, (20, 20, 20), 
+                        (offset_x, offset_y, self.cell_width, self.cell_height), 4)
         
-        # Desenha barreiras
-        for bx, by, bw, bh in env_single.barriers:
-            scale_x = self.cell_width / env_single.width
-            scale_y = self.cell_height / env_single.height
-            rect = pygame.Rect(offset_x + bx*scale_x, offset_y + by*scale_y,
-                             bw*scale_x, bh*scale_y)
-            pygame.draw.rect(self.pygame_screen, (100, 100, 100), rect)
-        
-        # Desenha checkpoints
-        for cp in env_single.checkpoints:
-            scale_x = self.cell_width / env_single.width
-            scale_y = self.cell_height / env_single.height
-            pos_x = int(offset_x + cp[0] * scale_x)
-            pos_y = int(offset_y + cp[1] * scale_y)
-            pygame.draw.circle(self.pygame_screen, (0, 255, 0), (pos_x, pos_y), 3)
-        
-        # Desenha carro
+        # Fatores de escala
         scale_x = self.cell_width / env_single.width
         scale_y = self.cell_height / env_single.height
+
+        # Desenha a Pista (Corridor Rect ou Barreiras Invertidas)
+        # No caso do 'corridor', desenhamos o retângulo jogável como asfalto
+        if env_single.corridor_rect:
+            cx0, cy0, cw, ch = env_single.corridor_rect
+            rect = pygame.Rect(offset_x + cx0*scale_x, offset_y + cy0*scale_y, 
+                             cw*scale_x, ch*scale_y)
+            pygame.draw.rect(self.pygame_screen, (50, 50, 50), rect) # Asfalto cinza escuro
+            
+            # Linhas da pista (decorativo)
+            line_y = offset_y + cy0*scale_y + (ch*scale_y)/2
+            start_x = offset_x + cx0*scale_x
+            end_x = start_x + cw*scale_x
+            for lx in range(int(start_x), int(end_x), 40):
+                pygame.draw.line(self.pygame_screen, (255, 255, 255), (lx, line_y), (lx+20, line_y), 2)
+
+        elif env_single.map_type == "curve" or env_single.map_type == "circle":
+            # Para curva/círculo, preenchemos tudo de asfalto e desenhamos barreiras por cima
+            pygame.draw.rect(self.pygame_screen, (50, 50, 50), 
+                            (offset_x, offset_y, self.cell_width, self.cell_height))
+        
+        # Desenha barreiras (Muros/Obstáculos)
+        for bx, by, bw, bh in env_single.barriers:
+            rect = pygame.Rect(offset_x + bx*scale_x, offset_y + by*scale_y,
+                             bw*scale_x, bh*scale_y)
+            # Muro vermelho e branco (estilo zebra de corrida)
+            pygame.draw.rect(self.pygame_screen, (200, 50, 50), rect)
+            pygame.draw.rect(self.pygame_screen, (255, 255, 255), rect, 2)
+        
+        # Desenha checkpoints (Alvos)
+        t = time.time()
+        for i, cp in enumerate(env_single.checkpoints):
+            pos_x = int(offset_x + cp[0] * scale_x)
+            pos_y = int(offset_y + cp[1] * scale_y)
+            
+            # Checkpoint ativo pulsa
+            if i == env_single.checkpoint_index:
+                raio = 4 + math.sin(t * 10) * 2
+                color = (0, 255, 255) # Ciano brilhante
+            else:
+                raio = 3
+                color = (0, 100, 0) # Verde escuro (inativo)
+                
+            pygame.draw.circle(self.pygame_screen, color, (pos_x, pos_y), int(raio))
+        
+        # Desenha Carro (Triângulo para mostrar direção)
         car_x = int(offset_x + env_single.car1_pos[0] * scale_x)
         car_y = int(offset_y + env_single.car1_pos[1] * scale_y)
-        pygame.draw.circle(self.pygame_screen, (255, 0, 0), (car_x, car_y), 4)
+        angle_rad = math.radians(env_single.car1_angle)
+        
+        # Cria forma do carro (seta)
+        car_len = 10
+        car_width = 6
+        
+        # Ponta da frente
+        p1 = (car_x + math.cos(angle_rad) * car_len, car_y + math.sin(angle_rad) * car_len)
+        # Traseira direita
+        p2 = (car_x + math.cos(angle_rad + 2.5) * car_width, car_y + math.sin(angle_rad + 2.5) * car_width)
+        # Traseira esquerda
+        p3 = (car_x + math.cos(angle_rad - 2.5) * car_width, car_y + math.sin(angle_rad - 2.5) * car_width)
+        
+        # Cor baseada no índice (para diferenciar agentes)
+        colors = [(255, 50, 50), (50, 50, 255), (50, 255, 50), (255, 255, 0), 
+                  (255, 0, 255), (0, 255, 255), (255, 128, 0), (128, 0, 255)]
+        car_color = colors[idx % len(colors)]
+        
+        pygame.draw.polygon(self.pygame_screen, car_color, [p1, p2, p3])
+        pygame.draw.polygon(self.pygame_screen, (0,0,0), [p1, p2, p3], 1) # Borda preta
 
     def draw_car_grid(self, pos, angle, idx, color=(255, 0, 0)):
         """Desenha carro em grid (compatível com run_curriculum)."""

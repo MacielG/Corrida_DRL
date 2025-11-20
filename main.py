@@ -213,20 +213,28 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             interface.clock.tick(60)
 
         elif interface.state == "selecao_agente":
-            interface.select_screen.draw_selecao_agente(interface.screen, selected_agent=interface.selected_agent, selected_map=interface.selected_map)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mx, my = pygame.mouse.get_pos()
-                    for ag, rect in interface.select_screen.agente_btns:
-                        r = pygame.Rect(rect)
-                        if r.collidepoint(mx, my):
-                            interface.selected_agent = ag
-                            interface.change_state("selecao_mapa")
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    interface.change_state("menu_inicial")
+            # Verifica se há agentes criados
+            agents_check = load_agents()
+            if not agents_check:
+                # Sem agentes, redireciona para gestão
+                print("[INFO] Nenhum agente criado. Redirecionando para Gestão de Agentes...")
+                interface.change_state("gestao_agentes")
+                agents = []  # Reinicia lista de agentes
+            else:
+                interface.select_screen.draw_selecao_agente(interface.screen, selected_agent=interface.selected_agent, selected_map=interface.selected_map)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        mx, my = pygame.mouse.get_pos()
+                        for ag, rect in interface.select_screen.agente_btns:
+                            r = pygame.Rect(rect)
+                            if r.collidepoint(mx, my):
+                                interface.selected_agent = ag
+                                interface.change_state("selecao_mapa")
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                        interface.change_state("menu_inicial")
             interface.clock.tick(60)
 
         elif interface.state == "selecao_mapa":

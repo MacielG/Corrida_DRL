@@ -38,3 +38,91 @@
 2025-11-20 01:22:29,380 - INFO - Recompensa média nos últimos 1000 passos: [34.526733]
 2025-11-20 01:22:40,093 - INFO - Recompensa média nos últimos 1000 passos: [35.34825]
 2025-11-20 01:22:40,093 - INFO - Recompensa média nos últimos 1000 passos: [35.34825]
+2025-11-20 02:25:00,888 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:00,888 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:00,888 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:00,888 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:00,980 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:00,980 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:00,980 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:00,980 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:07,185 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:07,185 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:07,185 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:07,185 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:10,423 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:10,423 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:10,423 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:10,423 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:12,793 - DEBUG - Estado: simulacao
+2025-11-20 02:25:12,793 - DEBUG - Estado: simulacao
+2025-11-20 02:25:12,793 - DEBUG - Estado: simulacao
+2025-11-20 02:25:12,793 - DEBUG - Estado: simulacao
+2025-11-20 02:25:13,060 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:13,060 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:13,060 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:13,060 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:13,062 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:13,062 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:13,062 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:13,062 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:17,347 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:17,347 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:17,347 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:17,347 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:18,519 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:18,519 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:18,519 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:18,519 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:19,338 - DEBUG - Estado: simulacao
+2025-11-20 02:25:19,338 - DEBUG - Estado: simulacao
+2025-11-20 02:25:19,338 - DEBUG - Estado: simulacao
+2025-11-20 02:25:19,338 - DEBUG - Estado: simulacao
+2025-11-20 02:25:19,564 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:19,564 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:19,564 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:19,564 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:19,566 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:19,566 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:19,566 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:19,566 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:22,236 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:22,236 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:22,236 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:22,236 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:22,863 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:22,863 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:22,863 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:22,863 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:24,346 - DEBUG - Estado: simulacao
+2025-11-20 02:25:24,346 - DEBUG - Estado: simulacao
+2025-11-20 02:25:24,346 - DEBUG - Estado: simulacao
+2025-11-20 02:25:24,346 - DEBUG - Estado: simulacao
+2025-11-20 02:25:24,584 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:24,584 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:24,584 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:24,584 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:24,585 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:24,585 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:24,585 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:24,585 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:25,845 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:25,845 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:25,845 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:25,845 - DEBUG - Estado: selecao_agente
+2025-11-20 02:25:26,538 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:26,538 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:26,538 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:26,538 - DEBUG - Estado: selecao_mapa
+2025-11-20 02:25:27,405 - DEBUG - Estado: simulacao
+2025-11-20 02:25:27,405 - DEBUG - Estado: simulacao
+2025-11-20 02:25:27,405 - DEBUG - Estado: simulacao
+2025-11-20 02:25:27,405 - DEBUG - Estado: simulacao
+2025-11-20 02:25:27,659 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:27,659 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:27,659 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:27,659 - INFO - Modo leve: FPS=30
+2025-11-20 02:25:27,660 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:27,660 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:27,660 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 02:25:27,660 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos

@@ -1,7 +1,10 @@
 # interface_select.py
 import pygame
 import os
+import math
+import time
 from interface_assets import load_icon
+from interface_agents import load_agents, AgentInfo
 
 class SelectScreen:
     def __init__(self, width, height):
@@ -9,141 +12,174 @@ class SelectScreen:
         self.height = height
         self.agente_btns = []
         self.mapa_btns = []
+        self.scroll_y = 0
 
     def draw_selecao_agente(self, screen, selected_agent=None, selected_map=None):
-        # Fundo gradiente animado
-        bg = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        # Fundo Moderno (Dark Blue Gradient)
+        bg = pygame.Surface((self.width, self.height))
         for y in range(self.height):
-            cor = (220-int(40*y/self.height), 240-int(30*y/self.height), 255-int(15*y/self.height), 230)
-            pygame.draw.line(bg, cor, (0, y), (self.width, y))
+            # Gradiente azul escuro para preto
+            color_val = max(0, 20 - int(y * 0.02))
+            pygame.draw.line(bg, (10, 15 + int(y*0.05), 30 + int(y*0.08)), (0, y), (self.width, y))
         screen.blit(bg, (0,0))
-        font = pygame.font.SysFont('Roboto', 40, bold=True)
-        title = font.render("Selecione o Agente", True, (30,60,120))
-        screen.blit(title, (self.width//2 - title.get_width()//2, 70))
-        agentes = ["DQN", "PPO", "SAC"]
-        icones = {"DQN": "assets/dqn_icon.png", "PPO": "assets/ppo_icon.png", "SAC": "assets/sac_icon.png"}
+
+        # Título
+        font_title = pygame.font.SysFont('Segoe UI', 48, bold=True)
+        title = font_title.render("Selecione seu Piloto", True, (255, 255, 255))
+        screen.blit(title, (self.width//2 - title.get_width()//2, 40))
+
+        # Carregar Agentes Reais
+        agents_data = load_agents()
+        
+        if not agents_data:
+            font_warn = pygame.font.SysFont('Segoe UI', 28, bold=True)
+            font_inst = pygame.font.SysFont('Segoe UI', 20)
+            
+            warn = font_warn.render("Nenhum agente criado!", True, (255, 150, 100))
+            inst = font_inst.render("Pressione ESC para voltar. Crie um agente em 'Gestao de Agentes'", True, (200, 200, 200))
+            
+            screen.blit(warn, (self.width//2 - warn.get_width()//2, self.height//2 - 50))
+            screen.blit(inst, (self.width//2 - inst.get_width()//2, self.height//2 + 30))
+            self.agente_btns = []
+            pygame.display.flip()
+            return
+
         self.agente_btns = []
         mx, my = pygame.mouse.get_pos()
-        for i, ag in enumerate(agentes):
-            rect = (self.width//2-220 + i*180, 220, 150, 150)
-            r = pygame.Rect(rect)
-            is_hover = r.collidepoint(mx,my)
-            is_selected = selected_agent==ag
-            # Animação de hover/seleção
-            scale = 1.1 if is_hover else (1.05 if is_selected else 1.0)
-            surf = pygame.Surface((150,150), pygame.SRCALPHA)
-            cor_card = (120,220,255,220) if is_hover or is_selected else (255,255,255,200)
-            pygame.draw.rect(surf, cor_card, (0,0,150,150), border_radius=24)
-            sombra = pygame.Surface((150,150), pygame.SRCALPHA)
-            pygame.draw.rect(sombra, (80,120,180,60), (6,6,138,138), border_radius=28)
-            screen.blit(sombra, (rect[0]-3, rect[1]-3))
-            # Ícone
-            if os.path.exists(icones[ag]):
-                try:
-                    icon = pygame.image.load(icones[ag]).convert_alpha()
-                    icon = pygame.transform.smoothscale(icon, (60,60))
-                    surf.blit(icon, (45,20))
-                except pygame.error:
-                    # Fallback: draw a colored circle if image fails to load
-                    pygame.draw.circle(surf, (100,150,200), (75,50), 25)
-            # Nome
-            ag_text = font.render(ag, True, (30,60,120))
-            surf.blit(ag_text, (35, 90))
-            # Status
-            model_path = f"models/model_{selected_map or 'corridor'}_{ag}_step_10000.zip"
-            status = "Treinado" if os.path.exists(model_path) else "Novo"
-            status_color = (80,200,120) if status=="Treinado" else (200,160,60)
-            status_font = pygame.font.SysFont('Roboto', 22, bold=True)
-            st = status_font.render(status, True, status_color)
-            surf.blit(st, (35, 125))
-            # Escala animada
-            surf = pygame.transform.smoothscale(surf, (int(150*scale), int(150*scale)))
-            screen.blit(surf, (rect[0]-(surf.get_width()-150)//2, rect[1]-(surf.get_height()-150)//2))
-            # Borda animada
+        
+        # Grid de cards
+        cols = 3
+        card_w, card_h = 220, 280
+        gap_x, gap_y = 40, 40
+        start_x = (self.width - (cols * card_w + (cols-1) * gap_x)) // 2
+        start_y = 140
+
+        for i, ag_dict in enumerate(agents_data):
+            ag = AgentInfo.from_dict(ag_dict)
+            col = i % cols
+            row = i // cols
+            
+            x = start_x + col * (card_w + gap_x)
+            y = start_y + row * (card_h + gap_y)
+            
+            rect = pygame.Rect(x, y, card_w, card_h)
+            self.agente_btns.append((ag.nome, rect)) # Salva o NOME do agente
+
+            is_hover = rect.collidepoint(mx, my)
+            is_selected = (selected_agent == ag.nome)
+
+            # Desenho do Card
+            # Sombra
+            shadow_rect = rect.copy()
+            shadow_rect.x += 6
+            shadow_rect.y += 6
+            pygame.draw.rect(screen, (0,0,0,100), shadow_rect, border_radius=15)
+
+            # Fundo do card
             if is_selected:
-                pygame.draw.rect(screen, (74,144,226), pygame.Rect(rect[0]-4, rect[1]-4, 158, 158), 4, border_radius=28)
+                color = (50, 100, 180) # Azul selecionado
+                border_c = (255, 255, 255)
             elif is_hover:
-                pygame.draw.rect(screen, (120,180,255), pygame.Rect(rect[0]-2, rect[1]-2, 154, 154), 3, border_radius=26)
-            self.agente_btns.append((ag, rect))
-            # Tooltip
-            if is_hover:
-                tip_font = pygame.font.SysFont('Open Sans', 20)
-                tip = f"{ag}: {'Treinado' if status=='Treinado' else 'Novo'}"
-                tip_surf = tip_font.render(tip, True, (40,60,120))
-                screen.blit(tip_surf, (mx+20, my-10))
+                color = (40, 50, 70) # Cinza hover
+                border_c = (100, 200, 255)
+            else:
+                color = (30, 35, 45) # Escuro padrão
+                border_c = (60, 70, 80)
+
+            pygame.draw.rect(screen, color, rect, border_radius=15)
+            pygame.draw.rect(screen, border_c, rect, 2, border_radius=15)
+
+            # Ícone
+            icon_path = f"assets/{ag.tipo.lower()}_icon.png"
+            icon = load_icon(icon_path, size=(80,80))
+            if icon:
+                screen.blit(icon, (x + card_w//2 - 40, y + 20))
+            
+            # Textos
+            font_name = pygame.font.SysFont('Segoe UI', 28, bold=True)
+            font_info = pygame.font.SysFont('Segoe UI', 18)
+            
+            name_surf = font_name.render(ag.nome, True, (255,255,255))
+            type_surf = font_info.render(f"Algoritmo: {ag.tipo}", True, (180,180,180))
+            lvl_surf = font_info.render(f"Nível: {ag.level}", True, (255, 200, 50))
+            xp_surf = font_info.render(f"XP: {sum(h.get('xp_gained',0) for h in ag.historico)}", True, (150,150,150))
+
+            screen.blit(name_surf, (x + card_w//2 - name_surf.get_width()//2, y + 110))
+            screen.blit(type_surf, (x + 15, y + 160))
+            screen.blit(lvl_surf, (x + 15, y + 190))
+            screen.blit(xp_surf, (x + 15, y + 220))
+
+            if is_selected:
+                chk_font = pygame.font.SysFont('Segoe UI', 20, bold=True)
+                chk = chk_font.render("SELECIONADO", True, (100, 255, 100))
+                screen.blit(chk, (x + card_w//2 - chk.get_width()//2, y + 250))
+
         pygame.display.flip()
 
     def draw_selecao_mapa(self, screen, selected_map=None):
-        # Fundo gradiente animado
-        bg = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        # Fundo Gradiente
+        bg = pygame.Surface((self.width, self.height))
         for y in range(self.height):
-            cor = (220-int(40*y/self.height), 255-int(20*y/self.height), 220-int(40*y/self.height), 230)
-            pygame.draw.line(bg, cor, (0, y), (self.width, y))
+            pygame.draw.line(bg, (15, 20 + int(y*0.03), 40 + int(y*0.05)), (0, y), (self.width, y))
         screen.blit(bg, (0,0))
-        font = pygame.font.SysFont('Roboto', 40, bold=True)
-        title = font.render("Selecione o Mapa", True, (30,60,120))
-        screen.blit(title, (self.width//2 - title.get_width()//2, 70))
+
+        font = pygame.font.SysFont('Segoe UI', 48, bold=True)
+        title = font.render("Selecione o Mapa", True, (255,255,255))
+        screen.blit(title, (self.width//2 - title.get_width()//2, 50))
+        
         mapas = ["corridor", "curve", "circle"]
-        icones = {"corridor": "assets/play.png", "curve": "assets/ranking.png", "circle": "assets/exit.jpg"}
+        nomes_mapas = {"corridor": "Corredor Reto", "curve": "Pista Curva", "circle": "Circular"}
+        
         self.mapa_btns = []
         mx, my = pygame.mouse.get_pos()
+        
+        start_y = 180
+        btn_h = 100
+        btn_w = 600
+        
         for i, mp in enumerate(mapas):
-            rect = (self.width//2-220 + i*180, 220, 150, 150)
-            r = pygame.Rect(rect)
-            is_hover = r.collidepoint(mx,my)
-            is_selected = selected_map==mp
-            scale = 1.1 if is_hover else (1.05 if is_selected else 1.0)
-            surf = pygame.Surface((150,150), pygame.SRCALPHA)
-            cor_card = (180,255,200,220) if is_hover or is_selected else (255,255,255,200)
-            pygame.draw.rect(surf, cor_card, (0,0,150,150), border_radius=24)
-            sombra = pygame.Surface((150,150), pygame.SRCALPHA)
-            pygame.draw.rect(sombra, (80,120,180,60), (6,6,138,138), border_radius=28)
-            screen.blit(sombra, (rect[0]-3, rect[1]-3))
-            # Ícone
-            if os.path.exists(icones[mp]):
-                icon = pygame.image.load(icones[mp]).convert_alpha()
-                icon = pygame.transform.smoothscale(icon, (60,60))
-                surf.blit(icon, (45,20))
-            mp_text = font.render(mp, True, (30,60,120))
-            surf.blit(mp_text, (35, 90))
-            surf = pygame.transform.smoothscale(surf, (int(150*scale), int(150*scale)))
-            screen.blit(surf, (rect[0]-(surf.get_width()-150)//2, rect[1]-(surf.get_height()-150)//2))
-            if is_selected:
-                pygame.draw.rect(screen, (74,144,226), pygame.Rect(rect[0]-4, rect[1]-4, 158, 158), 4, border_radius=28)
-            elif is_hover:
-                pygame.draw.rect(screen, (120,180,255), pygame.Rect(rect[0]-2, rect[1]-2, 154, 154), 3, border_radius=26)
+            rect = pygame.Rect((self.width - btn_w)//2, start_y + i*130, btn_w, btn_h)
             self.mapa_btns.append((mp, rect))
-            if is_hover:
-                tip_font = pygame.font.SysFont('Open Sans', 20)
-                tip = f"{mp.title()}"
-                tip_surf = tip_font.render(tip, True, (40,60,120))
-                screen.blit(tip_surf, (mx+20, my-10))
+            
+            is_hover = rect.collidepoint(mx, my)
+            is_selected = (selected_map == mp)
+            
+            color = (50, 120, 80) if is_selected else ((60, 70, 90) if is_hover else (40, 45, 55))
+            border = (100, 255, 150) if is_selected else ((200,200,255) if is_hover else (80,80,80))
+            
+            pygame.draw.rect(screen, color, rect, border_radius=12)
+            pygame.draw.rect(screen, border, rect, 3, border_radius=12)
+            
+            font_btn = pygame.font.SysFont('Segoe UI', 36)
+            txt = font_btn.render(nomes_mapas.get(mp, mp), True, (255,255,255))
+            screen.blit(txt, (rect.x + 40, rect.y + 25))
+            
+            if is_selected:
+                pygame.draw.circle(screen, (100, 255, 100), (rect.right - 50, rect.centery), 15)
+
         pygame.display.flip()
 
     def handle_selecao_agente_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                pygame.quit(); exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
-                for ag, rect in self.agente_btns:
-                    r = pygame.Rect(rect)
-                    if r.collidepoint(mx, my):
-                        return ag
+                for ag_nome, rect in self.agente_btns:
+                    if rect.collidepoint(mx, my):
+                        return ag_nome # Retorna o nome real do agente (ex: "Racer1")
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return None
+        return None # Retorno padrão
 
     def handle_selecao_mapa_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+                pygame.quit(); exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mx, my = pygame.mouse.get_pos()
                 for mp, rect in self.mapa_btns:
-                    r = pygame.Rect(rect)
-                    if r.collidepoint(mx, my):
+                    if rect.collidepoint(mx, my):
                         return mp
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return None
