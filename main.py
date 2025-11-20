@@ -284,25 +284,54 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
 
     # 2. Prepara ambiente, modelo e agente (NÃO treina antes do loop principal)
     from stable_baselines3.common.vec_env import DummyVecEnv
-    # Passa os stats do agente para o ambiente
-    env = DummyVecEnv([make_env(selected_map, car_stats=agent_info.stats) for _ in range(n_parallel)])
+    
+    # ===== LÓGICA HÍBRIDA: TREINO vs CORRIDA COMPETITIVA =====
+    race_manager = None
+    agent = None
+    
+    if not skip_training:
+        # MODO TREINO: 1 agente clonado (como era antes)
+        print("[MODO] Treino com um agente")
+        env = DummyVecEnv([make_env(selected_map, car_stats=agent_info.stats) for _ in range(n_parallel)])
+        
+        # Força algoritmo selecionado
+        import os
+        os.environ["RL_ALGORITHM"] = selected_agent
+        model_path = f"models/model_{selected_map}_{selected_agent}"
+        agent = Agent(env, model_path=model_path, learning_rate=learning_rate, gamma=gamma)
+        model_file = model_path + "_step_10000.zip"
+        if os.path.exists(model_file):
+            agent.load(model_file)
+            logger.info(f"Loaded pre-trained model from {model_file}")
+    else:
+        # MODO CORRIDA COMPETITIVA: RaceManager com múltiplos agentes
+        print("[MODO] Corrida Competitiva com múltiplos agentes")
+        
+        # Carrega agentes para competição (o selecionado + rivais do JSON)
+        all_agents = [AgentInfo.from_dict(a) for a in load_agents()]
+        rivals = [a for a in all_agents if a.nome != agent_info.nome]
+        
+        # Cria lista de competidores (selecionado + rivais)
+        race_agents = [agent_info] + rivals[:n_parallel-1]
+        
+        # Preenche com clones do agente se faltar
+        while len(race_agents) < n_parallel:
+            race_agents.append(agent_info)
+        
+        # Cria ambientes com stats DIFERENTES para cada carro
+        # Isso permite visualmente carros com upgrades serem mais rápidos
+        env = DummyVecEnv([make_env(selected_map, car_stats=ag.stats) for ag in race_agents])
+        
+        # Inicializa RaceManager com múltiplos modelos
+        race_manager = RaceManager(race_agents, selected_map, n_parallel)
+        print(f"[CORRIDA] Competição entre {len(race_agents)} agentes:")
+        for i, ag in enumerate(race_agents):
+            print(f"  Raia {i}: {ag.nome} (nível {ag.level}, acel {ag.stats['accel']:.2f})")
+    
     for i in range(10, 101, 10):
         interface.draw_loading(f'Renderizando agentes... ({i}%)', progresso=i/100, animar=False)
         interface.process_events()
         time.sleep(0.05)
-    # Força algoritmo selecionado
-    import os
-    os.environ["RL_ALGORITHM"] = selected_agent
-    model_path = f"models/model_{selected_map}_{selected_agent}"
-    agent = Agent(env, model_path=model_path, learning_rate=learning_rate, gamma=gamma)
-    model_file = model_path + "_step_10000.zip"
-    if skip_training:
-        if os.path.exists(model_file):
-            agent.load(model_file)
-            logger.info(f"Loaded pre-trained model from {model_file}")
-        else:
-            logger.info("No pre-trained model found, rodando treinamento ao vivo.")
-    # NÃO chama agent.train() aqui!
 
     # 3. Atualiza interface para mostrar que os agentes foram renderizados
     interface.draw_loading('Agentes renderizados! Treinamento iniciado.', progresso=1.0, animar=False)
@@ -354,9 +383,16 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             interface.draw_env_grid_simple(env_single, idx)
         speeds = []
         unique_states = set()
-        # CORREÇÃO: Predição vetorizada usando agent.model.predict() retorna (actions_array, _state)
-        actions_array, _ = agent.model.predict(obs, deterministic=False)
-        actions = [int(a) for a in actions_array]  # Converte array para list de ints
+        
+        # ===== LÓGICA HÍBRIDA: TREINO vs CORRIDA =====
+        if race_manager:
+            # MODO CORRIDA: Múltiplos agentes com seus próprios cérebros
+            actions = race_manager.get_actions(obs)
+        else:
+            # MODO TREINO: Um único agente clonado
+            actions_array, _ = agent.model.predict(obs, deterministic=False)
+            actions = [int(a) for a in actions_array]  # Converte array para list de ints
+        
         # CORREÇÃO: DummyVecEnv.step() sempre retorna 4 valores
         obs_, rewards, dones, infos = env.step(actions)
         terminateds = dones

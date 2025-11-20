@@ -115,13 +115,14 @@ def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_a
         status_color = (80,200,120) if status=="Treinado" else (200,160,60)
         status_font = pygame.font.SysFont('Roboto', 20, bold=True)
         card.blit(status_font.render(status, True, status_color), (320, 45))
-        # Botões: Selecionar, Editar, Excluir, Treinar
-        btn_sel = pygame.Rect(card.get_width()-320, 20, 60, 40)
-        btn_edit = pygame.Rect(card.get_width()-250, 20, 60, 40)
-        btn_del = pygame.Rect(card.get_width()-180, 20, 60, 40)
-        btn_train = pygame.Rect(card.get_width()-110, 20, 60, 40)
+        # Botões: Selecionar, Editar, Excluir, Treinar, Upgrades
+        btn_sel = pygame.Rect(card.get_width()-380, 20, 60, 40)
+        btn_edit = pygame.Rect(card.get_width()-310, 20, 60, 40)
+        btn_del = pygame.Rect(card.get_width()-240, 20, 60, 40)
+        btn_train = pygame.Rect(card.get_width()-170, 20, 60, 40)
+        btn_upgr = pygame.Rect(card.get_width()-100, 20, 80, 40)
         # Hover e ripple
-        btns = [(btn_sel, (120,200,120), "Usar"), (btn_edit, (220,200,120), "Edit"), (btn_del, (220,120,120), "Del"), (btn_train, (120,120,220), "Train")]
+        btns = [(btn_sel, (120,200,120), "Usar"), (btn_edit, (220,200,120), "Edit"), (btn_del, (220,120,120), "Del"), (btn_train, (120,120,220), "Train"), (btn_upgr, (180,120,220), "Upgrade")]
         for btn, cor, txt in btns:
             is_hover = btn.move(80, y).collidepoint(mx, my)
             cor_btn = tuple(min(255, c+30) for c in cor) if is_hover else cor
@@ -134,7 +135,7 @@ def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_a
                 card.blit(ripple, (btn.x, btn.y))
         # Deslize/fade-out para exclusão (simulação, real seria animado ao excluir)
         screen.blit(card, (80, y))
-        gestao_agent_cards.append({"rect": pygame.Rect(80, y, width-400, 80), "btn_sel": btn_sel.move(80, y), "btn_edit": btn_edit.move(80, y), "btn_del": btn_del.move(80, y), "btn_train": btn_train.move(80, y), "idx": i})
+        gestao_agent_cards.append({"rect": pygame.Rect(80, y, width-400, 80), "btn_sel": btn_sel.move(80, y), "btn_edit": btn_edit.move(80, y), "btn_del": btn_del.move(80, y), "btn_train": btn_train.move(80, y), "btn_upgr": btn_upgr.move(80, y), "idx": i})
         y += 100
     # Hover effect com brilho para card
     for card in gestao_agent_cards:
@@ -168,6 +169,12 @@ def handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, ag
                 if card["btn_train"].collidepoint(mx, my):
                     treinar_agente(agents, card["idx"])
                     return
+                if card["btn_upgr"].collidepoint(mx, my):
+                    # Abre menu de compra de upgrades
+                    comprar_upgrade(agents[card["idx"]])
+                    # Recarrega agents pois foram modificados
+                    agents = load_agents()
+                    return
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return "escape"
 
@@ -188,8 +195,9 @@ def treinar_agente(agents, idx, map_type="corridor"):
     from stable_baselines3.common.vec_env import DummyVecEnv
     
     # 1. Cria ambiente com o mapa correto
+    # CORREÇÃO: Passa os stats (upgrades) do agente para o ambiente de treino
     def make_env():
-        return CorridaEnv(map_type=map_type)
+        return CorridaEnv(map_type=map_type, car_stats=ag.stats)
     
     env = DummyVecEnv([make_env for _ in range(4)])  # 4 ambientes paralelos
     
@@ -284,3 +292,63 @@ def excluir_agente(ag):
     except Exception:
         pass
     play_sound("clique")
+
+def comprar_upgrade(agent_dict):
+    """Menu simples para comprar upgrades com XP"""
+    from gamification import GamificationSystem
+    
+    agent = AgentInfo.from_dict(agent_dict)
+    total_xp = sum(h.get('xp_gained', 0) for h in agent.historico)
+    
+    print("\n" + "="*60)
+    print(f"UPGRADES - {agent.nome} (Nível {agent.level}, {total_xp} XP)")
+    print("="*60)
+    
+    upgrades = GamificationSystem.get_upgrades_available(agent)
+    
+    for i, upgrade in enumerate(upgrades, 1):
+        status = "✓ Disponível" if upgrade['disponivel'] else "✗ Não disponível"
+        print(f"\n{i}. {upgrade['nome']} - {upgrade['custo_xp']} XP [{status}]")
+        print(f"   {upgrade['descricao']}")
+        print(f"   Valor atual: {agent.stats[upgrade['id']]:.2f}")
+    
+    print(f"\n0. Voltar")
+    print("="*60)
+    
+    # Em modo CLI, pediremos input
+    try:
+        choice = input("Escolha o upgrade (número): ").strip()
+        choice_idx = int(choice) - 1
+        
+        if choice == "0":
+            return False
+        
+        if 0 <= choice_idx < len(upgrades):
+            upgrade_id = upgrades[choice_idx]['id']
+            success, msg = GamificationSystem.apply_upgrade(agent, upgrade_id)
+            
+            if success:
+                print(f"\n✓ {msg}")
+                print(f"  Novo nível: {agent.level}")
+                print(f"  Novo valor de {upgrade_id}: {agent.stats[upgrade_id]:.2f}")
+                
+                # Atualiza JSON
+                agents = load_agents()
+                for a in agents:
+                    if a["nome"] == agent.nome:
+                        a.update(agent.to_dict())
+                save_agents(agents)
+                play_sound("finish")
+                return True
+            else:
+                print(f"\n✗ {msg}")
+                return False
+        else:
+            print("\nOpção inválida!")
+            return False
+    except ValueError:
+        print("\nOpção inválida!")
+        return False
+    except Exception as e:
+        print(f"\nErro: {e}")
+        return False

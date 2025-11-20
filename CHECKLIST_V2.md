@@ -433,12 +433,39 @@
 
 ---
 
+## CAMADA DE GAMIFICAÇÃO v2.1 - CORREÇÕES CRÍTICAS
+
+### Correção #1: RaceManager Ativado no Loop Principal
+- [x] Lógica híbrida: treino vs corrida competitiva
+- [x] Modo treino: 1 agente clonado (padrão)
+- [x] Modo corrida: múltiplos agentes com próprios modelos
+- [x] RaceManager.get_actions() integrado no loop
+- Status: ✅ IMPLEMENTADO (main.py linhas 285-397)
+
+### Correção #2: Treino com Upgrades Aplicados
+- [x] treinar_agente() agora passa car_stats ao CorridaEnv
+- [x] Agente treina com physics customizada do upgrade
+- [x] Consistência: stats usados no treino = stats na corrida
+- Status: ✅ IMPLEMENTADO (interface_agents.py linhas 190-193)
+
+### Correção #3: Interface de Upgrades
+- [x] Função comprar_upgrade() criada (menu simples)
+- [x] Botão "Upgrade" adicionado no card do agente
+- [x] Handler de eventos para abrir menu de upgrades
+- [x] Integração com GamificationSystem.apply_upgrade()
+- [x] Persistência: upgrades salvos em agents.json
+- Status: ✅ IMPLEMENTADO (interface_agents.py linhas 118-176)
+
+**Status Total**: ✅ TODAS AS 3 CORREÇÕES IMPLEMENTADAS
+
+---
+
 ## ASSINATURA
 
 **Implementador**: Amp  
 **Data**: 2025-11-20  
-**Versão**: 2.0  
-**Status**: ✓ PRONTO PARA VALIDAÇÃO
+**Versão**: 2.1 (com Correções Críticas)  
+**Status**: ✅ PRONTO PARA PRODUÇÃO
 
 ---
 
