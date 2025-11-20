@@ -20,37 +20,37 @@ class CorridaEnv(gym.Env):
         car_stats (dict): Stats do carro {'accel': 0.5, 'turn_speed': 5.0, 'max_speed': 20.0}
     """
     def __init__(self, map_type="corridor", car_stats=None):
-         self.width = int(800 * ENV_SCALE)
-         self.height = int(600 * ENV_SCALE)
-         self.map_type = map_type
-         self.car1_pos = [150 * ENV_SCALE, 300 * ENV_SCALE]
-         self.car1_speed = 0
-         self.car1_angle = 0
-         self.checkpoints = []
-         self.checkpoint_index = 0
-         self.barriers = []
-         self.corridor_rect = None
-         self.max_steps = MAX_STEPS
-         self.current_step = 0
-         self.episode_time = 0.0
-         self.width_norm = 1.0 / self.width
-         self.height_norm = 1.0 / self.height
-         self.last_angle = None
-         self.last_angle_pos = None
-         self.n_lidar = 8  # 8 sensores Lidar a cada 45 graus
-         self.randomize_checkpoint = False  # Garante que sempre existe
-         
-         # NOVO: Mecanismos anti-loop
-         self.position_history = []  # Track posições recentes
-         self.progress_counter = 0  # Contador de steps sem progresso
-         self.max_steps_without_progress = 200  # Falha se não progride em 200 steps (~20s)
-         self.min_progress_distance = 5 * ENV_SCALE  # Mínimo de progresso esperado
-         
-         # Carrega stats do agente ou usa padrão
-         self.car_stats = car_stats if car_stats else {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
-         self.ACCEL_FORCE = self.car_stats["accel"]
-         self.TURN_SPEED = self.car_stats["turn_speed"]
-         self.MAX_SPEED = self.car_stats["max_speed"]
+        self.width = int(800 * ENV_SCALE)
+        self.height = int(600 * ENV_SCALE)
+        self.map_type = map_type
+        self.car1_pos = [150 * ENV_SCALE, 300 * ENV_SCALE]
+        self.car1_speed = 0
+        self.car1_angle = 0
+        self.checkpoints = []
+        self.checkpoint_index = 0
+        self.barriers = []
+        self.corridor_rect = None
+        self.max_steps = MAX_STEPS
+        self.current_step = 0
+        self.episode_time = 0.0
+        self.width_norm = 1.0 / self.width
+        self.height_norm = 1.0 / self.height
+        self.last_angle = None
+        self.last_angle_pos = None
+        self.n_lidar = 8  # 8 sensores Lidar a cada 45 graus
+        self.randomize_checkpoint = False  # Garante que sempre existe
+        
+        # NOVO: Mecanismos anti-loop
+        self.position_history = []  # Track das últimas posições
+        self.progress_counter = 0  # Contador de steps sem progresso
+        self.max_steps_without_progress = 200  # Falha após ~20s
+        self.min_progress_distance = 5 * ENV_SCALE  # Mínimo deslocamento
+        
+        # Carrega stats do agente ou usa padrão
+        self.car_stats = car_stats if car_stats else {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
+        self.ACCEL_FORCE = self.car_stats["accel"]
+        self.TURN_SPEED = self.car_stats["turn_speed"]
+        self.MAX_SPEED = self.car_stats["max_speed"]
 
         # Ações: [acelerar, frear, virar_esquerda, virar_direita]
         self.action_space = spaces.Discrete(4)
@@ -173,7 +173,7 @@ class CorridaEnv(gym.Env):
         self.current_step = 0
         self.episode_time = 0.0
         self.prev_dist_to_checkpoint = None
-        # NOVO: Reset dos mecanismos anti-loop
+        # NOVO: Reset anti-loop
         self.position_history = []
         self.progress_counter = 0
         self.prev_angle = None
@@ -296,12 +296,12 @@ class CorridaEnv(gym.Env):
             collisions = 1
             # Retorna imediatamente para não somar penalidades extras
             state = self._get_obs()
-            info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success}
+            info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success, "progress": self.progress_counter}
             obs = np.array(self._get_obs(), dtype=np.float32)
             terminated = done
             truncated = False
             return obs, reward, terminated, truncated, info
-        else:
+            
             reward = -0.001
             if self.car1_speed < 0:
                 reward -= 0.1  # Penalidade maior para andar para trás
@@ -309,8 +309,7 @@ class CorridaEnv(gym.Env):
             if dist_moved > 0.05 and self.checkpoints:
                 reward += 0.2  # Bônus maior por movimento
             elif dist_moved < 0.01 and self.car1_speed < 0.1:
-                # Penalidade forte por não movimento (girar sem sair do lugar)
-                reward -= 0.3
+                reward -= 0.3  # Penalidade forte por não movimento
             if self.checkpoints:
                 checkpoint = self.checkpoints[self.checkpoint_index]
                 dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
@@ -378,47 +377,40 @@ class CorridaEnv(gym.Env):
         elif not self.checkpoints:
             self.checkpoints = self.setup_checkpoints(self.map_type)
 
-        # NOVO: Mecanismo de detecção de loop/inatividade
-        # Armazena posição a cada 10 steps
+        # NOVO: Detecção de loop/inatividade
         if self.current_step % 10 == 0:
             self.position_history.append(self.car1_pos.copy())
-            # Mantém apenas últimas 20 posições (~200 steps)
             if len(self.position_history) > 20:
                 self.position_history.pop(0)
         
-        # Verifica se houve progresso nos últimos steps
         if len(self.position_history) >= 2:
-            # Calcula distância total percorrida nos últimos ~200 steps
             total_distance = 0
             for i in range(1, len(self.position_history)):
                 dist = np.linalg.norm(np.array(self.position_history[i]) - np.array(self.position_history[i-1]))
                 total_distance += dist
             
-            # Se distância < mínimo esperado, incrementa contador
             if total_distance < self.min_progress_distance:
                 self.progress_counter += 1
-                reward -= 0.1  # Penalidade por inatividade
+                reward -= 0.1
             else:
-                self.progress_counter = 0  # Reset se houve progresso
+                self.progress_counter = 0
         
-        # Falha se não há progresso por muito tempo
         if self.progress_counter > self.max_steps_without_progress:
-            reward -= 10.0  # Grande penalidade
+            reward -= 10.0
             done = True
-            print(f"[FAIL] Agente preso em loop por {self.progress_counter} steps, posição: {self.car1_pos}")
 
-         if self.episode_time >= MAX_EPISODE_TIME:
-             done = True
-         if self.current_step >= self.max_steps:
-             done = True
+        if self.episode_time >= MAX_EPISODE_TIME:
+            done = True
+        if self.current_step >= self.max_steps:
+            done = True
 
-         state = self._get_obs()
-         info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success, "progress": self.progress_counter}
-         # Garante compatibilidade com Gymnasium: retorna obs, reward, terminated, truncated, info
-         obs = np.array(self._get_obs(), dtype=np.float32)
-         terminated = done
-         truncated = False
-         return obs, reward, terminated, truncated, info
+        state = self._get_obs()
+        info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success}
+        # Garante compatibilidade com Gymnasium: retorna obs, reward, terminated, truncated, info
+        obs = np.array(self._get_obs(), dtype=np.float32)
+        terminated = done
+        truncated = False
+        return obs, reward, terminated, truncated, info
 
     def is_on_corridor(self, pos):
         """Verifica se uma posição está dentro do corredor e fora das barreiras.
