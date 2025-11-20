@@ -62,7 +62,7 @@ def load_agents(filename="agents.json"):
 from agent import Agent
 import time
 
-def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_agent_cards):
+def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_agent_cards, back_btn=None):
     # Fundo gradiente
     bg = pygame.Surface((width, height), pygame.SRCALPHA)
     for y in range(height):
@@ -72,8 +72,18 @@ def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_a
     font = pygame.font.SysFont('Roboto', 44, bold=True)
     title = font.render("Gestão de Agentes", True, (30,60,120))
     screen.blit(title, (width//2 - title.get_width()//2, 40))
-    # Botão novo agente
+    
+    # Botão voltar (esquerda)
     btn_font = pygame.font.SysFont('Roboto', 32)
+    btn_back = pygame.Rect(40, 40, 120, 50)
+    pygame.draw.rect(screen, (200,120,120), btn_back, border_radius=16)
+    screen.blit(btn_font.render("Voltar", True, (255,255,255)), (55, 55))
+    gestao_agent_cards.clear()
+    if back_btn is not None:
+        back_btn.clear()
+        back_btn.append(btn_back)
+    
+    # Botão novo agente (direita)
     btn_novo = pygame.Rect(width-220, 40, 180, 50)
     pygame.draw.rect(screen, (120,220,180), btn_novo, border_radius=16)
     screen.blit(btn_font.render("Novo Agente", True, (30,60,60)), (width-200, 55))
@@ -148,17 +158,25 @@ def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_a
             screen.blit(glow_surf, (card["rect"].x, card["rect"].y))
     pygame.display.flip()
 
-def handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, agents, interface=None):
+def handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, agents, back_btn=None, interface=None):
     for event in events:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             mx, my = pygame.mouse.get_pos()
+            
+            # Verifica botão de voltar
+            if back_btn and back_btn and back_btn[0].collidepoint(mx, my):
+                return "back"
+            
+            # Verifica botão novo agente
             if gestao_btn_novo and gestao_btn_novo[0].collidepoint(mx, my):
                 if interface:
                     criar_novo_agente(agents, interface)
                 return
+            
+            # Verifica cards de agentes
             for card in gestao_agent_cards:
                 ag = agents[card["idx"]]
                 ag_name = ag.nome if isinstance(ag, AgentInfo) else ag["nome"]
@@ -176,12 +194,17 @@ def handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, ag
                     return
                 if card["btn_upgr"].collidepoint(mx, my):
                     # Abre menu de compra de upgrades
-                    comprar_upgrade(ag.to_dict() if isinstance(ag, AgentInfo) else ag)
-                    # Recarrega agents pois foram modificados
-                    agents = load_agents()
+                    ag_dict = ag.to_dict() if isinstance(ag, AgentInfo) else ag
+                    interface.change_state("comprar_upgrade_agente")
+                    interface.upgrade_agent_dict = ag_dict
+                    interface.upgrade_selected_idx = 0
+                    interface.upgrade_message = ""
+                    from gamification import GamificationSystem
+                    agent = AgentInfo.from_dict(ag_dict)
+                    interface.upgrade_list = GamificationSystem.get_upgrades_available(agent)
                     return
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            return "escape"
+            return "back"
 
 def treinar_agente(agents, idx, map_type="corridor"):
      """Treina um agente específico com sistema de fases.
@@ -295,82 +318,269 @@ def treinar_agente(agents, idx, map_type="corridor"):
      
      play_sound("finish")
 
+def draw_criar_agente_dialog(screen, width, height, dialog_state, nome, selected_type, error_msg=""):
+    """Desenha o diálogo de criação de novo agente (sem loop bloqueante)."""
+    tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
+    
+    # Fundo
+    screen.fill((240, 240, 250))
+    
+    # Título
+    font_title = pygame.font.SysFont('Roboto', 48, bold=True)
+    title = font_title.render("Novo Agente", True, (30, 60, 120))
+    screen.blit(title, (width//2 - title.get_width()//2, 50))
+    
+    font_label = pygame.font.SysFont('Roboto', 28, bold=True)
+    font_input = pygame.font.SysFont('Roboto', 24)
+    font_small = pygame.font.SysFont('Roboto', 20)
+    
+    if dialog_state == "GET_NAME":
+        # Entrada de nome
+        label = font_label.render("Nome do Agente:", True, (30, 60, 120))
+        screen.blit(label, (100, 150))
+        
+        input_box = pygame.Rect(100, 200, 600, 50)
+        pygame.draw.rect(screen, (255, 255, 255), input_box)
+        pygame.draw.rect(screen, (100, 150, 200), input_box, 3)
+        
+        texto = font_input.render(nome, True, (30, 30, 30))
+        screen.blit(texto, (120, 215))
+        
+        # Cursor piscante
+        cursor_timer = (pygame.time.get_ticks() // 250) % 2
+        if cursor_timer == 0:
+            cursor_x = 120 + texto.get_width()
+            pygame.draw.line(screen, (0, 0, 0), (cursor_x, 210), (cursor_x, 240), 2)
+        
+        # Help text
+        help_text = font_small.render("Digite o nome do agente (máx 20 caracteres)", True, (100, 100, 100))
+        screen.blit(help_text, (100, 260))
+        
+        # Erro se houver
+        if error_msg:
+            error_surf = font_small.render(error_msg, True, (200, 50, 50))
+            screen.blit(error_surf, (100, 300))
+        
+        # Instruções
+        instr = font_small.render("ENTER: Continuar  |  ESC: Cancelar", True, (60, 60, 60))
+        screen.blit(instr, (100, height - 80))
+        
+    elif dialog_state == "GET_TYPE":
+        # Seleção de tipo
+        label = font_label.render("Tipo de Carro:", True, (30, 60, 120))
+        screen.blit(label, (100, 150))
+        
+        # Desenha opções
+        start_y = 220
+        for i, tipo in enumerate(tipos):
+            is_selected = (i == selected_type)
+            
+            btn_rect = pygame.Rect(100, start_y + i*80, 600, 60)
+            
+            # Cor de fundo
+            if is_selected:
+                pygame.draw.rect(screen, (120, 200, 255), btn_rect)
+                pygame.draw.rect(screen, (30, 60, 120), btn_rect, 4)
+                cor_texto = (255, 255, 255)
+            else:
+                pygame.draw.rect(screen, (220, 230, 245), btn_rect)
+                pygame.draw.rect(screen, (100, 150, 200), btn_rect, 2)
+                cor_texto = (30, 60, 120)
+            
+            texto = font_input.render(f"{i+1}. {tipo.replace('_', ' ').title()}", True, cor_texto)
+            screen.blit(texto, (130, start_y + i*80 + 15))
+        
+        # Instruções
+        instr = font_small.render("CIMA/BAIXO: Selecionar  |  ENTER: Confirmar  |  ESC: Cancelar", True, (60, 60, 60))
+        screen.blit(instr, (50, height - 80))
+
+def draw_editar_agente_dialog(screen, width, height, dialog_state, ag_original, nome, selected_type, error_msg=""):
+    """Desenha o diálogo de edição de agente (sem loop bloqueante)."""
+    tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
+    ag_dict = ag_original.to_dict() if isinstance(ag_original, AgentInfo) else ag_original
+    
+    # Fundo
+    screen.fill((240, 240, 250))
+    
+    # Título
+    font_title = pygame.font.SysFont('Roboto', 48, bold=True)
+    title = font_title.render(f"Editar Agente: {ag_dict['nome']}", True, (30, 60, 120))
+    screen.blit(title, (width//2 - title.get_width()//2, 50))
+    
+    font_label = pygame.font.SysFont('Roboto', 28, bold=True)
+    font_input = pygame.font.SysFont('Roboto', 24)
+    font_small = pygame.font.SysFont('Roboto', 20)
+    
+    if dialog_state == "GET_NAME":
+        # Entrada de nome
+        label = font_label.render("Novo Nome:", True, (30, 60, 120))
+        screen.blit(label, (100, 150))
+        
+        input_box = pygame.Rect(100, 200, 600, 50)
+        pygame.draw.rect(screen, (255, 255, 255), input_box)
+        pygame.draw.rect(screen, (100, 150, 200), input_box, 3)
+        
+        texto = font_input.render(nome, True, (30, 30, 30))
+        screen.blit(texto, (120, 215))
+        
+        # Cursor piscante
+        cursor_timer = (pygame.time.get_ticks() // 250) % 2
+        if cursor_timer == 0:
+            cursor_x = 120 + texto.get_width()
+            pygame.draw.line(screen, (0, 0, 0), (cursor_x, 210), (cursor_x, 240), 2)
+        
+        # Help text
+        help_text = font_small.render(f"Nome atual: {ag_dict['nome']}", True, (100, 100, 100))
+        screen.blit(help_text, (100, 260))
+        
+        # Instruções
+        instr = font_small.render("ENTER: Continuar  |  ESC: Cancelar", True, (60, 60, 60))
+        screen.blit(instr, (100, height - 80))
+        
+    elif dialog_state == "GET_TYPE":
+        # Seleção de tipo
+        label = font_label.render("Novo Tipo de Carro:", True, (30, 60, 120))
+        screen.blit(label, (100, 150))
+        
+        current_tipo_text = font_small.render(f"Tipo atual: {ag_dict['tipo']}", True, (100, 100, 100))
+        screen.blit(current_tipo_text, (100, 190))
+        
+        # Desenha opções
+        start_y = 240
+        for i, tipo in enumerate(tipos):
+            is_selected = (i == selected_type)
+            
+            btn_rect = pygame.Rect(100, start_y + i*70, 600, 60)
+            
+            # Cor de fundo
+            if is_selected:
+                pygame.draw.rect(screen, (120, 200, 255), btn_rect)
+                pygame.draw.rect(screen, (30, 60, 120), btn_rect, 4)
+                cor_texto = (255, 255, 255)
+            else:
+                pygame.draw.rect(screen, (220, 230, 245), btn_rect)
+                pygame.draw.rect(screen, (100, 150, 200), btn_rect, 2)
+                cor_texto = (30, 60, 120)
+            
+            texto = font_input.render(f"{i+1}. {tipo.replace('_', ' ').title()}", True, cor_texto)
+            screen.blit(texto, (130, start_y + i*70 + 12))
+        
+        # Instruções
+        instr = font_small.render("CIMA/BAIXO: Selecionar  |  ENTER: Confirmar  |  ESC: Cancelar", True, (60, 60, 60))
+        screen.blit(instr, (50, height - 80))
+
 def criar_novo_agente(agents, interface):
-     """Cria um novo agente (CLI simplificado)."""
-     print("\n" + "="*60)
-     print("CRIAR NOVO AGENTE")
-     print("="*60)
-     
-     try:
-         nome = input("Nome do agente: ").strip()
-         if not nome:
-             print("Erro: Nome não pode ser vazio!")
-             return
-         
-         if any((ag["nome"] if isinstance(ag, dict) else ag.nome) == nome for ag in agents):
-             print(f"Erro: Já existe agente com nome '{nome}'!")
-             return
-         
-         print("\nTipos disponíveis:")
-         tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
-         for i, t in enumerate(tipos, 1):
-             print(f"  {i}. {t}")
-         
-         tipo_choice = input("Escolha o tipo (número): ").strip()
-         tipo_idx = int(tipo_choice) - 1
-         
-         if 0 <= tipo_idx < len(tipos):
-             tipo = tipos[tipo_idx]
-             ag = AgentInfo(nome, tipo)
-             agents.append(ag.to_dict())
-             save_agents(agents)
-             play_sound("clique")
-             print(f"\n✓ Agente '{nome}' ({tipo}) criado com sucesso!")
-         else:
-             print("Erro: Tipo inválido!")
-     except Exception as e:
-         print(f"Erro ao criar agente: {e}")
+      """Inicia o processo de criação de agente (muda estado da interface)."""
+      interface.change_state("criar_agente")
+      interface.criar_agente_state = "GET_NAME"
+      interface.criar_agente_nome = ""
+      interface.criar_agente_tipo = 0
+      interface.criar_agente_error = ""
 
 def editar_agente(ag, interface):
-     """Edita um agente existente (CLI simplificado)."""
-     ag_dict = ag.to_dict() if isinstance(ag, AgentInfo) else ag
-     print("\n" + "="*60)
-     print(f"EDITAR AGENTE: {ag_dict['nome']}")
-     print("="*60)
-     
-     try:
-         novo_nome = input(f"Novo nome [{ag_dict['nome']}]: ").strip() or ag_dict['nome']
-         
-         print("\nTipos disponíveis:")
-         tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
-         for i, t in enumerate(tipos, 1):
-             print(f"  {i}. {t}")
-         
-         tipo_choice = input(f"Novo tipo [1-3, atual: {ag_dict['tipo']}]: ").strip()
-         if tipo_choice:
-             tipo_idx = int(tipo_choice) - 1
-             if 0 <= tipo_idx < len(tipos):
-                 novo_tipo = tipos[tipo_idx]
-             else:
-                 print("Erro: Tipo inválido!")
-                 return
-         else:
-             novo_tipo = ag_dict['tipo']
-         
-         ag_dict["nome"] = novo_nome
-         ag_dict["tipo"] = novo_tipo
-         
-         agents = load_agents()
-         for a in agents:
-             if a["nome"] == novo_nome:
-                 a.update(ag_dict)
-                 break
-         
-         save_agents(agents)
-         play_sound("clique")
-         print(f"\n✓ Agente '{novo_nome}' editado com sucesso!")
-     except Exception as e:
-         print(f"Erro ao editar agente: {e}")
+      """Inicia o processo de edição de agente (muda estado da interface)."""
+      ag_dict = ag.to_dict() if isinstance(ag, AgentInfo) else ag
+      interface.change_state("editar_agente")
+      interface.editar_agente_state = "GET_NAME"
+      interface.editar_agente_nome = ag_dict["nome"]
+      interface.editar_agente_ag_original = ag
+      
+      tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
+      try:
+          interface.editar_agente_tipo = tipos.index(ag_dict["tipo"])
+      except ValueError:
+          interface.editar_agente_tipo = 0
+      
+      interface.editar_agente_error = ""
+
+def handle_criar_agente_events(events, agents, interface):
+    """Processa eventos do diálogo de criar novo agente."""
+    tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
+    
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        
+        if event.type == pygame.KEYDOWN:
+            if interface.criar_agente_state == "GET_NAME":
+                if event.key == pygame.K_RETURN:
+                    if interface.criar_agente_nome.strip():
+                        # Verifica nome duplicado
+                        if any((ag["nome"] if isinstance(ag, dict) else ag.nome) == interface.criar_agente_nome for ag in agents):
+                            interface.criar_agente_error = "Erro: Agente com este nome já existe!"
+                        else:
+                            interface.criar_agente_state = "GET_TYPE"
+                            interface.criar_agente_error = ""
+                elif event.key == pygame.K_ESCAPE:
+                    interface.change_state("gestao_agentes")
+                elif event.key == pygame.K_BACKSPACE:
+                    interface.criar_agente_nome = interface.criar_agente_nome[:-1]
+                    interface.criar_agente_error = ""
+                else:
+                    if len(interface.criar_agente_nome) < 20 and event.unicode.isprintable():
+                        interface.criar_agente_nome += event.unicode
+                        interface.criar_agente_error = ""
+            
+            elif interface.criar_agente_state == "GET_TYPE":
+                if event.key == pygame.K_UP:
+                    interface.criar_agente_tipo = (interface.criar_agente_tipo - 1) % len(tipos)
+                elif event.key == pygame.K_DOWN:
+                    interface.criar_agente_tipo = (interface.criar_agente_tipo + 1) % len(tipos)
+                elif event.key == pygame.K_RETURN:
+                    # Criar agente
+                    tipo = tipos[interface.criar_agente_tipo]
+                    ag = AgentInfo(interface.criar_agente_nome, tipo)
+                    agents.append(ag.to_dict())
+                    save_agents(agents)
+                    play_sound("clique")
+                    interface.change_state("gestao_agentes")
+                elif event.key == pygame.K_ESCAPE:
+                    interface.change_state("gestao_agentes")
+
+def handle_editar_agente_events(events, agents, interface):
+    """Processa eventos do diálogo de editar agente."""
+    tipos = ["carro_rapido", "carro_equilibrado", "carro_cauteloso"]
+    
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        
+        if event.type == pygame.KEYDOWN:
+            if interface.editar_agente_state == "GET_NAME":
+                if event.key == pygame.K_RETURN:
+                    interface.editar_agente_state = "GET_TYPE"
+                elif event.key == pygame.K_ESCAPE:
+                    interface.change_state("gestao_agentes")
+                elif event.key == pygame.K_BACKSPACE:
+                    interface.editar_agente_nome = interface.editar_agente_nome[:-1]
+                else:
+                    if len(interface.editar_agente_nome) < 20 and event.unicode.isprintable():
+                        interface.editar_agente_nome += event.unicode
+            
+            elif interface.editar_agente_state == "GET_TYPE":
+                if event.key == pygame.K_UP:
+                    interface.editar_agente_tipo = (interface.editar_agente_tipo - 1) % len(tipos)
+                elif event.key == pygame.K_DOWN:
+                    interface.editar_agente_tipo = (interface.editar_agente_tipo + 1) % len(tipos)
+                elif event.key == pygame.K_RETURN:
+                    # Atualizar agente
+                    ag_dict = interface.editar_agente_ag_original.to_dict() if isinstance(interface.editar_agente_ag_original, AgentInfo) else interface.editar_agente_ag_original
+                    novo_tipo = tipos[interface.editar_agente_tipo]
+                    
+                    agentes_loaded = load_agents()
+                    for a in agentes_loaded:
+                        if a["nome"] == ag_dict["nome"]:
+                            a["nome"] = interface.editar_agente_nome
+                            a["tipo"] = novo_tipo
+                            break
+                    
+                    save_agents(agentes_loaded)
+                    play_sound("clique")
+                    interface.change_state("gestao_agentes")
+                elif event.key == pygame.K_ESCAPE:
+                    interface.change_state("gestao_agentes")
 
 def excluir_agente(ag):
      agents = load_agents()
@@ -384,62 +594,114 @@ def excluir_agente(ag):
          pass
      play_sound("clique")
 
-def comprar_upgrade(agent_dict):
-    """Menu simples para comprar upgrades com XP"""
-    from gamification import GamificationSystem
-    
+def draw_comprar_upgrade_dialog(screen, width, height, agent_dict, upgrades, selected_idx, message):
+    """Desenha o diálogo de compra de upgrades (sem loop bloqueante)."""
     agent = AgentInfo.from_dict(agent_dict)
     total_xp = sum(h.get('xp_gained', 0) for h in agent.historico)
     
-    print("\n" + "="*60)
-    print(f"UPGRADES - {agent.nome} (Nível {agent.level}, {total_xp} XP)")
-    print("="*60)
+    # Fundo
+    screen.fill((240, 240, 250))
     
-    upgrades = GamificationSystem.get_upgrades_available(agent)
+    # Título
+    font_title = pygame.font.SysFont('Roboto', 40, bold=True)
+    title = font_title.render(f"Upgrades - {agent.nome}", True, (30, 60, 120))
+    screen.blit(title, (width//2 - title.get_width()//2, 30))
     
-    for i, upgrade in enumerate(upgrades, 1):
-        status = "✓ Disponível" if upgrade['disponivel'] else "✗ Não disponível"
-        print(f"\n{i}. {upgrade['nome']} - {upgrade['custo_xp']} XP [{status}]")
-        print(f"   {upgrade['descricao']}")
-        print(f"   Valor atual: {agent.stats[upgrade['id']]:.2f}")
+    # Info do agente
+    font_small = pygame.font.SysFont('Roboto', 18)
+    info = font_small.render(f"Nível {agent.level} | {total_xp} XP", True, (100, 100, 100))
+    screen.blit(info, (width//2 - info.get_width()//2, 80))
     
-    print(f"\n0. Voltar")
-    print("="*60)
+    font_label = pygame.font.SysFont('Roboto', 24, bold=True)
+    font_content = pygame.font.SysFont('Roboto', 20)
     
-    # Em modo CLI, pediremos input
-    try:
-        choice = input("Escolha o upgrade (número): ").strip()
-        choice_idx = int(choice) - 1
+    # Lista de upgrades
+    start_y = 130
+    item_height = 85
+    
+    for i, upgrade in enumerate(upgrades):
+        is_selected = (i == selected_idx)
         
-        if choice == "0":
-            return False
+        # Posição
+        y = start_y + i * item_height
         
-        if 0 <= choice_idx < len(upgrades):
-            upgrade_id = upgrades[choice_idx]['id']
-            success, msg = GamificationSystem.apply_upgrade(agent, upgrade_id)
-            
-            if success:
-                print(f"\n✓ {msg}")
-                print(f"  Novo nível: {agent.level}")
-                print(f"  Novo valor de {upgrade_id}: {agent.stats[upgrade_id]:.2f}")
-                
-                # Atualiza JSON
-                agents = load_agents()
-                for a in agents:
-                    if a["nome"] == agent.nome:
-                        a.update(agent.to_dict())
-                save_agents(agents)
-                play_sound("finish")
-                return True
-            else:
-                print(f"\n✗ {msg}")
-                return False
+        # Box
+        box_rect = pygame.Rect(50, y, width - 100, item_height - 10)
+        
+        if is_selected:
+            pygame.draw.rect(screen, (120, 200, 255), box_rect, border_radius=8)
+            pygame.draw.rect(screen, (30, 60, 120), box_rect, 3, border_radius=8)
+            cor_texto = (30, 60, 120)
         else:
-            print("\nOpção inválida!")
-            return False
-    except ValueError:
-        print("\nOpção inválida!")
-        return False
-    except Exception as e:
-        print(f"\nErro: {e}")
-        return False
+            pygame.draw.rect(screen, (220, 230, 245), box_rect, border_radius=8)
+            pygame.draw.rect(screen, (100, 150, 200), box_rect, 1, border_radius=8)
+            cor_texto = (50, 50, 50)
+        
+        # Nome e custo
+        status = "✓" if upgrade['disponivel'] else "✗"
+        nome_text = f"{status} {upgrade['nome']} - {upgrade['custo_xp']} XP"
+        nome_surf = font_label.render(nome_text, True, cor_texto)
+        screen.blit(nome_surf, (70, y + 5))
+        
+        # Descrição
+        desc_surf = font_content.render(upgrade['descricao'], True, cor_texto)
+        screen.blit(desc_surf, (70, y + 35))
+        
+        # Valor atual
+        valor_text = f"Valor atual: {agent.stats[upgrade['id']]:.2f}"
+        valor_surf = font_small.render(valor_text, True, cor_texto)
+        screen.blit(valor_surf, (70, y + 58))
+    
+    # Mensagem de status
+    if message:
+        msg_color = (100, 200, 100) if "sucesso" in message.lower() or "✓" in message else (200, 100, 100)
+        msg_surf = font_small.render(message, True, msg_color)
+        screen.blit(msg_surf, (width//2 - msg_surf.get_width()//2, height - 120))
+    
+    # Instruções
+    instr = font_small.render("CIMA/BAIXO: Selecionar  |  ENTER: Comprar  |  ESC: Sair", True, (60, 60, 60))
+    screen.blit(instr, (50, height - 70))
+
+def handle_comprar_upgrade_events(events, interface):
+    """Processa eventos do diálogo de compra de upgrades."""
+    from gamification import GamificationSystem
+    
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                interface.upgrade_selected_idx = (interface.upgrade_selected_idx - 1) % len(interface.upgrade_list)
+            elif event.key == pygame.K_DOWN:
+                interface.upgrade_selected_idx = (interface.upgrade_selected_idx + 1) % len(interface.upgrade_list)
+            elif event.key == pygame.K_RETURN:
+                if interface.upgrade_selected_idx < len(interface.upgrade_list):
+                    upgrade = interface.upgrade_list[interface.upgrade_selected_idx]
+                    if upgrade['disponivel']:
+                        agent = AgentInfo.from_dict(interface.upgrade_agent_dict)
+                        upgrade_id = upgrade['id']
+                        success, msg = GamificationSystem.apply_upgrade(agent, upgrade_id)
+                        
+                        if success:
+                            # Atualiza JSON
+                            agents = load_agents()
+                            for a in agents:
+                                if a["nome"] == agent.nome:
+                                    a.update(agent.to_dict())
+                            save_agents(agents)
+                            play_sound("finish")
+                            interface.upgrade_message = f"✓ {msg}"
+                            interface.upgrade_agent_dict = agent.to_dict()
+                            # Recarrega upgrades
+                            interface.upgrade_list = GamificationSystem.get_upgrades_available(agent)
+                            interface.upgrade_selected_idx = min(interface.upgrade_selected_idx, len(interface.upgrade_list) - 1)
+                        else:
+                            interface.upgrade_message = f"✗ {msg}"
+                    else:
+                        interface.upgrade_message = "✗ Upgrade não disponível (XP insuficiente)"
+            elif event.key == pygame.K_ESCAPE:
+                interface.change_state("gestao_agentes")
+
+

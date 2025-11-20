@@ -1,111 +1,329 @@
 [
   {
-    "nome": "test",
-    "tipo": "SAC",
-    "tempo_acumulado": 120.59999999999974,
-    "modelo_path": "models/test_SAC.zip",
+    "nome": "g",
+    "tipo": "carro_rapido",
+    "tempo_acumulado": 269.5999999999997,
+    "modelo_path": "models/g_carro_rapido.zip",
     "historico": [
       {
         "mapa": "corridor",
-        "score": 16.24868944659829,
-        "velocidade": 1.2793821543455124,
-        "tempo": 5.299999999999997,
-        "xp_gained": 162,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:23:32",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 67.24194755032659,
-        "velocidade": 1.2083178013563156,
-        "tempo": 12.599999999999971,
-        "xp_gained": 672,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:23:59",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 51.57872101292014,
-        "velocidade": 1.0761019140481949,
-        "tempo": 12.69999999999997,
-        "xp_gained": 515,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:23:59",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 11.210376402363181,
-        "velocidade": 0.9754232466220856,
-        "tempo": 12.79999999999997,
-        "xp_gained": 112,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:24:00",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 93.41193506494164,
-        "velocidade": 1.4441725015640259,
-        "tempo": 12.399999999999972,
-        "xp_gained": 934,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:24:18",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 137.60343120526522,
-        "velocidade": 1.3980005383491516,
-        "tempo": 11.999999999999973,
-        "xp_gained": 1376,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:24:43",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 171.16791499080136,
-        "velocidade": 1.062747448682785,
-        "tempo": 12.99999999999997,
-        "xp_gained": 1711,
-        "checkpoints": 0,
-        "data": "2025-11-20 05:24:46",
-        "tipo_evento": "simulacao"
-      },
-      {
-        "mapa": "corridor",
-        "score": 159.46008566441014,
-        "velocidade": 1.6755947917699814,
+        "score": -142.30564868682995,
+        "velocidade": 0.9964134842157364,
         "tempo": 15.099999999999962,
-        "xp_gained": 1594,
+        "xp_gained": 0,
         "checkpoints": 0,
-        "data": "2025-11-20 05:24:54",
+        "data": "2025-11-20 06:07:32",
         "tipo_evento": "simulacao"
       },
       {
         "mapa": "corridor",
-        "score": 207.63195894192904,
-        "velocidade": 1.1613074839115143,
-        "tempo": 12.299999999999972,
-        "xp_gained": 2076,
+        "score": -72.67675081803463,
+        "velocidade": 0.9964134842157364,
+        "tempo": 15.099999999999962,
+        "xp_gained": 0,
         "checkpoints": 0,
-        "data": "2025-11-20 05:25:02",
+        "data": "2025-11-20 06:07:32",
         "tipo_evento": "simulacao"
       },
       {
         "mapa": "corridor",
-        "score": 235.818021137733,
-        "velocidade": 1.3208092749118805,
-        "tempo": 12.399999999999972,
-        "xp_gained": 2358,
+        "score": 185.2547964155674,
+        "velocidade": 12.694611057639122,
+        "tempo": 5.1999999999999975,
+        "xp_gained": 1852,
+        "checkpoints": 1,
+        "data": "2025-11-20 06:14:44",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 62.35728946328163,
+        "velocidade": 5.0288000255823135,
+        "tempo": 5.299999999999997,
+        "xp_gained": 623,
         "checkpoints": 0,
-        "data": "2025-11-20 05:25:26",
+        "data": "2025-11-20 06:14:45",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 56.769989132881165,
+        "velocidade": 5.0288000255823135,
+        "tempo": 5.299999999999997,
+        "xp_gained": 567,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:14:45",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 66.59193569421768,
+        "velocidade": 1.475190132856369,
+        "tempo": 5.399999999999997,
+        "xp_gained": 665,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:14:46",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 247.50641837716103,
+        "velocidade": 8.766668111085892,
+        "tempo": 5.1999999999999975,
+        "xp_gained": 2475,
+        "checkpoints": 1,
+        "data": "2025-11-20 06:15:05",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 242.91497361660004,
+        "velocidade": 8.766668111085892,
+        "tempo": 5.299999999999997,
+        "xp_gained": 2429,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:05",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 118.84763905405998,
+        "velocidade": 5.435062304139137,
+        "tempo": 5.399999999999997,
+        "xp_gained": 1188,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:06",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 130.77672657370567,
+        "velocidade": 1.827856332063675,
+        "tempo": 5.399999999999997,
+        "xp_gained": 1307,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:07",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 308.4318636357784,
+        "velocidade": 4.8492327481508255,
+        "tempo": 5.399999999999997,
+        "xp_gained": 3084,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:26",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 305.72997733950615,
+        "velocidade": 4.8492327481508255,
+        "tempo": 5.1999999999999975,
+        "xp_gained": 3057,
+        "checkpoints": 1,
+        "data": "2025-11-20 06:15:26",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 304.0699745416641,
+        "velocidade": 4.8492327481508255,
+        "tempo": 5.399999999999997,
+        "xp_gained": 3040,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:26",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 196.2179804444313,
+        "velocidade": 1.707838460803032,
+        "tempo": 5.299999999999997,
+        "xp_gained": 1962,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:15:28",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 59.37471812963486,
+        "velocidade": 12.707535177469254,
+        "tempo": 5.1999999999999975,
+        "xp_gained": 593,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:35",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 61.71066403388977,
+        "velocidade": 5.060138300061226,
+        "tempo": 5.299999999999997,
+        "xp_gained": 617,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:35",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 62.419087797403336,
+        "velocidade": 5.060138300061226,
+        "tempo": 5.299999999999997,
+        "xp_gained": 624,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:35",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 63.48873648047447,
+        "velocidade": 1.4873316586017609,
+        "tempo": 5.399999999999997,
+        "xp_gained": 634,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:36",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 244.94278845191002,
+        "velocidade": 12.525750249624252,
+        "tempo": 5.1999999999999975,
+        "xp_gained": 2449,
+        "checkpoints": 1,
+        "data": "2025-11-20 06:19:51",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 119.38907608389854,
+        "velocidade": 9.077658399939537,
+        "tempo": 5.299999999999997,
+        "xp_gained": 1193,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:52",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 127.01147827506065,
+        "velocidade": 1.4709151089191437,
+        "tempo": 5.399999999999997,
+        "xp_gained": 1270,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:53",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 123.2539794743061,
+        "velocidade": 1.4709151089191437,
+        "tempo": 5.299999999999997,
+        "xp_gained": 1232,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:19:53",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 428.5638552904129,
+        "velocidade": 12.197349414229393,
+        "tempo": 5.099999999999998,
+        "xp_gained": 4285,
+        "checkpoints": 1,
+        "data": "2025-11-20 06:20:09",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 184.82250076532364,
+        "velocidade": 5.517462134361267,
+        "tempo": 5.299999999999997,
+        "xp_gained": 1848,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:10",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 184.0565708875656,
+        "velocidade": 5.517462134361267,
+        "tempo": 5.399999999999997,
+        "xp_gained": 1840,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:11",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 187.33243438601494,
+        "velocidade": 1.9229406267404556,
+        "tempo": 5.399999999999997,
+        "xp_gained": 1873,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:11",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 491.45704504847527,
+        "velocidade": 12.278731733560562,
+        "tempo": 5.399999999999997,
+        "xp_gained": 4914,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:25",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 247.5858532488346,
+        "velocidade": 9.31802898645401,
+        "tempo": 5.299999999999997,
+        "xp_gained": 2475,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:26",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 245.42481660842896,
+        "velocidade": 1.69466233253479,
+        "tempo": 5.399999999999997,
+        "xp_gained": 2454,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:27",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 247.66916993260384,
+        "velocidade": 1.69466233253479,
+        "tempo": 5.299999999999997,
+        "xp_gained": 2476,
+        "checkpoints": 0,
+        "data": "2025-11-20 06:20:27",
         "tipo_evento": "simulacao"
       }
     ],
+    "cor": [
+      120,
+      180,
+      255
+    ],
+    "level": 1,
+    "stats": {
+      "accel": 0.5,
+      "turn_speed": 5.0,
+      "max_speed": 20.0
+    }
+  },
+  {
+    "nome": "t",
+    "tipo": "carro_equilibrado",
+    "tempo_acumulado": 0.0,
+    "modelo_path": "models/t_carro_equilibrado.zip",
+    "historico": [],
     "cor": [
       120,
       180,

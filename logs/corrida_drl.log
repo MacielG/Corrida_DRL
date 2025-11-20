@@ -782,3 +782,993 @@
 2025-11-20 05:25:27,806 - INFO - Modo leve: FPS=30
 2025-11-20 05:25:27,806 - INFO - Modo leve: FPS=30
 2025-11-20 05:25:27,806 - INFO - Modo leve: FPS=30
+2025-11-20 05:47:47,566 - INFO - Modo leve: FPS=30
+2025-11-20 05:47:47,566 - INFO - Modo leve: FPS=30
+2025-11-20 05:47:47,566 - INFO - Modo leve: FPS=30
+2025-11-20 05:47:47,566 - INFO - Modo leve: FPS=30
+2025-11-20 05:47:47,588 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:47:47,588 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:47:47,588 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:47:47,588 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:48:13,583 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:48:13,583 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:48:13,583 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:48:13,583 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:52:55,190 - INFO - Modo leve: FPS=30
+2025-11-20 05:52:55,190 - INFO - Modo leve: FPS=30
+2025-11-20 05:52:55,190 - INFO - Modo leve: FPS=30
+2025-11-20 05:52:55,190 - INFO - Modo leve: FPS=30
+2025-11-20 05:52:55,192 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:52:55,192 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:52:55,192 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:52:55,192 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:53:01,859 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:53:01,859 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:53:01,859 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:53:01,859 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:59:31,172 - INFO - Modo leve: FPS=30
+2025-11-20 05:59:31,172 - INFO - Modo leve: FPS=30
+2025-11-20 05:59:31,172 - INFO - Modo leve: FPS=30
+2025-11-20 05:59:31,172 - INFO - Modo leve: FPS=30
+2025-11-20 05:59:31,173 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:59:31,173 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:59:31,173 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:59:31,173 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 05:59:34,283 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:59:34,283 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:59:34,283 - DEBUG - Estado: gestao_agentes
+2025-11-20 05:59:34,283 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:20,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:05:20,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:05:20,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:05:20,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:05:20,094 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:05:20,094 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:05:20,094 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:05:20,094 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:05:22,077 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:22,077 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:22,077 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:22,077 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:27,069 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:27,069 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:27,069 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:27,069 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:36,307 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:36,307 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:36,307 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:36,307 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:38,236 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:38,236 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:38,236 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:38,236 - DEBUG - Estado: criar_agente
+2025-11-20 06:05:42,143 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:42,143 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:42,143 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:42,143 - DEBUG - Estado: gestao_agentes
+2025-11-20 06:05:44,027 - DEBUG - Estado: menu_inicial
+2025-11-20 06:05:44,027 - DEBUG - Estado: menu_inicial
+2025-11-20 06:05:44,027 - DEBUG - Estado: menu_inicial
+2025-11-20 06:05:44,027 - DEBUG - Estado: menu_inicial
+2025-11-20 06:05:47,379 - DEBUG - Estado: selecao_agente
+2025-11-20 06:05:47,379 - DEBUG - Estado: selecao_agente
+2025-11-20 06:05:47,379 - DEBUG - Estado: selecao_agente
+2025-11-20 06:05:47,379 - DEBUG - Estado: selecao_agente
+2025-11-20 06:05:51,282 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:05:51,282 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:05:51,282 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:05:51,282 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:05:53,300 - DEBUG - Estado: simulacao
+2025-11-20 06:05:53,300 - DEBUG - Estado: simulacao
+2025-11-20 06:05:53,300 - DEBUG - Estado: simulacao
+2025-11-20 06:05:53,300 - DEBUG - Estado: simulacao
+2025-11-20 06:06:03,624 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:03,624 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:03,624 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:03,624 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:05,286 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:06:05,286 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:06:05,286 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:06:05,286 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:06:05,504 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:05,504 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:05,504 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:05,504 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:06,813 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:06,813 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:06,813 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:06,813 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:08,118 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:08,118 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:08,118 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:08,118 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:09,442 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:09,442 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:09,442 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:09,442 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:10,719 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:10,719 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:10,719 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:10,719 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:11,992 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:11,992 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:11,992 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:11,992 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:13,249 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:13,249 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:13,249 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:13,249 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:14,391 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:14,391 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:14,391 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:14,391 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:15,700 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:15,700 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:15,700 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:15,700 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:16,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:16,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:16,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:16,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:18,292 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:18,292 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:18,292 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:18,292 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:19,576 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:19,576 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:19,576 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:19,576 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:20,838 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:20,838 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:20,838 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:20,838 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:22,116 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:22,116 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:22,116 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:22,116 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:23,459 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:23,459 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:23,459 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:23,459 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:24,668 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:24,668 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:24,668 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:24,668 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:25,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:25,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:25,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:25,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:27,320 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:27,320 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:27,320 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:27,320 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:28,450 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:28,450 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:28,450 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:28,450 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:29,764 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:29,764 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:29,764 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:29,764 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:31,061 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:31,061 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:31,061 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:31,061 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:32,324 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:32,324 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:32,324 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:32,324 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:33,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:33,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:33,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:33,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:34,767 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:34,767 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:34,767 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:34,767 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:36,124 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:36,124 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:36,124 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:36,124 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:37,412 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:37,412 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:37,412 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:37,412 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:38,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:38,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:38,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:38,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:40,099 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:40,099 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:40,099 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:40,099 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:41,407 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:41,407 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:41,407 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:41,407 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:42,703 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:42,703 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:42,703 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:42,703 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:43,961 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:43,961 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:43,961 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:43,961 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:45,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:45,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:45,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:45,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:46,404 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:46,404 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:46,404 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:46,404 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:48,280 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:48,280 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:48,280 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:48,280 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:49,499 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:49,499 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:49,499 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:49,499 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:50,755 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:50,755 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:50,755 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:50,755 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:52,005 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:52,005 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:52,005 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:52,005 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:53,213 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:53,213 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:53,213 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:53,213 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:54,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:54,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:54,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:54,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:55,652 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:55,652 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:55,652 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:55,652 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:56,921 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:56,921 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:56,921 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:56,921 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:58,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:58,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:58,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:58,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:59,428 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:59,428 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:59,428 - INFO - Modo leve: FPS=30
+2025-11-20 06:06:59,428 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:00,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:00,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:00,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:00,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:02,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:02,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:02,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:02,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:03,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:03,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:03,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:03,172 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:04,448 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:04,448 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:04,448 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:04,448 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:05,604 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:05,604 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:05,604 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:05,604 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:06,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:06,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:06,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:06,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:08,205 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:08,205 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:08,205 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:08,205 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:09,349 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:09,349 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:09,349 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:09,349 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:10,697 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:10,697 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:10,697 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:10,697 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:12,021 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:12,021 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:12,021 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:12,021 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:13,348 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:13,348 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:13,348 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:13,348 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:14,509 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:14,509 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:14,509 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:14,509 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:15,960 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:15,960 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:15,960 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:15,960 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:17,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:17,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:17,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:17,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:18,445 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:18,445 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:18,445 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:18,445 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:19,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:19,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:19,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:19,784 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:21,072 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:21,072 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:21,072 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:21,072 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:22,366 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:22,366 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:22,366 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:22,366 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:23,594 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:23,594 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:23,594 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:23,594 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:24,883 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:24,883 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:24,883 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:24,883 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:26,214 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:26,214 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:26,214 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:26,214 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:27,550 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:27,550 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:27,550 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:27,550 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:29,012 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:29,012 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:29,012 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:29,012 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:30,331 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:30,331 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:30,331 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:30,331 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:31,655 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:31,655 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:31,655 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:31,655 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:32,777 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:32,777 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:32,777 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:32,777 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:34,024 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:34,024 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:34,024 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:34,024 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:35,311 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:35,311 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:35,311 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:35,311 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:36,627 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:36,627 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:36,627 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:36,627 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:37,873 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:37,873 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:37,873 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:37,873 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:39,203 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:39,203 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:39,203 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:39,203 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:40,538 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:40,538 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:40,538 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:40,538 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:41,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:41,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:41,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:41,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:42,989 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:42,989 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:42,989 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:42,989 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:44,337 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:44,337 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:44,337 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:44,337 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:45,583 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:45,583 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:45,583 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:45,583 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:46,866 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:46,866 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:46,866 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:46,866 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:48,166 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:48,166 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:48,166 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:48,166 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:49,462 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:49,462 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:49,462 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:49,462 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:50,768 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:50,768 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:50,768 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:50,768 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:52,056 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:52,056 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:52,056 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:52,056 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:53,182 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:53,182 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:53,182 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:53,182 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:54,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:54,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:54,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:54,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:55,770 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:55,770 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:55,770 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:55,770 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:57,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:57,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:57,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:57,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:58,299 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:58,299 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:58,299 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:58,299 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:59,426 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:59,426 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:59,426 - INFO - Modo leve: FPS=30
+2025-11-20 06:07:59,426 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:00,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:00,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:00,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:00,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:02,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:02,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:02,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:02,089 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:03,396 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:03,396 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:03,396 - INFO - Modo leve: FPS=30
+2025-11-20 06:08:03,396 - INFO - Modo leve: FPS=30
+2025-11-20 06:13:57,779 - INFO - Modo leve: FPS=30
+2025-11-20 06:13:57,779 - INFO - Modo leve: FPS=30
+2025-11-20 06:13:57,779 - INFO - Modo leve: FPS=30
+2025-11-20 06:13:57,779 - INFO - Modo leve: FPS=30
+2025-11-20 06:13:57,780 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:13:57,780 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:13:57,780 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:13:57,780 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:14:06,965 - DEBUG - Estado: selecao_agente
+2025-11-20 06:14:06,965 - DEBUG - Estado: selecao_agente
+2025-11-20 06:14:06,965 - DEBUG - Estado: selecao_agente
+2025-11-20 06:14:06,965 - DEBUG - Estado: selecao_agente
+2025-11-20 06:14:11,748 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:14:11,748 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:14:11,748 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:14:11,748 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:14:13,742 - DEBUG - Estado: simulacao
+2025-11-20 06:14:13,742 - DEBUG - Estado: simulacao
+2025-11-20 06:14:13,742 - DEBUG - Estado: simulacao
+2025-11-20 06:14:13,742 - DEBUG - Estado: simulacao
+2025-11-20 06:14:23,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:23,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:23,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:23,486 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:25,233 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:14:25,233 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:14:25,233 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:14:25,233 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:14:25,557 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:25,557 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:25,557 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:25,557 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:27,059 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:27,059 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:27,059 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:27,059 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:28,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:28,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:28,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:28,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:29,689 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:29,689 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:29,689 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:29,689 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:30,958 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:30,958 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:30,958 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:30,958 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:32,086 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:32,086 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:32,086 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:32,086 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:33,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:33,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:33,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:33,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:34,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:34,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:34,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:34,749 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:36,038 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:36,038 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:36,038 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:36,038 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:37,344 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:37,344 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:37,344 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:37,344 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:38,475 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:38,475 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:38,475 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:38,475 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:39,780 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:39,780 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:39,780 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:39,780 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:41,144 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:41,144 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:41,144 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:41,144 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:42,562 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:42,562 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:42,562 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:42,562 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:43,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:43,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:43,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:43,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:45,117 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:45,117 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:45,117 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:45,117 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:46,306 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:46,306 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:46,306 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:46,306 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:47,654 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:47,654 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:47,654 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:47,654 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:49,066 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:49,066 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:49,066 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:49,066 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:50,433 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:50,433 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:50,433 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:50,433 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:51,762 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:51,762 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:51,762 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:51,762 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:53,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:53,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:53,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:53,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:54,602 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:54,602 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:54,602 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:54,602 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:56,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:56,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:56,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:56,009 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:57,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:57,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:57,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:57,356 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:58,712 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:58,712 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:58,712 - INFO - Modo leve: FPS=30
+2025-11-20 06:14:58,712 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:00,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:00,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:00,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:00,154 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:01,850 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:01,850 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:01,850 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:01,850 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:03,474 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:03,474 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:03,474 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:03,474 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:04,906 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:04,906 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:04,906 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:04,906 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:06,295 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:06,295 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:06,295 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:06,295 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:07,481 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:07,481 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:07,481 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:07,481 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:08,742 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:08,742 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:08,742 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:08,742 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:10,095 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:10,095 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:10,095 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:10,095 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:11,227 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:11,227 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:11,227 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:11,227 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:12,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:12,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:12,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:12,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:13,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:13,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:13,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:13,804 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:15,060 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:15,060 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:15,060 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:15,060 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:16,416 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:16,416 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:16,416 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:16,416 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:17,659 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:17,659 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:17,659 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:17,659 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:18,803 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:18,803 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:18,803 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:18,803 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:20,150 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:20,150 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:20,150 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:20,150 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:21,548 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:21,548 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:21,548 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:21,548 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:22,918 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:22,918 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:22,918 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:22,918 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:24,075 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:24,075 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:24,075 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:24,075 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:25,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:25,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:25,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:25,447 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:27,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:27,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:27,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:27,471 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:28,848 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:28,848 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:28,848 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:28,848 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:30,419 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:30,419 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:30,419 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:30,419 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:31,748 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:31,748 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:31,748 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:31,748 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:33,503 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:33,503 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:33,503 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:33,503 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:34,687 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:34,687 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:34,687 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:34,687 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:36,252 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:36,252 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:36,252 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:36,252 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:37,721 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:37,721 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:37,721 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:37,721 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:39,111 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:39,111 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:39,111 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:39,111 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:40,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:40,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:40,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:40,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:41,982 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:41,982 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:41,982 - INFO - Modo leve: FPS=30
+2025-11-20 06:15:41,982 - INFO - Modo leve: FPS=30
+2025-11-20 06:18:43,285 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=25.01
+2025-11-20 06:18:43,286 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.64
+2025-11-20 06:19:11,810 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:11,810 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:11,810 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:11,810 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:11,811 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:19:11,811 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:19:11,811 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:19:11,811 - INFO - Interface inicializada: 800x600, 4 ambientes paralelos
+2025-11-20 06:19:14,947 - DEBUG - Estado: selecao_agente
+2025-11-20 06:19:14,947 - DEBUG - Estado: selecao_agente
+2025-11-20 06:19:14,947 - DEBUG - Estado: selecao_agente
+2025-11-20 06:19:14,947 - DEBUG - Estado: selecao_agente
+2025-11-20 06:19:16,823 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:19:16,823 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:19:16,823 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:19:16,823 - DEBUG - Estado: selecao_mapa
+2025-11-20 06:19:17,706 - DEBUG - Estado: simulacao
+2025-11-20 06:19:17,706 - DEBUG - Estado: simulacao
+2025-11-20 06:19:17,706 - DEBUG - Estado: simulacao
+2025-11-20 06:19:17,706 - DEBUG - Estado: simulacao
+2025-11-20 06:19:19,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:19,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:19,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:19,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:21,652 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:19:21,652 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:19:21,652 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:19:21,652 - INFO - Treinando 4 execuções paralelas do agente 1 no mapa: corridor (Fase: Corredor reto)
+2025-11-20 06:19:21,860 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:21,860 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:21,860 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:21,860 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:23,170 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:23,170 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:23,170 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:23,170 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:24,490 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:24,490 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:24,490 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:24,490 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:25,775 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:25,775 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:25,775 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:25,775 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:27,015 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:27,015 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:27,015 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:27,015 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:28,243 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:28,243 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:28,243 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:28,243 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:29,417 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:29,417 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:29,417 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:29,417 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:30,707 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:30,707 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:30,707 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:30,707 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:31,985 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:31,985 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:31,985 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:31,985 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:33,291 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:33,291 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:33,291 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:33,291 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:34,569 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:34,569 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:34,569 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:34,569 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:35,994 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:35,994 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:35,994 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:35,994 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:37,131 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:37,131 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:37,131 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:37,131 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:38,377 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:38,377 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:38,377 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:38,377 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:39,621 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:39,621 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:39,621 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:39,621 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:40,852 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:40,852 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:40,852 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:40,852 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:42,178 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:42,178 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:42,178 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:42,178 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:43,573 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:43,573 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:43,573 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:43,573 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:44,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:44,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:44,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:44,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:46,202 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:46,202 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:46,202 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:46,202 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:47,483 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:47,483 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:47,483 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:47,483 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:48,681 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:48,681 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:48,681 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:48,681 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:49,823 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:49,823 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:49,823 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:49,823 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:50,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:50,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:50,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:50,995 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:51,578 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=24.33
+2025-11-20 06:19:51,578 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=24.33
+2025-11-20 06:19:51,578 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=24.33
+2025-11-20 06:19:51,578 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=24.33
+2025-11-20 06:19:51,580 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.75
+2025-11-20 06:19:51,580 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.75
+2025-11-20 06:19:51,580 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.75
+2025-11-20 06:19:51,580 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.75
+2025-11-20 06:19:52,157 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:52,157 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:52,157 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:52,157 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:53,633 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:53,633 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:53,633 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:53,633 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:54,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:54,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:54,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:54,936 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:56,196 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:56,196 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:56,196 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:56,196 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:57,431 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:57,431 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:57,431 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:57,431 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:58,691 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:58,691 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:58,691 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:58,691 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:59,983 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:59,983 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:59,983 - INFO - Modo leve: FPS=30
+2025-11-20 06:19:59,983 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:01,374 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:01,374 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:01,374 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:01,374 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:02,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:02,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:02,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:02,671 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:03,964 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:03,964 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:03,964 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:03,964 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:05,209 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:05,209 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:05,209 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:05,209 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:06,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:06,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:06,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:06,461 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:07,701 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:07,701 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:07,701 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:07,701 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:08,963 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:08,963 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:08,963 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:08,963 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:08,969 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=28.37
+2025-11-20 06:20:08,969 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=28.37
+2025-11-20 06:20:08,969 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=28.37
+2025-11-20 06:20:08,969 - INFO - [CHECKPOINT] Agente atingiu checkpoint 1/1 em dist=28.37
+2025-11-20 06:20:08,974 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.90
+2025-11-20 06:20:08,974 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.90
+2025-11-20 06:20:08,974 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.90
+2025-11-20 06:20:08,974 - INFO - [SUCESSO] Todos os 1 checkpoints alcançados! Reward total: 111.90
+2025-11-20 06:20:10,365 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:10,365 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:10,365 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:10,365 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:11,829 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:11,829 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:11,829 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:11,829 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:13,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:13,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:13,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:13,185 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:14,328 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:14,328 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:14,328 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:14,328 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:15,670 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:15,670 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:15,670 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:15,670 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:16,981 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:16,981 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:16,981 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:16,981 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:18,329 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:18,329 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:18,329 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:18,329 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:19,646 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:19,646 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:19,646 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:19,646 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:20,840 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:20,840 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:20,840 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:20,840 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:21,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:21,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:21,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:21,966 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:23,101 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:23,101 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:23,101 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:23,101 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:24,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:24,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:24,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:24,305 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:25,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:25,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:25,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:25,575 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:26,839 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:26,839 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:26,839 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:26,839 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:27,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:27,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:27,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:27,972 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:29,302 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:29,302 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:29,302 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:29,302 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:30,658 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:30,658 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:30,658 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:30,658 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:31,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:31,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:31,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:31,792 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:33,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:33,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:33,153 - INFO - Modo leve: FPS=30
+2025-11-20 06:20:33,153 - INFO - Modo leve: FPS=30

@@ -190,9 +190,13 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
     # Variables for gestao_agentes UI
     gestao_btn_novo = []
     gestao_agent_cards = []
+    gestao_back_btn = []
 
     import pygame
-    from interface_agents import draw_gestao_agentes, handle_gestao_agentes_events
+    from interface_agents import (draw_gestao_agentes, handle_gestao_agentes_events,
+                                   draw_criar_agente_dialog, handle_criar_agente_events,
+                                   draw_editar_agente_dialog, handle_editar_agente_events,
+                                   draw_comprar_upgrade_dialog, handle_comprar_upgrade_events)
     agents = [AgentInfo.from_dict(a) for a in load_agents()]
 
     while True:
@@ -265,14 +269,45 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
             interface.clock.tick(60)
 
         elif interface.state == "gestao_agentes":
-            draw_gestao_agentes(interface.screen, interface.width, interface.height, agents, gestao_btn_novo, gestao_agent_cards)
-            result = handle_gestao_agentes_events(pygame.event.get(), gestao_btn_novo, gestao_agent_cards, agents, interface=interface)
+            agents = load_agents()  # Recarrega agentes sempre
+            draw_gestao_agentes(interface.screen, interface.width, interface.height, agents, gestao_btn_novo, gestao_agent_cards, gestao_back_btn)
+            result = handle_gestao_agentes_events(pygame.event.get(), gestao_btn_novo, gestao_agent_cards, agents, gestao_back_btn, interface)
             if result is not None:
                 if isinstance(result, tuple) and result[0] == "select":
                     interface.selected_agent = result[1]
                     interface.change_state("menu_inicial")
-                elif result == "escape":
+                elif result == "back":
                     interface.change_state("menu_inicial")
+            interface.clock.tick(60)
+        
+        elif interface.state == "criar_agente":
+            agents = load_agents()  # Recarrega agentes
+            draw_criar_agente_dialog(interface.screen, interface.width, interface.height,
+                                    getattr(interface, 'criar_agente_state', 'GET_NAME'),
+                                    getattr(interface, 'criar_agente_nome', ''),
+                                    getattr(interface, 'criar_agente_tipo', 0),
+                                    getattr(interface, 'criar_agente_error', ''))
+            handle_criar_agente_events(pygame.event.get(), agents, interface)
+            interface.clock.tick(60)
+        
+        elif interface.state == "editar_agente":
+            agents = load_agents()  # Recarrega agentes
+            draw_editar_agente_dialog(interface.screen, interface.width, interface.height,
+                                     getattr(interface, 'editar_agente_state', 'GET_NAME'),
+                                     getattr(interface, 'editar_agente_ag_original', None),
+                                     getattr(interface, 'editar_agente_nome', ''),
+                                     getattr(interface, 'editar_agente_tipo', 0),
+                                     getattr(interface, 'editar_agente_error', ''))
+            handle_editar_agente_events(pygame.event.get(), agents, interface)
+            interface.clock.tick(60)
+        
+        elif interface.state == "comprar_upgrade_agente":
+            draw_comprar_upgrade_dialog(interface.screen, interface.width, interface.height,
+                                       getattr(interface, 'upgrade_agent_dict', {}),
+                                       getattr(interface, 'upgrade_list', []),
+                                       getattr(interface, 'upgrade_selected_idx', 0),
+                                       getattr(interface, 'upgrade_message', ''))
+            handle_comprar_upgrade_events(pygame.event.get(), interface)
             interface.clock.tick(60)
 
         elif interface.state == "simulacao":

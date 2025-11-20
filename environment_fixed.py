@@ -20,38 +20,37 @@ class CorridaEnv(gym.Env):
         car_stats (dict): Stats do carro {'accel': 0.5, 'turn_speed': 5.0, 'max_speed': 20.0}
     """
     def __init__(self, map_type="corridor", car_stats=None):
-        self.width = int(800 * ENV_SCALE)
-        self.height = int(600 * ENV_SCALE)
-        self.map_type = map_type
-        self.car1_pos = [150 * ENV_SCALE, 300 * ENV_SCALE]
-        self.car1_speed = 0
-        self.car1_angle = 0
-        self.checkpoints = []
-        self.checkpoint_index = 0
-        self.barriers = []
-        self.corridor_rect = None
-        self.max_steps = MAX_STEPS
-        self.current_step = 0
-        self.episode_time = 0.0
-        self.width_norm = 1.0 / self.width
-        self.height_norm = 1.0 / self.height
-        self.last_angle = None
-        self.last_angle_pos = None
-        self.n_lidar = 8  # 8 sensores Lidar a cada 45 graus
-        self.randomize_checkpoint = False  # Garante que sempre existe
-        
-        # NOVO: Mecanismos anti-loop
-        self.position_history = []  # Track das últimas posições
-        self.progress_counter = 0  # Contador de steps sem progresso
-        self.max_steps_without_progress = 200  # Falha após ~20s
-        self.min_progress_distance = 5 * ENV_SCALE  # Mínimo deslocamento
-        self.checkpoints_reached = set()  # Rastreia checkpoints já atingidos neste episódio
-        
-        # Carrega stats do agente ou usa padrão
-        self.car_stats = car_stats if car_stats else {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
-        self.ACCEL_FORCE = self.car_stats["accel"]
-        self.TURN_SPEED = self.car_stats["turn_speed"]
-        self.MAX_SPEED = self.car_stats["max_speed"]
+         self.width = int(800 * ENV_SCALE)
+         self.height = int(600 * ENV_SCALE)
+         self.map_type = map_type
+         self.car1_pos = [150 * ENV_SCALE, 300 * ENV_SCALE]
+         self.car1_speed = 0
+         self.car1_angle = 0
+         self.checkpoints = []
+         self.checkpoint_index = 0
+         self.barriers = []
+         self.corridor_rect = None
+         self.max_steps = MAX_STEPS
+         self.current_step = 0
+         self.episode_time = 0.0
+         self.width_norm = 1.0 / self.width
+         self.height_norm = 1.0 / self.height
+         self.last_angle = None
+         self.last_angle_pos = None
+         self.n_lidar = 8  # 8 sensores Lidar a cada 45 graus
+         self.randomize_checkpoint = False  # Garante que sempre existe
+         
+         # NOVO: Mecanismos anti-loop
+         self.position_history = []  # Track posições recentes
+         self.progress_counter = 0  # Contador de steps sem progresso
+         self.max_steps_without_progress = 200  # Falha se não progride em 200 steps (~20s)
+         self.min_progress_distance = 5 * ENV_SCALE  # Mínimo de progresso esperado
+         
+         # Carrega stats do agente ou usa padrão
+         self.car_stats = car_stats if car_stats else {"accel": 0.5, "turn_speed": 5.0, "max_speed": 20.0}
+         self.ACCEL_FORCE = self.car_stats["accel"]
+         self.TURN_SPEED = self.car_stats["turn_speed"]
+         self.MAX_SPEED = self.car_stats["max_speed"]
 
         # Ações: [acelerar, frear, virar_esquerda, virar_direita]
         self.action_space = spaces.Discrete(4)
@@ -174,11 +173,10 @@ class CorridaEnv(gym.Env):
         self.current_step = 0
         self.episode_time = 0.0
         self.prev_dist_to_checkpoint = None
-        # NOVO: Reset anti-loop
+        # NOVO: Reset dos mecanismos anti-loop
         self.position_history = []
         self.progress_counter = 0
         self.prev_angle = None
-        self.checkpoints_reached = set()  # Rastreia checkpoints já atingidos
         # Sempre retorna observação completa (core + lidar) para compatibilidade com DummyVecEnv
         obs = self._get_obs(only_core=False)
         return np.array(obs, dtype=np.float32), {}
@@ -233,147 +231,194 @@ class CorridaEnv(gym.Env):
         return obs
 
     def step(self, action: int):
-         """Executa uma ação no ambiente e retorna o próximo estado."""
-         self.current_step += 1
-         self.episode_time += TIME_STEP
-         
-         # Salva estado anterior
-         prev_pos = self.car1_pos.copy()
-         prev_speed = self.car1_speed
-         prev_angle = self.car1_angle
-         
-         # ===== FÍSICA DO CARRO =====
-         FRICTION = 0.98
-         if action == 0:
-             self.car1_speed = self.car1_speed * FRICTION + self.ACCEL_FORCE
-         elif action == 1:
-             self.car1_speed = self.car1_speed * FRICTION - self.ACCEL_FORCE
-         else:
-             self.car1_speed = self.car1_speed * FRICTION
-         
-         # Limita velocidade máxima
-         self.car1_speed = max(-self.MAX_SPEED, min(self.car1_speed, self.MAX_SPEED))
-         
-         # Rotação
-         if action == 2:
-             self.car1_angle = (self.car1_angle - self.TURN_SPEED) % 360
-         elif action == 3:
-             self.car1_angle = (self.car1_angle + self.TURN_SPEED) % 360
-         
-         # Movimento
-         if abs(self.car1_speed) > 0.01:
-             rad = np.radians(self.car1_angle)
-             delta_x = self.car1_speed * np.cos(rad)
-             delta_y = self.car1_speed * np.sin(rad)
-             self.car1_pos[0] += delta_x
-             self.car1_pos[1] += delta_y
-         
-         # ===== SISTEMA DE RECOMPENSAS =====
-         reward = 0.0
-         done = False
-         collisions = 0
-         success = False
-         inside_corridor = self.is_on_corridor(self.car1_pos)
-         
-         # 1. PENALIDADE POR SAIR DO CORREDOR
-         if not inside_corridor:
-             reward = -10.0  # Penalidade PESADA por sair
+        """Executa uma ação no ambiente e retorna o próximo estado.
+        
+        Args:
+            action (int): Ação a ser executada (0: acelerar, 1: frear, 2: virar esquerda, 3: virar direita).
+        Returns:
+            tuple: (state, reward, done, info) onde:
+                - state (np.array): Novo estado do ambiente.
+                - reward (float): Recompensa pela ação.
+                - done (bool): Indica se o episódio terminou.
+                - info (dict): Informações adicionais (colisões, checkpoint, etc.).
+        """
+        self.current_step += 1
+        self.episode_time += TIME_STEP
+        reward = 0  # Inicializa reward antes de qualquer uso
+        prev_pos = self.car1_pos.copy()
+        prev_speed = self.car1_speed
+        prev_angle = self.car1_angle
+        prev_pos_before_move = self.car1_pos.copy()
+        # Ação do carro 1 (agente)
+        # Física realista: força e atrito com stats dinâmicos
+        FRICTION = 0.98
+        if action == 0:
+            self.car1_speed = self.car1_speed * FRICTION + self.ACCEL_FORCE
+        elif action == 1:
+            self.car1_speed = self.car1_speed * FRICTION - self.ACCEL_FORCE
+        else:
+            self.car1_speed = self.car1_speed * FRICTION
+        
+        # Limita velocidade máxima baseada em stats
+        self.car1_speed = max(-self.MAX_SPEED, min(self.car1_speed, self.MAX_SPEED))
+        
+        if action == 2:
+            self.car1_angle = (self.car1_angle - self.TURN_SPEED) % 360
+        elif action == 3:
+            self.car1_angle = (self.car1_angle + self.TURN_SPEED) % 360
+        if abs(self.car1_speed) > 0.01:
+            rad = np.radians(self.car1_angle)
+            delta_x = self.car1_speed * np.cos(rad)
+            delta_y = self.car1_speed * np.sin(rad)
+            # Calcula vetor de movimento real
+            move_vec = np.array([delta_x, delta_y])
+            # Calcula vetor direção do carro
+            angle_vec = np.array([np.cos(rad), np.sin(rad)])
+            # Penaliza drift lateral (movimento desalinhado)
+            if np.linalg.norm(move_vec) > 0:
+                move_dir = move_vec / (np.linalg.norm(move_vec) + 1e-8)
+                alignment = np.dot(move_dir, angle_vec)
+                if alignment < 0.98:  # 1.0 = alinhado, <0.98 = drift
+                    reward -= (1 - alignment) * 0.5  # penalidade suave
+            self.car1_pos[0] += delta_x
+            self.car1_pos[1] += delta_y
+        inside_corridor = self.is_on_corridor(self.car1_pos)
+
+        reward = 0
+        done = False
+        collisions = 0
+        penalty = 0
+        success = False
+
+        if not inside_corridor:
+            reward = -3
+            done = True
+            collisions = 1
+            # Retorna imediatamente para não somar penalidades extras
+            state = self._get_obs()
+            info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success}
+            obs = np.array(self._get_obs(), dtype=np.float32)
+            terminated = done
+            truncated = False
+            return obs, reward, terminated, truncated, info
+        else:
+            reward = -0.001
+            if self.car1_speed < 0:
+                reward -= 0.1  # Penalidade maior para andar para trás
+            dist_moved = np.linalg.norm(np.array(self.car1_pos) - np.array(prev_pos))
+            if dist_moved > 0.05 and self.checkpoints:
+                reward += 0.2  # Bônus maior por movimento
+            elif dist_moved < 0.01 and self.car1_speed < 0.1:
+                # Penalidade forte por não movimento (girar sem sair do lugar)
+                reward -= 0.3
+            if self.checkpoints:
+                checkpoint = self.checkpoints[self.checkpoint_index]
+                dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
+                if self.prev_dist_to_checkpoint is not None:
+                    progress = self.prev_dist_to_checkpoint - dist
+                    reward += max(0, progress) * 4.0  # Peso maior para progresso
+                self.prev_dist_to_checkpoint = dist
+                angle_diff = self.angle_to_checkpoint()
+                reward += np.cos(np.radians(angle_diff)) * 0.2  # Bônus angular maior
+                if abs(prev_speed) < 0.05:
+                    reward = -0.5
+                # NOVO: Aumenta densidade de recompensa por velocidade
+                reward += (self.car1_speed / 20.0) * 0.1  # Incentiva movimento constante
+                # NOVO: Penalidade por tempo (incentiva terminar rápido)
+                reward -= 0.005
+            else:
+                reward += 0.0
+
+        # Recompensa densa/esparsa
+        if REWARD_SCHEME == "dense" and self.checkpoints:
+            # Centralização
+            if self.map_type == "corridor":
+                center_y = 300 * ENV_SCALE
+                reward += -0.03 * abs(self.car1_pos[1] - center_y) / ENV_SCALE
+            elif self.map_type == "curve":
+                checkpoint = self.checkpoints[self.checkpoint_index] if self.checkpoints else (0, 0)
+                dist_to_cp = np.linalg.norm(np.array(self.car1_pos) - np.array(checkpoint))
+                reward += -0.008 * dist_to_cp / ENV_SCALE
+            # Suavidade de ação
+            if hasattr(self, 'last_action') and self.last_action is not None and action != self.last_action:
+                reward -= 0.03
+            self.last_action = action
+        elif REWARD_SCHEME == "sparse":
+            self.last_action = action
+            # Remove componentes densos
+            pass
+        else:
+            self.last_action = action
+
+        # Usa checkpoint padrão se a lista estiver vazia
+        checkpoint = self.checkpoints[self.checkpoint_index] if self.checkpoints else (0, 0)
+        dx = checkpoint[0] - self.car1_pos[0]
+        dy = checkpoint[1] - self.car1_pos[1]
+        target_angle = (math.degrees(math.atan2(dy, dx)) + 360) % 360
+        car_angle = self.car1_angle % 360
+        diff_angle = min(abs(target_angle - car_angle), 360 - abs(target_angle - car_angle))
+        if diff_angle < 10:
+            reward += 0.3  # Bônus maior por alinhamento
+
+        dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
+        angle_diff = self.angle_to_checkpoint() if self.checkpoints else 0
+        # Removido print DEBUG para não travar interface
+        # print(f"[DEBUG] dist={dist}, angle_diff={angle_diff}, car1_pos={self.car1_pos}, checkpoint={checkpoint}")
+        # Alteração: sucesso se dist < 20*ENV_SCALE e ângulo < 30 OU dist ~ 0
+        if self.checkpoints and ((dist < 20 * ENV_SCALE and angle_diff < 30) or np.isclose(dist, 0, atol=1e-6)):
+            reward += 20.0  # Recompensa irresistível por checkpoint (aumentado de 12)
+            self.checkpoint_index += 1
+            success = True
+            if self.checkpoint_index >= len(self.checkpoints):
+                reward += 50.0  # Bônus adicional por completar todos os checkpoints
+                done = True
+
+        if self.randomize_checkpoint and success:
+            self.checkpoints = self.setup_checkpoints(self.map_type, self.randomize_checkpoint)
+        elif not self.checkpoints:
+            self.checkpoints = self.setup_checkpoints(self.map_type)
+
+        # NOVO: Mecanismo de detecção de loop/inatividade
+        # Armazena posição a cada 10 steps
+        if self.current_step % 10 == 0:
+            self.position_history.append(self.car1_pos.copy())
+            # Mantém apenas últimas 20 posições (~200 steps)
+            if len(self.position_history) > 20:
+                self.position_history.pop(0)
+        
+        # Verifica se houve progresso nos últimos steps
+        if len(self.position_history) >= 2:
+            # Calcula distância total percorrida nos últimos ~200 steps
+            total_distance = 0
+            for i in range(1, len(self.position_history)):
+                dist = np.linalg.norm(np.array(self.position_history[i]) - np.array(self.position_history[i-1]))
+                total_distance += dist
+            
+            # Se distância < mínimo esperado, incrementa contador
+            if total_distance < self.min_progress_distance:
+                self.progress_counter += 1
+                reward -= 0.1  # Penalidade por inatividade
+            else:
+                self.progress_counter = 0  # Reset se houve progresso
+        
+        # Falha se não há progresso por muito tempo
+        if self.progress_counter > self.max_steps_without_progress:
+            reward -= 10.0  # Grande penalidade
+            done = True
+            print(f"[FAIL] Agente preso em loop por {self.progress_counter} steps, posição: {self.car1_pos}")
+
+         if self.episode_time >= MAX_EPISODE_TIME:
              done = True
-             collisions = 1
-         else:
-             # 2. INCENTIVO BASE PARA MOVIMENTO (maior peso)
-             # O agente DEVE aprender a se mover
-             speed_normalized = self.car1_speed / self.MAX_SPEED  # [-1, 1]
-             reward += abs(speed_normalized) * 0.3  # Até +0.3 por estar em movimento
-             
-             # 3. DISTÂNCIA MOVIMENTO NO STEP
-             dist_moved = np.linalg.norm(np.array(self.car1_pos) - np.array(prev_pos))
-             if dist_moved > 0.01:
-                 reward += 0.1  # Bônus por se mover neste step
-             else:
-                 reward -= 0.15  # PENALIDADE FORTE por ficar parado
-             
-             # 4. RECOMPENSA POR PROGRESSO EM DIREÇÃO AO CHECKPOINT
-             if self.checkpoints:
-                 checkpoint = self.checkpoints[self.checkpoint_index]
-                 dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
-                 
-                 # Rastreia progresso anterior - AUMENTADO EM PESO
-                 if self.prev_dist_to_checkpoint is not None:
-                     progress = self.prev_dist_to_checkpoint - dist  # Positivo = aproximando
-                     if progress > 0:
-                         reward += progress * 0.1  # 10x maior que antes
-                     elif progress < -5 * ENV_SCALE:  # Se afastou muito
-                         reward -= 0.2
-                 
-                 self.prev_dist_to_checkpoint = dist
-                 
-                 # 5. RECOMPENSA POR ALINHAMENTO COM CHECKPOINT
-                 angle_diff = self.angle_to_checkpoint()
-                 alignment_bonus = max(0, np.cos(np.radians(angle_diff)))  # [0, 1]
-                 reward += alignment_bonus * 0.2  # 2x maior
-                 
-                 # 6. RECOMPENSA POR PROXIMIDADE AO CHECKPOINT
-                 checkpoint_radius = 40 * ENV_SCALE  # Raio de detecção maior
-                 if dist < checkpoint_radius:
-                     reward += (checkpoint_radius - dist) / checkpoint_radius * 0.5  # Até +0.5
-                 
-                 # 7. GRANDE RECOMPENSA POR ATINGIR CHECKPOINT
-                 # Aumentou de 20 para 30 para mais tolerância
-                 if dist < 30 * ENV_SCALE and self.checkpoint_index not in self.checkpoints_reached:
-                     reward += 10.0  # Bônus MUITO grande por chegar perto
-                     self.checkpoints_reached.add(self.checkpoint_index)
-                     success = True
-                     
-                     # DEBUG: mostra quando checkpoint é atingido
-                     logger.info(f"[CHECKPOINT] Agente atingiu checkpoint {self.checkpoint_index + 1}/{len(self.checkpoints)} em dist={dist:.2f}")
-                     
-                     self.checkpoint_index += 1
-                     
-                     if self.checkpoint_index >= len(self.checkpoints):
-                         reward += 100.0  # BÔNUS FINAL ENORME - motivação máxima
-                         logger.info(f"[SUCESSO] Todos os {len(self.checkpoints)} checkpoints alcançados! Reward total: {reward:.2f}")
-                         done = True
-             
-             # 8. PENALIDADE POR TEMPO (incentiva terminar rápido)
-             reward -= 0.005
-         
-         # ===== DETECÇÃO DE LOOP/INATIVIDADE =====
-         if self.current_step % 10 == 0:
-             self.position_history.append(self.car1_pos.copy())
-             if len(self.position_history) > 20:
-                 self.position_history.pop(0)
-         
-         if len(self.position_history) >= 2:
-             total_distance = 0
-             for i in range(1, len(self.position_history)):
-                 dist = np.linalg.norm(np.array(self.position_history[i]) - np.array(self.position_history[i-1]))
-                 total_distance += dist
-             
-             if total_distance < self.min_progress_distance:
-                 self.progress_counter += 1
-                 reward -= 0.2  # Penalidade crescente por loop
-             else:
-                 self.progress_counter = 0
-         
-         if self.progress_counter > self.max_steps_without_progress:
-             reward -= 10.0
+         if self.current_step >= self.max_steps:
              done = True
-         
-         # ===== LIMITE DE TEMPO =====
-         if self.episode_time >= MAX_EPISODE_TIME or self.current_step >= self.max_steps:
-             done = True
-         
-         # ===== RETORNO =====
+
+         state = self._get_obs()
+         info = {"collisions": collisions, "episode_time": self.episode_time, "checkpoint": self.checkpoint_index, "penalty": penalty, "success": success, "progress": self.progress_counter}
+         # Garante compatibilidade com Gymnasium: retorna obs, reward, terminated, truncated, info
          obs = np.array(self._get_obs(), dtype=np.float32)
-         info = {
-             "collisions": collisions,
-             "episode_time": self.episode_time,
-             "checkpoint": self.checkpoint_index,
-             "success": success,
-             "progress": self.progress_counter
-         }
-         return obs, reward, done, False, info
+         terminated = done
+         truncated = False
+         return obs, reward, terminated, truncated, info
 
     def is_on_corridor(self, pos):
         """Verifica se uma posição está dentro do corredor e fora das barreiras.
