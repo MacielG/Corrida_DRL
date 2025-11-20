@@ -86,6 +86,10 @@ Exemplo de gráfico de desempenho após treinamento:
 - `tests/`: Testes unitários com pytest.
 - `requirements.txt`: Dependências do projeto.
 
+## 🎯 Plano de Ação & Melhorias
+
+Veja o **[PLANO_ACAO.md](PLANO_ACAO.md)** para o plano estruturado de polimento e melhorias do projeto. O projeto tem uma base sólida e este plano delineia como transformá-lo em um **portfólio standout**.
+
 ## 📖 Documentação Completa
 
 Toda a documentação está bem organizada e estruturada. Veja **[ORGANIZACAO_DOCS.md](ORGANIZACAO_DOCS.md)** para uma visão completa da organização.

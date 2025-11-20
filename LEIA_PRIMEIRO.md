@@ -41,6 +41,13 @@ Bem-vindo ao **Corrida DRL 2.0** - Uma plataforma profissional para treinar agen
 - Padrões de código
 - Como fazer PR
 
+### 🎯 Quero saber o plano de melhorias?
+→ **[PLANO_ACAO.md](PLANO_ACAO.md)** ⭐ NOVO
+- Análise consolidada de pontos a melhorar
+- 3 fases estruturadas (curto/médio/longo prazo)
+- Checklist executável
+- Timeline recomendado
+
 ---
 
 ## 📁 Índice por Tipo

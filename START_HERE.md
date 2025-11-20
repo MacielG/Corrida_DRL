@@ -2,46 +2,74 @@
 
 Bem-vindo ao **Corrida DRL v2.0**! Este é seu ponto de entrada.
 
-## ⚡ Em 3 Cliques
+## ⚡ Sua Próxima Ação (Escolha uma)
 
-### 1️⃣ Leia isto (2 min)
-**→ [LEIA_PRIMEIRO.md](LEIA_PRIMEIRO.md)**
-- Índice navegável completo
-- Rotas por perfil de usuário
-- Tudo organizado
+### 👤 Você é novo no projeto?
+**→ [QUICKSTART.md](QUICKSTART.md)** (5 min)  
+Instale, execute e veja funcionando em 5 minutos.
 
-### 2️⃣ Escolha seu perfil
-- ⚡ **Rápido demais** (5 min) → [QUICKSTART.md](QUICKSTART.md)
-- 💼 **Entender tudo** (20 min) → [README_PRODUCTION.md](README_PRODUCTION.md)
-- 📚 **Explorar detalhes** (1h) → [docs/evolution/README.md](docs/evolution/README.md)
-- 👔 **Visão executiva** (5 min) → [docs/evolution/SUMARIO_FINAL_v2.1.md](docs/evolution/SUMARIO_FINAL_v2.1.md)
+### 🎯 Você quer contribuir e melhorar?
+**→ [PROXIMOS_PASSOS.md](PROXIMOS_PASSOS.md)** ⭐ **RECOMENDADO**  
+Plano estruturado para transformar o projeto em portfólio standout.
 
-### 3️⃣ Comece!
+### 💼 Você quer entender tudo?
+**→ [LEIA_PRIMEIRO.md](LEIA_PRIMEIRO.md)** (5 min)  
+Índice navegável com rotas por perfil de usuário.
+
+### 📚 Você quer explorar?
+**→ [docs/evolution/README.md](docs/evolution/README.md)** (1h)  
+20 documentos detalhados sobre evolução e técnica.
+
+---
+
+## 🎯 Três Opções
+
+| Sua Situação | Arquivo | Tempo |
+|--------------|---------|-------|
+| 🆕 Novo no projeto | [QUICKSTART.md](QUICKSTART.md) | 5 min |
+| 🔧 Quer melhorar | [PROXIMOS_PASSOS.md](PROXIMOS_PASSOS.md) ⭐ | 10 min |
+| 📖 Quer aprender | [LEIA_PRIMEIRO.md](LEIA_PRIMEIRO.md) | 5 min |
+| 🎓 Quer profundidade | [README_PRODUCTION.md](README_PRODUCTION.md) | 20 min |
+| 📊 Quer métricas | [BENCHMARKS.md](BENCHMARKS.md) | 10 min |
+| 🤝 Quer contribuir | [CONTRIBUTING.md](CONTRIBUTING.md) | 15 min |
+
+---
+
+## 🎊 Se você está considerando contribuir...
+
+Leia **[PROXIMOS_PASSOS.md](PROXIMOS_PASSOS.md)** primeiro!  
+Tem um plano estruturado (3 fases, 2-3 semanas) para deixar o projeto pronto para portfólio.
+
+Basicamente:
+- 🔴 **Fase 1** (3-5 dias): Corrigir testes + integrar RaceManager  
+- 🟡 **Fase 2** (5-7 dias): Melhorar visual + adicionar gráficos  
+- 🟢 **Fase 3** (1-2 semanas): Funcionalidades polidas + CI/CD  
+
+---
 
 ## 📖 Documentação Completa
 
-Toda a documentação está **bem organizada**:
-
 ```
-📄 7 arquivos na raiz (principal)
-📚 20 arquivos em docs/evolution/ (evolução & detalhes)
+📄 Documentação Principal (na raiz):
+├── QUICKSTART.md .............. Começar em 5 min
+├── README.md .................. Página inicial
+├── LEIA_PRIMEIRO.md ........... Índice completo
+├── PLANO_ACAO.md .............. Plano de melhorias 🎯
+├── PROXIMOS_PASSOS.md ......... Como começar a contribuir ⭐
+├── README_PRODUCTION.md ....... Arquitetura detalhada
+├── BENCHMARKS.md .............. Comparação de algoritmos
+└── CONTRIBUTING.md ............ Guia de colaboração
+
+📚 Documentação de Evolução (em docs/evolution/):
+├── README.md .................. Índice dos 20 documentos
+├── ARQUITETURA_RL_CIENTIFICA.md
+├── GAMIFICACAO_README.md
+├── CORRECOES_APLICADAS.md
+└── ... (17 outros documentos)
 ```
-
-Veja: **[ORGANIZACAO_DOCS.md](ORGANIZACAO_DOCS.md)** para mapa completo.
-
-## 🎯 Seu Próximo Passo
-
-| Você é... | Clique em... | Tempo |
-|-----------|--------------|-------|
-| Usuário novo | [LEIA_PRIMEIRO.md](LEIA_PRIMEIRO.md) | 2 min |
-| Com pressa | [QUICKSTART.md](QUICKSTART.md) | 5 min |
-| Desenvolvedor | [README_PRODUCTION.md](README_PRODUCTION.md) | 20 min |
-| Pesquisador | [BENCHMARKS.md](BENCHMARKS.md) | 10 min |
-| Gerente | [docs/evolution/SUMARIO_FINAL_v2.1.md](docs/evolution/SUMARIO_FINAL_v2.1.md) | 5 min |
-| Explorando | [docs/evolution/README.md](docs/evolution/README.md) | 1h |
 
 ---
 
 **Versão**: 2.0  
-**Status**: ✓ Pronto para Produção  
+**Status**: ✓ Base Sólida + Plano de Melhoria  
 **Data**: 2025-11-20
