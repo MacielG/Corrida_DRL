@@ -2,13 +2,120 @@
   {
     "nome": "test",
     "tipo": "SAC",
-    "tempo_acumulado": 0.0,
+    "tempo_acumulado": 120.59999999999974,
     "modelo_path": "models/test_SAC.zip",
-    "historico": [],
+    "historico": [
+      {
+        "mapa": "corridor",
+        "score": 16.24868944659829,
+        "velocidade": 1.2793821543455124,
+        "tempo": 5.299999999999997,
+        "xp_gained": 162,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:23:32",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 67.24194755032659,
+        "velocidade": 1.2083178013563156,
+        "tempo": 12.599999999999971,
+        "xp_gained": 672,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:23:59",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 51.57872101292014,
+        "velocidade": 1.0761019140481949,
+        "tempo": 12.69999999999997,
+        "xp_gained": 515,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:23:59",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 11.210376402363181,
+        "velocidade": 0.9754232466220856,
+        "tempo": 12.79999999999997,
+        "xp_gained": 112,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:24:00",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 93.41193506494164,
+        "velocidade": 1.4441725015640259,
+        "tempo": 12.399999999999972,
+        "xp_gained": 934,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:24:18",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 137.60343120526522,
+        "velocidade": 1.3980005383491516,
+        "tempo": 11.999999999999973,
+        "xp_gained": 1376,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:24:43",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 171.16791499080136,
+        "velocidade": 1.062747448682785,
+        "tempo": 12.99999999999997,
+        "xp_gained": 1711,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:24:46",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 159.46008566441014,
+        "velocidade": 1.6755947917699814,
+        "tempo": 15.099999999999962,
+        "xp_gained": 1594,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:24:54",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 207.63195894192904,
+        "velocidade": 1.1613074839115143,
+        "tempo": 12.299999999999972,
+        "xp_gained": 2076,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:25:02",
+        "tipo_evento": "simulacao"
+      },
+      {
+        "mapa": "corridor",
+        "score": 235.818021137733,
+        "velocidade": 1.3208092749118805,
+        "tempo": 12.399999999999972,
+        "xp_gained": 2358,
+        "checkpoints": 0,
+        "data": "2025-11-20 05:25:26",
+        "tipo_evento": "simulacao"
+      }
+    ],
     "cor": [
       120,
       180,
       255
-    ]
+    ],
+    "level": 1,
+    "stats": {
+      "accel": 0.5,
+      "turn_speed": 5.0,
+      "max_speed": 20.0
+    }
   }
 ]
