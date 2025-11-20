@@ -250,6 +250,12 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
         interface.load_ranking_data()
     except FileNotFoundError:
         interface.ranking_data = {}
+    
+    # OTIMIZAÇÃO: Carrega agentes UMA VEZ antes do loop principal
+    # Não recarrega a cada episódio (leitura de disco é lenta)
+    agents_current = [AgentInfo.from_dict(a) for a in load_agents()]
+    agent_info_cache = next((a for a in agents_current if a.nome == interface.selected_agent), None)
+    
     logger.info(f"Treinando {n_parallel} execuções paralelas do agente {car_to_train} no mapa: {map_type} (Fase: {fase_desc})")
     obs = env.reset()  # CORREÇÃO: DummyVecEnv.reset() retorna apenas obs
     rewards_hist = [[] for _ in range(n_parallel)]
@@ -315,6 +321,7 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
                 is_success = infos[idx].get('success', False)
                 episode_time = infos[idx].get('episode_time', None)
                 training_logger.log(idx, rewards_hist[idx], collisions_hist[idx], actions=actions_hist[idx], checkpoints=checkpoints_hist[idx], episode_time=episode_time, success=is_success)
+                
                 # Atualiza ranking ao final de cada episódio
                 key = f"{selected_agent}|{selected_map}"
                 score = sum(rewards_hist[idx])
@@ -324,17 +331,35 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
                 if score > prev["score"]:
                     interface.ranking_data[key] = {"score": score, "speed": speed, "tempo": tempo}
                     interface.save_ranking_data()
-                # Atualiza tempo_acumulado e histórico do agente
-                agents = [AgentInfo.from_dict(a) for a in load_agents()]
-                agent_info = next((a for a in agents if a.nome == interface.selected_agent), None)
-                if agent_info:
-                    agent_info.tempo_acumulado += episode_time or 0
-                    agent_info.historico.append({"mapa": selected_map, "score": score, "velocidade": speed, "tempo": tempo, "data": time.strftime("%Y-%m-%d %H:%M:%S")})
-                    # Limita histórico para não pesar
-                    agent_info.historico = agent_info.historico[-30:]
-                    # Salva
-                    agents = [a.to_dict() if a.nome != agent_info.nome else agent_info.to_dict() for a in agents]
-                    save_agents(agents)
+                
+                # OTIMIZAÇÃO: Atualiza o cache em memória em vez de reler do disco
+                # Isso reduz I/O e melhora performance
+                if agent_info_cache:
+                    agent_info_cache.tempo_acumulado += episode_time or 0
+                    
+                    # Calcula XP baseado no score (gamificação)
+                    xp_gained = max(0, int(score * 10))  # 10 XP por ponto de recompensa
+                    
+                    # Adiciona ao histórico (subjetivação)
+                    agent_info_cache.historico.append({
+                        "mapa": selected_map,
+                        "score": score,
+                        "velocidade": speed,
+                        "tempo": tempo,
+                        "xp_gained": xp_gained,
+                        "checkpoints": checkpoints_hist[idx][-1] if checkpoints_hist[idx] else 0,
+                        "data": time.strftime("%Y-%m-%d %H:%M:%S"),
+                        "tipo_evento": "simulacao"
+                    })
+                    
+                    # Limita histórico para não pesar (últimas 30 corridas)
+                    agent_info_cache.historico = agent_info_cache.historico[-30:]
+                    
+                    # Salva APENAS AQUI (não a cada iteração, apenas ao fim do episódio)
+                    agents_all = [AgentInfo.from_dict(a) for a in load_agents()]
+                    agents_all = [a.to_dict() if a.nome != agent_info_cache.nome else agent_info_cache.to_dict() for a in agents_all]
+                    save_agents(agents_all)
+                
                 # CORREÇÃO: reset() sempre retorna tuple
                 obs_single, _ = env.envs[idx].reset()
                 obs[idx] = obs_single

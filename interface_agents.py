@@ -80,6 +80,13 @@ def draw_gestao_agentes(screen, width, height, agents, gestao_btn_novo, gestao_a
         # Tempo acumulado
         tempo = f"Tempo: {ag['tempo_acumulado']:.1f}s"
         card.blit(tipo_font.render(tempo, True, (60,60,60)), (200, 45))
+        
+        # XP total (gamificação)
+        total_xp = sum(h.get('xp_gained', 0) for h in ag.get('historico', []))
+        level = max(1, int(total_xp / 100) + 1)  # 1 nível a cada 100 XP
+        xp_display = f"Nível {level} ({total_xp} XP)"
+        card.blit(tipo_font.render(xp_display, True, (180,120,60)), (380, 12))
+        
         # Status
         status = "Treinado" if os.path.exists(ag.get("modelo_path","")) else "Novo"
         status_color = (80,200,120) if status=="Treinado" else (200,160,60)
@@ -141,20 +148,72 @@ def handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, ag
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return "escape"
 
-def treinar_agente(agents, idx):
+def treinar_agente(agents, idx, map_type="corridor"):
+    """Treina um agente específico no mapa selecionado, carregando seu cérebro anterior.
+    
+    Args:
+        agents (list): Lista de agentes em dicionário.
+        idx (int): Índice do agente a treinar.
+        map_type (str): Tipo de mapa (corridor, curve, circle).
+    """
     ag_dict = agents[idx]
     ag = AgentInfo.from_dict(ag_dict)
+    
+    print(f"[TREINO] Iniciando treino de {ag.nome} no mapa '{map_type}'...")
+    
     from environment import CorridaEnv
-    env = CorridaEnv()
-    agent = Agent(env, model_path=ag.modelo_path)
+    from stable_baselines3.common.vec_env import DummyVecEnv
+    
+    # 1. Cria ambiente com o mapa correto
+    def make_env():
+        return CorridaEnv(map_type=map_type)
+    
+    env = DummyVecEnv([make_env for _ in range(4)])  # 4 ambientes paralelos
+    
+    # 2. Instancia agente com o modelo_path correto
+    # Remove extensão .zip para SB3 adicionar automaticamente
+    model_path_base = ag.modelo_path.replace(".zip", "")
+    agent = Agent(env, model_path=model_path_base, learning_rate=0.0003, gamma=0.98)
+    
+    # 3. Carrega modelo existente (continuidade/subjetivação) ou cria novo
+    if os.path.exists(ag.modelo_path):
+        print(f"[TREINO] Carregando cérebro existente de: {ag.modelo_path}")
+        agent.load(ag.modelo_path)
+    else:
+        print(f"[TREINO] Criando novo cérebro para {ag.nome}")
+    
+    # 4. Treina por 20k passos (um 'round' de treino razoável para um jogo)
     start_time = time.time()
-    agent.train(total_timesteps=10000)  # Example training steps
+    agent.train(total_timesteps=20000)
     elapsed = time.time() - start_time
+    
+    # 5. Atualiza estatísticas do agente
     ag.tempo_acumulado += elapsed
-    ag.historico.append({"timestamp": time.time(), "duration": elapsed})
+    
+    # Calcula score médio do treinamento (para XP)
+    xp_gained = int(elapsed * 10)  # Simples: 10 XP por segundo de treino
+    
+    # 6. Adiciona ao histórico (subjetivação/evolução)
+    ag.historico.append({
+        "timestamp": time.time(),
+        "duration": elapsed,
+        "map": map_type,
+        "xp_gained": xp_gained,
+        "tipo_evento": "treino"
+    })
+    
+    # 7. Limita histórico para não ficar pesado (últimas 50 ocorrências)
+    ag.historico = ag.historico[-50:]
+    
+    # 8. Salva no JSON (persistência)
     ag_dict.update(ag.to_dict())
     agents[idx] = ag_dict
     save_agents(agents)
+    
+    # 9. Salva o modelo (o Agent.train() já salva checkpoints, mas força final)
+    agent.save(model_path_base)
+    
+    print(f"[TREINO] ✓ {ag.nome} treinado por {elapsed:.1f}s no mapa {map_type}. XP ganho: {xp_gained}")
     play_sound("finish")
 
 def criar_novo_agente(agents, interface):

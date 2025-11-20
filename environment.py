@@ -300,6 +300,10 @@ class CorridaEnv(gym.Env):
                 reward += np.cos(np.radians(angle_diff)) * 0.2  # Bônus angular maior
                 if abs(prev_speed) < 0.05:
                     reward = -0.5
+                # NOVO: Aumenta densidade de recompensa por velocidade
+                reward += (self.car1_speed / 20.0) * 0.1  # Incentiva movimento constante
+                # NOVO: Penalidade por tempo (incentiva terminar rápido)
+                reward -= 0.005
             else:
                 reward += 0.0
 
@@ -340,10 +344,11 @@ class CorridaEnv(gym.Env):
         # print(f"[DEBUG] dist={dist}, angle_diff={angle_diff}, car1_pos={self.car1_pos}, checkpoint={checkpoint}")
         # Alteração: sucesso se dist < 20*ENV_SCALE e ângulo < 30 OU dist ~ 0
         if self.checkpoints and ((dist < 20 * ENV_SCALE and angle_diff < 30) or np.isclose(dist, 0, atol=1e-6)):
-            reward += 12  # Bônus maior ao atingir checkpoint
+            reward += 20.0  # Recompensa irresistível por checkpoint (aumentado de 12)
             self.checkpoint_index += 1
             success = True
             if self.checkpoint_index >= len(self.checkpoints):
+                reward += 50.0  # Bônus adicional por completar todos os checkpoints
                 done = True
 
         if self.randomize_checkpoint and success:

@@ -1,0 +1,397 @@
+
+======================================================================
+ TESTES DE VALIDACAO: MELHORIAS DE APRENDIZADO (v2.0)
+======================================================================
+
+============================================================
+TESTE 1: REWARD SHAPING (Densidade de Recompensa)
+============================================================
+
+Resultado:
+  Recompensa total: 209.36
+  Recompensa media/step: 6.7537
+  Checkpoints atingidos: 0
+  Status: [PASS] - Recompensa densa
+
+============================================================
+TESTE 2: PERSISTENCIA DO AGENTE (Subjetivacao)
+============================================================
+
+1. Criando e treinando agente 'TestAgent_Learning'...
+Using cpu device
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.791    |
+| time/               |          |
+|    episodes         | 4        |
+|    fps              | 113      |
+|    time_elapsed     | 3        |
+|    total_timesteps  | 439      |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 1.08     |
+|    n_updates        | 84       |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.599    |
+| time/               |          |
+|    episodes         | 8        |
+|    fps              | 106      |
+|    time_elapsed     | 7        |
+|    total_timesteps  | 845      |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 4.91     |
+|    n_updates        | 186      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.453    |
+| time/               |          |
+|    episodes         | 12       |
+|    fps              | 101      |
+|    time_elapsed     | 11       |
+|    total_timesteps  | 1151     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 5.98     |
+|    n_updates        | 262      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.329    |
+| time/               |          |
+|    episodes         | 16       |
+|    fps              | 98       |
+|    time_elapsed     | 14       |
+|    total_timesteps  | 1413     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 4.02     |
+|    n_updates        | 328      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.219    |
+| time/               |          |
+|    episodes         | 20       |
+|    fps              | 98       |
+|    time_elapsed     | 16       |
+|    total_timesteps  | 1645     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.49     |
+|    n_updates        | 386      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.105    |
+| time/               |          |
+|    episodes         | 24       |
+|    fps              | 98       |
+|    time_elapsed     | 19       |
+|    total_timesteps  | 1884     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 2.04     |
+|    n_updates        | 445      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 28       |
+|    fps              | 97       |
+|    time_elapsed     | 21       |
+|    total_timesteps  | 2089     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 10.1     |
+|    n_updates        | 497      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 32       |
+|    fps              | 97       |
+|    time_elapsed     | 23       |
+|    total_timesteps  | 2307     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.47     |
+|    n_updates        | 551      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 36       |
+|    fps              | 96       |
+|    time_elapsed     | 26       |
+|    total_timesteps  | 2518     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 26.1     |
+|    n_updates        | 604      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 40       |
+|    fps              | 95       |
+|    time_elapsed     | 28       |
+|    total_timesteps  | 2726     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.89     |
+|    n_updates        | 656      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 44       |
+|    fps              | 95       |
+|    time_elapsed     | 31       |
+|    total_timesteps  | 2949     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.13     |
+|    n_updates        | 712      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 48       |
+|    fps              | 94       |
+|    time_elapsed     | 33       |
+|    total_timesteps  | 3164     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.17     |
+|    n_updates        | 765      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 52       |
+|    fps              | 93       |
+|    time_elapsed     | 35       |
+|    total_timesteps  | 3377     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 2.16     |
+|    n_updates        | 819      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 56       |
+|    fps              | 93       |
+|    time_elapsed     | 38       |
+|    total_timesteps  | 3589     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 16.7     |
+|    n_updates        | 872      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 60       |
+|    fps              | 93       |
+|    time_elapsed     | 40       |
+|    total_timesteps  | 3813     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 7.22     |
+|    n_updates        | 928      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 64       |
+|    fps              | 92       |
+|    time_elapsed     | 43       |
+|    total_timesteps  | 4035     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 40.5     |
+|    n_updates        | 983      |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 68       |
+|    fps              | 93       |
+|    time_elapsed     | 45       |
+|    total_timesteps  | 4249     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 2.54     |
+|    n_updates        | 1037     |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 72       |
+|    fps              | 93       |
+|    time_elapsed     | 47       |
+|    total_timesteps  | 4455     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 4.16     |
+|    n_updates        | 1088     |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 76       |
+|    fps              | 93       |
+|    time_elapsed     | 50       |
+|    total_timesteps  | 4670     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 4.42     |
+|    n_updates        | 1142     |
+----------------------------------
+----------------------------------
+| metrics/            |          |
+|    avg_speed        | 1        |
+| rollout/            |          |
+|    exploration_rate | 0.05     |
+| time/               |          |
+|    episodes         | 80       |
+|    fps              | 92       |
+|    time_elapsed     | 52       |
+|    total_timesteps  | 4889     |
+| train/              |          |
+|    learning_rate    | 0.0003   |
+|    loss             | 3.11     |
+|    n_updates        | 1197     |
+----------------------------------
+   Treino completado em 58.3s
+   [OK] Modelo salvo em models/test_TestAgent_Learning.zip
+
+2. Carregando modelo existente...
+Using cpu device
+   [OK] Modelo carregado com sucesso
+   [OK] Acoes consistentes: ambos predizem 0
+
+3. Testando historico em agents.json...
+   [OK] Agente salvo em agents.json
+   [OK] Agente recarregado com historico: 1 eventos
+
+Resultado: [PASS] - Subjetivacao funcionando
+
+============================================================
+TESTE 3: RASTREAMENTO COMPETITIVO (Ranking + Historico)
+============================================================
+
+1. Simulando 5 corridas do agente 'CompetitiveAgent'...
+   Corrida 1: score=100, xp=1000
+   Corrida 2: score=250, xp=2500
+   Corrida 3: score=180, xp=1800
+   Corrida 4: score=320, xp=3200
+   Corrida 5: score=280, xp=2800
+
+2. Estatisticas acumuladas:
+   Total de corridas: 5
+   Total de XP: 11300
+   Nivel atual: 114
+   Score maximo: 320
+   Score medio: 226.0
+
+3. Ranking simulado:
+   PPO|corridor: score=320, tempo=16.0s
+
+4. Evolucao de score ao longo do tempo:
+   Corrida 1: 100 pontos
+   Corrida 2: 250 pontos
+   Corrida 3: 180 pontos
+   Corrida 4: 320 pontos
+   Corrida 5: 280 pontos
+
+Resultado: [PASS] - Sistema competitivo funcionando
+
+============================================================
+TESTE 4: TREINO PARALELO (DummyVecEnv)
+============================================================
+
+1. Criando 4 ambientes paralelos...
+   [OK] 4 ambientes criados
+
+2. Testando reset...
+   [OK] Obs shape correto: (4, 15)
+
+3. Testando step com acoes diferentes...
+   Rewards: [0.36043862 0.17549708 0.11932006 0.55069923]
+   Dones: [False False False False]
+   [OK] Step executado corretamente
+
+4. Simulando episodio completo...
+   Episodio completado em 501 steps
+   [OK] Treino paralelo funcionando
+
+Resultado: [PASS] - Paralelo funcionando
+
+======================================================================
+ RESUMO DE TESTES
+======================================================================
+Reward Shaping                 [PASS]
+Persistencia                   [PASS]
+Competicao                     [PASS]
+Paralelo                       [PASS]
+
+Total: 4/4 testes passaram
+
+[SUCCESS] TODOS OS TESTES PASSARAM! Arquitetura RL v2.0 validada.
