@@ -52,7 +52,8 @@ class LoopDetector:
         fft_y = np.abs(np.fft.fft(y_coords))
         
         # Detecta picos na FFT (indicam frequências dominantes = loops)
-        peak_threshold = np.mean([np.max(fft_x), np.max(fft_y)]) * 0.5
+        # CORREÇÃO: Excluir índice 0 (DC component) do cálculo de threshold
+        peak_threshold = np.mean([np.max(fft_x[1:]), np.max(fft_y[1:])]) * 0.5
         peaks_x = np.sum(fft_x[1:-1] > peak_threshold)  # Ignora DC
         peaks_y = np.sum(fft_y[1:-1] > peak_threshold)
         

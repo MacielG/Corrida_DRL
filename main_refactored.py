@@ -16,6 +16,7 @@ from metrics import Metrics
 from interface_dpg import InterfaceDPG as Interface
 from config import PHASES, ENV_SCALE, SIM_SPEED, TIME_STEP
 import argparse
+import json
 import psutil
 from logger import setup_logger
 from interface_agents import AgentInfo, load_agents, save_agents
@@ -622,7 +623,14 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="config.json", help="Arquivo JSON de config")
     args = parser.parse_args()
     
-    cfg = load_config(args.config)
+    # CORREÇÃO: Carregamento robusto de configuração com tratamento de erros
+    try:
+        cfg = load_config(args.config)
+    except (FileNotFoundError, json.JSONDecodeError):
+        logger.warning(f"Falha ao carregar {args.config}, usando valores padrão")
+        cfg = load_config()  # Usa config padrão
+    
+    # Sobrescrever com argumentos de CLI se fornecidos
     if args.learning_rate is not None:
         cfg["learning_rate"] = args.learning_rate
     if args.gamma is not None:
@@ -632,10 +640,18 @@ if __name__ == "__main__":
     if args.map_type is not None:
         cfg["map_type"] = args.map_type
     
-    map_type, fase_idx, n_agents, car_to_train, n_parallel = \
-        cfg["map_type"], 0, 1, 1, cfg["n_parallel"]
+    # Extrair parâmetros da config carregada
+    map_type = cfg.get("map_type", "corridor")
+    fase_idx = 0
+    n_agents = 1
+    car_to_train = 1
+    n_parallel = cfg.get("n_parallel", 4)
+    
+    logger.info(f"Config carregada: map_type={map_type}, n_parallel={n_parallel}, "
+                f"learning_rate={cfg.get('learning_rate', 0.0003)}, "
+                f"gamma={cfg.get('gamma', 0.98)}")
     
     main(map_type=map_type, car_to_train=car_to_train, fase_idx=fase_idx, 
          n_parallel=n_parallel, skip_training=args.skip_training, 
-         learning_rate=cfg["learning_rate"], gamma=cfg["gamma"])
+         learning_rate=cfg.get("learning_rate"), gamma=cfg.get("gamma"))
     run_curriculum(car_to_train=car_to_train, n_parallel=n_parallel)

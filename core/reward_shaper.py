@@ -74,45 +74,49 @@ class BalancedRewardShaper(BaseRewardShaper):
         self.total_distance = 0.0
     
     def compute_reward(self, 
-                      position: Tuple[float, float],
-                      velocity: float,
-                      angle: float,
-                      checkpoint_idx: int,
-                      total_checkpoints: int,
-                      collision: bool,
-                      out_of_bounds: bool,
-                      progress: float,
-                      last_velocity: Optional[float] = None,
-                      **kwargs) -> float:
-        """Computa recompensa balanceada."""
-        reward = 0.0
-        
-        # 1. Recompensa por atingir novo checkpoint
-        if checkpoint_idx > self.last_checkpoint:
-            reward += self.checkpoint_reward * (checkpoint_idx - self.last_checkpoint)
-            self.last_checkpoint = checkpoint_idx
-        
-        # 2. Penalidade por colisão
-        if collision:
-            reward += self.collision_penalty
-        
-        # 3. Penalidade por sair da pista
-        if out_of_bounds:
-            reward += self.out_of_bounds_penalty
-        
-        # 4. Recompensa por velocidade (não muito rápido, não muito lento)
-        speed_bonus = min(velocity / 20.0, 1.0)  # Normaliza até 20 unidades/s
-        reward += self.speed_reward_factor * speed_bonus
-        
-        # 5. Recompensa por progresso
-        reward += self.progress_reward_factor * progress
-        
-        # 6. Recompensa por estabilidade (pouca variação de velocidade)
-        if last_velocity is not None:
-            stability = 1.0 / (1.0 + abs(velocity - last_velocity))
-            reward += self.stability_reward * stability
-        
-        return reward
+                       position: Tuple[float, float],
+                       velocity: float,
+                       angle: float,
+                       checkpoint_idx: int,
+                       total_checkpoints: int,
+                       collision: bool,
+                       out_of_bounds: bool,
+                       progress: float,
+                       last_velocity: Optional[float] = None,
+                       **kwargs) -> float:
+         """Computa recompensa balanceada."""
+         reward = 0.0
+         
+         # 1. Recompensa por atingir novo checkpoint
+         if checkpoint_idx > self.last_checkpoint:
+             reward += self.checkpoint_reward * (checkpoint_idx - self.last_checkpoint)
+             self.last_checkpoint = checkpoint_idx
+         
+         # 2. Penalidade por colisão
+         if collision:
+             reward += self.collision_penalty
+         
+         # 3. Penalidade por sair da pista
+         if out_of_bounds:
+             reward += self.out_of_bounds_penalty
+         
+         # 4. Recompensa por velocidade (não muito rápido, não muito lento)
+         speed_bonus = min(velocity / 20.0, 1.0)  # Normaliza até 20 unidades/s
+         reward += self.speed_reward_factor * speed_bonus
+         
+         # 5. Recompensa por progresso
+         reward += self.progress_reward_factor * progress
+         
+         # 6. Recompensa por estabilidade (pouca variação de velocidade)
+         # CORREÇÃO: Normalizar estabilidade em [0, 1] ANTES de aplicar weight
+         # Evita que penalidades desproporcionais dominem a função de recompensa
+         if last_velocity is not None:
+             # stability normalizada: 1.0 = sem mudança, 0.0 = mudança muito grande
+             stability = 1.0 / (1.0 + abs(velocity - last_velocity))
+             # Aplicar weight após normalização: max contribution = stability_reward * 1.0
+             reward += self.stability_reward * stability
+         
+         return reward
     
     def reset(self) -> None:
         """Reseta estado para novo episódio."""
