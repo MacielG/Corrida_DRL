@@ -515,7 +515,7 @@ def main(map_type="corridor", car_to_train=1, fase_idx=0, n_parallel=8, skip_tra
                 checkpoints_hist[idx] = []
                 gc.collect()
         if interface.should_restart():
-            obs = env.reset()
+            obs, _ = env.reset()
             for idx in range(n_parallel):
                 rewards_hist[idx] = []
                 collisions_hist[idx] = []

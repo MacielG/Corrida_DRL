@@ -9,6 +9,8 @@ from config import ENV_SCALE, CAR_LENGTH, CAR_WIDTH, TIME_STEP, RANDOMIZE_START,
 import math
 from logger import setup_logger
 import os
+from core.reward_shaper import RewardShapeFactory
+from loop_detector import LoopDetector
 
 logger = setup_logger()
 
@@ -19,7 +21,7 @@ class CorridaEnv(gym.Env):
         map_type (str): Tipo de mapa ('corridor' ou 'curve').
         car_stats (dict): Stats do carro {'accel': 0.5, 'turn_speed': 5.0, 'max_speed': 20.0}
     """
-    def __init__(self, map_type="corridor", car_stats=None):
+    def __init__(self, map_type="corridor", car_stats=None, reward_shaper_type='balanced', reward_config=None):
         self.width = int(800 * ENV_SCALE)
         self.height = int(600 * ENV_SCALE)
         self.map_type = map_type
@@ -52,6 +54,35 @@ class CorridaEnv(gym.Env):
         self.ACCEL_FORCE = self.car_stats["accel"]
         self.TURN_SPEED = self.car_stats["turn_speed"]
         self.MAX_SPEED = self.car_stats["max_speed"]
+        
+        # Inicializa RewardShaper
+        if reward_shaper_type == 'speed':
+            config = reward_config or {
+                'speed_reward_factor': 2.0,
+                'collision_penalty': -100.0,
+                'checkpoint_bonus': 50.0
+            }
+        elif reward_shaper_type == 'safety':
+            config = reward_config or {
+                'collision_penalty': -200.0,
+                'out_of_bounds_penalty': -150.0,
+                'smooth_driving_reward': 2.0,
+                'checkpoint_bonus': 100.0
+            }
+        else:  # balanced (default)
+            config = reward_config or {
+                'checkpoint_reward': 100.0,
+                'collision_penalty': -50.0,
+                'speed_reward_factor': 0.5,
+                'progress_reward_factor': 1.0,
+                'out_of_bounds_penalty': -100.0,
+                'stability_reward': 1.0
+            }
+        self.reward_shaper = RewardShapeFactory.create(reward_shaper_type, **config)
+        self.last_velocity = 0.0
+        
+        # Inicializa loop detector
+        self.loop_detector = LoopDetector(history_size=100, threshold=0.7)
 
         # Ações: [acelerar, frear, virar_esquerda, virar_direita]
         self.action_space = spaces.Discrete(4)
@@ -179,6 +210,11 @@ class CorridaEnv(gym.Env):
         self.progress_counter = 0
         self.prev_angle = None
         self.checkpoints_reached = set()  # Rastreia checkpoints já atingidos
+        # Reset do reward shaper
+        self.reward_shaper.reset()
+        self.last_velocity = 0.0
+        # Reset do loop detector
+        self.loop_detector.reset()
         # Sempre retorna observação completa (core + lidar) para compatibilidade com DummyVecEnv
         obs = self._get_obs(only_core=False)
         return np.array(obs, dtype=np.float32), {}
@@ -268,83 +304,71 @@ class CorridaEnv(gym.Env):
              self.car1_pos[0] += delta_x
              self.car1_pos[1] += delta_y
          
-         # ===== SISTEMA DE RECOMPENSAS =====
+         # ===== SISTEMA DE RECOMPENSAS (com RewardShaper) =====
          reward = 0.0
          done = False
          collisions = 0
          success = False
          inside_corridor = self.is_on_corridor(self.car1_pos)
+         collision = not inside_corridor
+         out_of_bounds = not inside_corridor
          
-         # 1. PENALIDADE POR SAIR DO CORREDOR
+         # Calcula progresso em direção ao checkpoint
+         progress = 0.0
+         if self.checkpoints:
+             checkpoint = self.checkpoints[self.checkpoint_index]
+             dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
+             
+             # Rastreia progresso anterior
+             if self.prev_dist_to_checkpoint is not None:
+                 progress = (self.prev_dist_to_checkpoint - dist) / 100.0  # Normaliza
+             
+             self.prev_dist_to_checkpoint = dist
+             
+             # Verifica checkpoint atingido
+             if dist < 30 * ENV_SCALE and self.checkpoint_index not in self.checkpoints_reached:
+                 self.checkpoints_reached.add(self.checkpoint_index)
+                 success = True
+                 logger.info(f"[CHECKPOINT] Agente atingiu checkpoint {self.checkpoint_index + 1}/{len(self.checkpoints)} em dist={dist:.2f}")
+                 self.checkpoint_index += 1
+                 
+                 if self.checkpoint_index >= len(self.checkpoints):
+                     logger.info(f"[SUCESSO] Todos os {len(self.checkpoints)} checkpoints alcançados!")
+                     done = True
+         
+         # Usa RewardShaper para computar recompensa
+         reward = self.reward_shaper.compute_reward(
+             position=tuple(self.car1_pos),
+             velocity=self.car1_speed,
+             angle=self.car1_angle,
+             checkpoint_idx=self.checkpoint_index,
+             total_checkpoints=len(self.checkpoints),
+             collision=collision,
+             out_of_bounds=out_of_bounds,
+             progress=progress,
+             last_velocity=self.last_velocity
+         )
+         
+         self.last_velocity = self.car1_speed
+         
+         # Se saiu do corredor, penaliza fortemente
          if not inside_corridor:
-             reward = -10.0  # Penalidade PESADA por sair
+             reward -= 50.0
              done = True
              collisions = 1
-         else:
-             # 2. INCENTIVO BASE PARA MOVIMENTO (maior peso)
-             # O agente DEVE aprender a se mover
-             speed_normalized = self.car1_speed / self.MAX_SPEED  # [-1, 1]
-             reward += abs(speed_normalized) * 0.3  # Até +0.3 por estar em movimento
-             
-             # 3. DISTÂNCIA MOVIMENTO NO STEP
-             dist_moved = np.linalg.norm(np.array(self.car1_pos) - np.array(prev_pos))
-             if dist_moved > 0.01:
-                 reward += 0.1  # Bônus por se mover neste step
-             else:
-                 reward -= 0.15  # PENALIDADE FORTE por ficar parado
-             
-             # 4. RECOMPENSA POR PROGRESSO EM DIREÇÃO AO CHECKPOINT
-             if self.checkpoints:
-                 checkpoint = self.checkpoints[self.checkpoint_index]
-                 dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
-                 
-                 # Rastreia progresso anterior - AUMENTADO EM PESO
-                 if self.prev_dist_to_checkpoint is not None:
-                     progress = self.prev_dist_to_checkpoint - dist  # Positivo = aproximando
-                     if progress > 0:
-                         reward += progress * 0.1  # 10x maior que antes
-                     elif progress < -5 * ENV_SCALE:  # Se afastou muito
-                         reward -= 0.2
-                 
-                 self.prev_dist_to_checkpoint = dist
-                 
-                 # 5. RECOMPENSA POR ALINHAMENTO COM CHECKPOINT
-                 angle_diff = self.angle_to_checkpoint()
-                 alignment_bonus = max(0, np.cos(np.radians(angle_diff)))  # [0, 1]
-                 reward += alignment_bonus * 0.2  # 2x maior
-                 
-                 # 6. RECOMPENSA POR PROXIMIDADE AO CHECKPOINT
-                 checkpoint_radius = 40 * ENV_SCALE  # Raio de detecção maior
-                 if dist < checkpoint_radius:
-                     reward += (checkpoint_radius - dist) / checkpoint_radius * 0.5  # Até +0.5
-                 
-                 # 7. GRANDE RECOMPENSA POR ATINGIR CHECKPOINT
-                 # Aumentou de 20 para 30 para mais tolerância
-                 if dist < 30 * ENV_SCALE and self.checkpoint_index not in self.checkpoints_reached:
-                     reward += 10.0  # Bônus MUITO grande por chegar perto
-                     self.checkpoints_reached.add(self.checkpoint_index)
-                     success = True
-                     
-                     # DEBUG: mostra quando checkpoint é atingido
-                     logger.info(f"[CHECKPOINT] Agente atingiu checkpoint {self.checkpoint_index + 1}/{len(self.checkpoints)} em dist={dist:.2f}")
-                     
-                     self.checkpoint_index += 1
-                     
-                     if self.checkpoint_index >= len(self.checkpoints):
-                         reward += 100.0  # BÔNUS FINAL ENORME - motivação máxima
-                         logger.info(f"[SUCESSO] Todos os {len(self.checkpoints)} checkpoints alcançados! Reward total: {reward:.2f}")
-                         done = True
-             
-             # 8. PENALIDADE POR TEMPO (incentiva terminar rápido)
-             reward -= 0.005
          
-         # ===== DETECÇÃO DE LOOP/INATIVIDADE =====
+         # ===== DETECÇÃO DE LOOP/INATIVIDADE (com FFT-based detection) =====
          if self.current_step % 10 == 0:
              self.position_history.append(self.car1_pos.copy())
+             self.loop_detector.add_position(tuple(self.car1_pos))
              if len(self.position_history) > 20:
                  self.position_history.pop(0)
          
-         if len(self.position_history) >= 2:
+         # Detecção de loop usando múltiplos métodos
+         if self.loop_detector.detect_loop(self.position_history):
+             self.progress_counter += 2  # Contagem mais agressiva
+             reward -= 5.0  # Penalidade forte por loop detectado
+         elif len(self.position_history) >= 2:
              total_distance = 0
              for i in range(1, len(self.position_history)):
                  dist = np.linalg.norm(np.array(self.position_history[i]) - np.array(self.position_history[i-1]))
@@ -352,7 +376,7 @@ class CorridaEnv(gym.Env):
              
              if total_distance < self.min_progress_distance:
                  self.progress_counter += 1
-                 reward -= 0.2  # Penalidade crescente por loop
+                 reward -= 0.2  # Penalidade crescente por inatividade
              else:
                  self.progress_counter = 0
          

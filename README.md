@@ -107,6 +107,8 @@ Toda a documentação está bem organizada e estruturada. Veja **[ORGANIZACAO_DO
 A documentação está dividida em categorias:
 
 ### 📚 Documentos Principais
+- **[docs/API.md](docs/API.md)**: Referência completa da API
+- **[docs/TUTORIAL.md](docs/TUTORIAL.md)**: Tutorial Getting Started
 - **[README_PRODUCTION.md](README_PRODUCTION.md)**: Arquitetura profissional e guia de produção
 - **[QUICKSTART.md](QUICKSTART.md)**: Começar em 5 minutos
 - **[BENCHMARKS.md](BENCHMARKS.md)**: Resultados de benchmarks (DQN vs PPO vs SAC)

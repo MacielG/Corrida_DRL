@@ -12,6 +12,7 @@ from config import PHASES, ENV_SCALE, MAX_STEPS, MAX_EPISODE_TIME, SUPPORTED_ALG
 from stable_baselines3.common.vec_env import DummyVecEnv
 from unittest.mock import Mock, patch
 import matplotlib.pyplot as plt
+from interface_dpg import InterfaceDPG
 
 # Fixture para inicializar o ambiente e a interface
 @pytest.fixture

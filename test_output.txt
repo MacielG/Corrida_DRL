@@ -1,2 +1,0 @@
-ERRO: Sintaxe inv†lida. A opá∆o padr∆o n∆o Ç permitida mais de '1' vez(es).
-Digite "TIMEOUT /?" para obter detalhes sobre o uso.
