@@ -140,12 +140,61 @@ Conteúdo inclui:
 - Sugestões e issues são bem-vindos!
 - Veja [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes completos.
 
-## Testes
+## Testes e CI/CD
 
-Execute todos os testes unitários com:
+### Execução Local
+
+Execute todos os testes rápidos com:
 ```bash
-pytest tests/
+# Testes rápidos (< 1 minuto)
+pytest tests/ -v -m "not slow" --ignore=tests/test_learning.py
+
+# Todos os testes (inclui slow tests, ~10 minutos)
+pytest tests/ -v
+
+# Com cobertura de código
+pytest tests/ --cov=core --cov=agent --cov=environment --cov-report=html
+
+# Modo watch (executa ao salvar arquivo)
+ptw tests/ -- -m "not slow"
 ```
+
+### CI/CD Pipeline (GitHub Actions)
+
+O projeto possui pipelines automatizados:
+
+**✅ Testes Rápidos** (A cada push/PR)
+- Executa em ~1 minuto
+- Python 3.10, 3.11, 3.12
+- Testa sintaxe, import e testes não-slow
+- Gera cobertura para codecov
+
+**🌙 Slow Tests** (Diário às 2h UTC)
+- Executa testes de aprendizado (~60 minutos)
+- Valida convergência do agente
+- Upda artifacts de resultado
+
+**📊 Lint & Code Quality** (A cada push)
+- Flake8 para estilo Python
+- Verifica syntax errors
+- Complexity check
+
+Para disparar manualmente:
+```bash
+# Via GitHub CLI
+gh workflow run tests.yml
+gh workflow run slow-tests.yml
+```
+
+Ver status dos workflows:
+- GitHub Actions: https://github.com/MacielG/Corrida_DRL/actions
+- Codecov: https://codecov.io/github/MacielG/Corrida_DRL
+
+### Documentação de Testing
+
+Para aprender os padrões de mocking e fixtures usados:
+- **[docs/TESTING_PATTERNS.md](docs/TESTING_PATTERNS.md)** - Guia completo de testing
+- **[TEST_REPORT.md](TEST_REPORT.md)** - Relatório da última análise
 
 Cobertura de testes:
 - Core modules: >80%

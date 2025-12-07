@@ -1,0 +1,118 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.0, pytest-8.1.1, pluggy-1.6.0 -- C:\Users\guilh\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: c:\Users\guilh\Documents\Corrida_DRL
+configfile: pytest.ini
+plugins: anyio-4.11.0, timeout-2.4.0
+collecting ... collected 89 items
+
+tests/test_core_module.py::TestConfigManager::test_default_config PASSED [  1%]
+tests/test_core_module.py::TestConfigManager::test_load_yaml_config PASSED [  2%]
+tests/test_core_module.py::TestConfigManager::test_load_json_config PASSED [  3%]
+tests/test_core_module.py::TestConfigManager::test_save_config PASSED    [  4%]
+tests/test_core_module.py::TestConfigManager::test_update_config PASSED  [  5%]
+tests/test_core_module.py::TestConfigManager::test_get_nested_config PASSED [  6%]
+tests/test_core_module.py::TestRewardShaper::test_balanced_reward_shaper PASSED [  7%]
+tests/test_core_module.py::TestRewardShaper::test_collision_penalty PASSED [  8%]
+tests/test_core_module.py::TestRewardShaper::test_speed_reward_shaper PASSED [ 10%]
+tests/test_core_module.py::TestRewardShaper::test_safety_reward_shaper PASSED [ 11%]
+tests/test_core_module.py::TestRewardShaper::test_reward_shaper_factory PASSED [ 12%]
+tests/test_core_module.py::TestRewardShaper::test_shaper_reset PASSED    [ 13%]
+tests/test_core_module.py::TestAlgorithmConfig::test_algorithm_config_defaults PASSED [ 14%]
+tests/test_core_module.py::TestAlgorithmConfig::test_algorithm_config_to_dict PASSED [ 15%]
+tests/test_core_module.py::TestEnvironmentConfig::test_environment_config_defaults PASSED [ 16%]
+tests/test_core_module.py::TestEnvironmentConfig::test_environment_config_custom PASSED [ 17%]
+tests/test_core_module.py::TestTrainingConfig::test_training_config_defaults PASSED [ 19%]
+tests/test_environment.py::test_agent_save_and_load[DQN] PASSED          [ 20%]
+tests/test_environment.py::test_agent_save_and_load[PPO] PASSED          [ 21%]
+tests/test_environment.py::test_agent_save_and_load[SAC] PASSED          [ 22%]
+tests/test_environment.py::test_agent_train_calls_learn PASSED           [ 23%]
+tests/test_environment.py::test_agent_model_initialization PASSED        [ 24%]
+tests/test_environment.py::test_agent_evaluate_multi_episodes[DQN] PASSED [ 25%]
+tests/test_environment.py::test_agent_evaluate_multi_episodes[PPO] PASSED [ 26%]
+tests/test_environment.py::test_agent_evaluate_multi_episodes[SAC] PASSED [ 28%]
+tests/test_environment.py::test_log_callback PASSED                      [ 29%]
+tests/test_environment.py::test_custom_callback PASSED                   [ 30%]
+tests/test_environment.py::test_run_experiment_error PASSED              [ 31%]
+tests/test_environment.py::test_main_empty_results PASSED                [ 32%]
+tests/test_environment.py::test_load_config_missing_file PASSED          [ 33%]
+tests/test_environment.py::test_load_config_invalid_json PASSED          [ 34%]
+tests/test_environment.py::test_reset_randomize_checkpoint PASSED        [ 35%]
+tests/test_environment.py::test_reset_randomize_start_failure PASSED     [ 37%]
+tests/test_environment.py::test_step_empty_checkpoints PASSED            [ 38%]
+tests/test_environment.py::test_circle_map_specific PASSED               [ 39%]
+tests/test_environment.py::test_metrics_render_empty PASSED              [ 40%]
+tests/test_environment.py::test_metrics_render_small_data PASSED         [ 41%]
+tests/test_environment.py::test_metrics_memory_cleanup PASSED            [ 42%]
+tests/test_integration.py::test_end_to_end_training_evaluation[DQN] PASSED [ 43%]
+tests/test_integration.py::test_end_to_end_training_evaluation[PPO] PASSED [ 44%]
+tests/test_integration.py::test_end_to_end_training_evaluation[SAC] PASSED [ 46%]
+tests/test_integration.py::test_agent_learning_progress_integration PASSED [ 47%]
+tests/test_integration.py::test_metrics_calculation PASSED               [ 48%]
+tests/test_integration.py::test_step_no_checkpoints PASSED               [ 49%]
+tests/test_integration.py::test_multi_agent_env PASSED                   [ 50%]
+tests/test_integration.py::test_interface_states PASSED                  [ 51%]
+tests/test_integration.py::test_resource_usage FAILED                    [ 52%]
+tests/test_integration.py::test_curriculum_progression PASSED            [ 53%]
+tests/test_integration.py::test_reward_scheme PASSED                     [ 55%]
+tests/test_integration.py::test_long_episode PASSED                      [ 56%]
+tests/test_interface.py::test_draw_corridor PASSED                       [ 57%]
+tests/test_interface.py::test_draw_barriers PASSED                       [ 58%]
+tests/test_interface.py::test_draw_checkpoints_pulse PASSED              [ 59%]
+tests/test_interface.py::test_draw_car_trajectory PASSED                 [ 60%]
+tests/test_interface.py::test_toggle_pause PASSED                        [ 61%]
+tests/test_interface.py::test_request_restart PASSED                     [ 62%]
+tests/test_interface.py::test_draw_dashboard_empty PASSED                [ 64%]
+tests/test_interface.py::test_draw_env_grid_simple PASSED                [ 65%]
+tests/test_interface.py::test_select_screen_agent_selection PASSED       [ 66%]
+tests/test_interface.py::test_ranking_screen_instantiation PASSED        [ 67%]
+tests/test_interface.py::test_agent_info_serialization PASSED            [ 68%]
+tests/test_interface.py::test_handle_gestao_agentes_events_select PASSED [ 69%]
+tests/test_interface_modules.py::test_handle_menu_events_no_infinite_loop PASSED [ 70%]
+tests/test_interface_modules.py::test_create_new_agent PASSED            [ 71%]
+tests/test_interface_modules.py::test_agent_learning_time_and_history PASSED [ 73%]
+tests/test_interface_modules.py::test_simulate_race_with_multiple_agents PASSED [ 74%]
+tests/test_interface_modules.py::test_event_history_and_state_management PASSED [ 75%]
+tests/test_main.py::test_main_loop_pause SKIPPED (Requires complex m...) [ 76%]
+tests/test_main.py::test_run_curriculum_complete SKIPPED (Requires c...) [ 77%]
+tests/test_main.py::test_train_phase_success PASSED                      [ 78%]
+tests/test_main.py::test_training_logger PASSED                          [ 79%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_balanced_shaper_initialization PASSED [ 80%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_speed_shaper_initialization PASSED [ 82%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_safety_shaper_initialization PASSED [ 83%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_custom_reward_config PASSED [ 84%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_reward_is_finite PASSED [ 85%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_reward_shaper_reset PASSED [ 86%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_reward_shaper_checkpoint_detection PASSED [ 87%]
+tests/test_reward_shaper_integration.py::TestRewardShaperIntegration::test_different_shapers_different_rewards PASSED [ 88%]
+tests/test_reward_shaper_integration.py::TestLoopDetectorIntegration::test_loop_detector_initialization PASSED [ 89%]
+tests/test_reward_shaper_integration.py::TestLoopDetectorIntegration::test_loop_detector_tracks_position PASSED [ 91%]
+tests/test_reward_shaper_integration.py::TestLoopDetectorIntegration::test_loop_detection_penalizes_loops PASSED [ 92%]
+tests/test_reward_shaper_integration.py::TestLoopDetectorIntegration::test_loop_detector_reset PASSED [ 93%]
+tests/test_reward_shaper_integration.py::TestRewardShapingBehavior::test_collision_penalty PASSED [ 94%]
+tests/test_reward_shaper_integration.py::TestRewardShapingBehavior::test_out_of_bounds_penalty PASSED [ 95%]
+tests/test_reward_shaper_integration.py::TestRewardShapingBehavior::test_speed_reward_factor PASSED [ 96%]
+tests/test_smoke.py::test_interface_instanciacao PASSED                  [ 97%]
+tests/test_smoke.py::test_compare_algorithms_main PASSED                 [ 98%]
+tests/test_smoke.py::test_main_imports PASSED                            [100%]
+
+================================== FAILURES ===================================
+c:\Users\guilh\Documents\Corrida_DRL\environment.py:319: IndexError: list index out of range
+============================== warnings summary ===============================
+..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\pygame\pkgdata.py:25
+  C:\Users\guilh\AppData\Local\Programs\Python\Python312\Lib\site-packages\pygame\pkgdata.py:25: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+    from pkg_resources import resource_stream, resource_exists
+
+tests/test_environment.py::test_metrics_render_empty
+tests/test_environment.py::test_metrics_render_small_data
+  c:\Users\guilh\Documents\Corrida_DRL\metrics.py:78: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+    self.ax.legend()
+
+tests/test_interface.py::test_draw_corridor
+  c:\Users\guilh\Documents\Corrida_DRL\metrics.py:28: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`). Consider using `matplotlib.pyplot.close()`.
+    self.fig, self.ax = plt.subplots(figsize=(3, 2))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_integration.py::test_resource_usage - IndexError: list inde...
+============ 1 failed, 86 passed, 2 skipped, 4 warnings in 41.66s =============

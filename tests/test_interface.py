@@ -68,14 +68,20 @@ def test_draw_env_grid_simple(interface):
 
 # Additional tests for agent selection, ranking, events, names, and models
 
-def test_select_screen_agent_selection(monkeypatch):
+def test_select_screen_agent_selection(monkeypatch, temp_agents_file):
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
     select_screen = SelectScreen(800, 600)
-    select_screen.draw_selecao_agente(screen, selected_agent="DQN", selected_map="corridor")
-    assert len(select_screen.agente_btns) == 3
-    found = any(ag == "DQN" for ag, rect in select_screen.agente_btns)
-    assert found
+    # Mock load_agents para retornar agentes do fixture temporário
+    monkeypatch.setattr("interface_select.load_agents", lambda: [
+        {"nome": "Agente Test 1", "tipo": "DQN", "tempo_acumulado": 0.0, "modelo_path": "models/test1.zip", "historico": [], "cor": [120,180,255], "level": 1, "stats": {}},
+        {"nome": "Agente Test 2", "tipo": "PPO", "tempo_acumulado": 0.0, "modelo_path": "models/test2.zip", "historico": [], "cor": [120,180,255], "level": 1, "stats": {}},
+        {"nome": "Agente Test 3", "tipo": "SAC", "tempo_acumulado": 0.0, "modelo_path": "models/test3.zip", "historico": [], "cor": [120,180,255], "level": 1, "stats": {}}
+    ])
+    select_screen.draw_selecao_agente(screen, selected_agent="Agente Test 1", selected_map="corridor")
+    assert len(select_screen.agente_btns) == 3, f"Expected 3 agents, got {len(select_screen.agente_btns)}"
+    found = any(ag == "Agente Test 1" for ag, rect in select_screen.agente_btns)
+    assert found, "Agent 'Agente Test 1' not found in agente_btns"
 
 def test_ranking_screen_instantiation():
     ranking_screen = RankingScreen(800, 600)

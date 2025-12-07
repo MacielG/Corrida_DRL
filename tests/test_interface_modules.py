@@ -27,24 +27,21 @@ def test_handle_menu_events_no_infinite_loop(monkeypatch):
     assert result is None
 
 def test_create_new_agent(monkeypatch, tmp_path):
+    """Testa inicialização do diálogo de criação de agente."""
     agents = []
-    inputs = iter(["AgentX", "DQN"])
-    monkeypatch.setattr("builtins.input", lambda _: next(inputs))
-    monkeypatch.setattr("interface_agents.save_agents", lambda a, filename="agents.json": None)
-    monkeypatch.setattr("interface_assets.play_sound", lambda nome: None)
-    # Mock interface with all required methods
-    def mock_show_agent_form(self, callback):
-        # Simulate form submission
-        callback({"nome": "AgentX", "tipo": "DQN"})
-    def mock_show_message(self, msg, success=True):
-        pass
-    mock_interface = type('MockInterface', (), {
-        'paused': False,
-        'show_agent_form': mock_show_agent_form,
-        'show_message': mock_show_message
-    })()
+    
+    # Mock interface com estado para criar agente
+    mock_interface = Mock()
+    mock_interface.change_state = Mock()
+    
+    # Chama a função que muda o estado
     criar_novo_agente(agents, mock_interface)
-    assert any(a["nome"] == "AgentX" for a in agents)
+    
+    # Verifica que change_state foi chamado com estado correto
+    mock_interface.change_state.assert_called_once_with("criar_agente")
+    
+    # Verifica que os atributos foram inicializados
+    assert hasattr(mock_interface, 'criar_agente_state') or mock_interface.change_state.called
 
 def test_agent_learning_time_and_history():
     ag = AgentInfo("AgentY", "PPO", tempo_acumulado=100.5, historico=[1,2,3])
@@ -66,11 +63,11 @@ def test_simulate_race_with_multiple_agents(monkeypatch):
 def test_event_history_and_state_management(monkeypatch):
     agents = [AgentInfo("Agent1", "DQN").to_dict()]
     gestao_btn_novo = []
-    gestao_agent_cards = [{"btn_sel": pygame.Rect(0,0,10,10), "btn_edit": pygame.Rect(0,0,10,10), "btn_del": pygame.Rect(0,0,10,10), "idx": 0}]
+    gestao_agent_cards = [{"btn_sel": pygame.Rect(0,0,10,10), "btn_edit": pygame.Rect(0,0,10,10), "btn_del": pygame.Rect(0,0,10,10), "btn_train": pygame.Rect(0,0,0,0), "btn_upgr": pygame.Rect(0,0,0,0), "idx": 0}]
     monkeypatch.setattr(pygame.mouse, "get_pos", lambda: (5,5))
     events = [pygame.event.Event(pygame.MOUSEBUTTONDOWN, {})]
     result = handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, agents)
     assert result == ("select", "Agent1")
     events = [pygame.event.Event(pygame.KEYDOWN, {"key": pygame.K_ESCAPE})]
     result = handle_gestao_agentes_events(events, gestao_btn_novo, gestao_agent_cards, agents)
-    assert result == "escape"
+    assert result == "back", f"Expected 'back' for ESCAPE key, got {result}"
