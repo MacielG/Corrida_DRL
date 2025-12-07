@@ -315,7 +315,7 @@ class CorridaEnv(gym.Env):
          
          # Calcula progresso em direção ao checkpoint
          progress = 0.0
-         if self.checkpoints:
+         if self.checkpoints and self.checkpoint_index < len(self.checkpoints):
              checkpoint = self.checkpoints[self.checkpoint_index]
              dist = np.sqrt((self.car1_pos[0] - checkpoint[0])**2 + (self.car1_pos[1] - checkpoint[1])**2)
              
